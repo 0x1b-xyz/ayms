@@ -87,7 +87,6 @@ class PersistenceSpecIT extends Specification {
         Client client = client()
         clientDao.save(client)
         Service svc = new Service()
-        svc.company = company
         svc.user = user
         svc.client = client
         serviceDao.save(svc)

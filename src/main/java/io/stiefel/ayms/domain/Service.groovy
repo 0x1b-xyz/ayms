@@ -24,9 +24,6 @@ class Service {
     Long id
 
     @ManyToOne(optional = false)
-    Company company
-
-    @ManyToOne(optional = false)
     Client client
 
     @ManyToOne(optional = false)

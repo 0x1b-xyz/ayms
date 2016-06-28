@@ -361,6 +361,7 @@
                                 </env>
                                 <wait>
                                     <tcp>
+                                        <mode>mapped</mode>
                                         <ports>
                                             <port>5432</port>
                                         </ports>

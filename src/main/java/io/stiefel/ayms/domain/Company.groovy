@@ -28,7 +28,4 @@ class Company implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = 'company', orphanRemoval = true)
     List<Client> clients;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = 'company', orphanRemoval = true)
-    List<Service> services;
-
 }
