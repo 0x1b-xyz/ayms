@@ -1,17 +1,8 @@
 package io.stiefel.ayms.domain
 
 import groovy.transform.Canonical
-import org.hibernate.validator.constraints.NotEmpty
 
-import javax.persistence.CascadeType
-import javax.persistence.Column
-import javax.persistence.Embedded
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
-import javax.persistence.OneToMany
-import javax.persistence.Table
+import javax.persistence.*
 
 /**
  * @author jason@stiefel.io
@@ -36,5 +27,8 @@ class Company implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = 'company', orphanRemoval = true)
     List<Client> clients;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = 'company', orphanRemoval = true)
+    List<Service> services;
 
 }

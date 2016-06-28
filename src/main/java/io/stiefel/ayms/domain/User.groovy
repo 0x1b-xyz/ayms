@@ -43,4 +43,7 @@ class User {
     @Column(nullable = false, length = 75)
     String lastName
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = 'user', orphanRemoval = true)
+    List<Service> services;
+
 }
