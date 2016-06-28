@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <context:annotation-config/>
+    <tx:annotation-driven />
+
+    <bean id="ayms.properties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="location" value="classpath:io/stiefel/ayms/defaults.properties"/>
+        <property name="locations">
+            <list>
+                <value>classpath:io/stiefel/ayms/defaults.properties</value>
+                <value>file:${user.home}/ayms.properties</value>
+                <value>file://#{systemProperties['ayms.properties']}</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="properties" ref="ayms.properties"/>
+    </bean>
+
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+        <property name="driverClassName" value="${ayms.jdbc.driver}"/>
+        <property name="url" value="${ayms.jdbc.url}"/>
+        <property name="username" value="${ayms.jdbc.username}"/>
+        <property name="password" value="${ayms.jdbc.password}"/>
+    </bean>
+
+    <bean id="liquibase.init" class="liquibase.integration.spring.SpringLiquibase">
+        <property name="dataSource" ref="dataSource" />
+        <property name="changeLog" value="classpath:io/stiefel/ayms/db-changelog.xml" />
+        <property name="contexts" value="${ayms.jdbc.contexts}" />
+    </bean>
+
+    <bean id="entityManagerFactoryBean" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+        depends-on="liquibase.init">
+        <property name="dataSource" ref="dataSource" />
+        <property name="packagesToScan" value="io.stiefel.ayms.domain" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.hbm2ddl.auto">${ayms.jdbc.hbm2ddl}</prop>
+                <prop key="hibernate.dialect">${ayms.jdbc.dialect}</prop>
+                <prop key="hibernate.show_sql">${ayms.jdbc.showSql}</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactoryBean" />
+    </bean>
+
+    <context:component-scan base-package="io.stiefel.ayms.dao"/>
+
+</beans>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--<changeSet id="add-hibernate-sequence" author="jstiefel">-->
+        <!--<createSequence sequenceName="hibernate_sequence"/>-->
+    <!--</changeSet>-->
+
+    <!--<changeSet id="add-company-tbl" author="jstiefel">-->
+        <!--<createTable tableName="AYM_COMPANY">-->
+            <!--<column name="id" autoIncrement="true" type="bigint"/>-->
+            <!--<column name="name" type="text"/>-->
+        <!--</createTable>-->
+        <!--<addNotNullConstraint tableName="AYM_COMPANY" columnName="name"/>-->
+        <!--<addUniqueConstraint tableName="AYM_COMPANY" columnNames="name"/>-->
+        <!--<addPrimaryKey tableName="AYM_COMPANY" columnNames="id"/>-->
+    <!--</changeSet>-->
+
+    <!--<changeSet id="add-user-tbl" author="jstiefel">-->
+        <!--<createTable tableName="AYM_USER">-->
+            <!--<column name="id" autoIncrement="true" type="bigint"/>-->
+            <!--<column name="name" type="varchar(25)"/>-->
+            <!--<column name="firstName" type="varchar(50)"/>-->
+            <!--<column name="lastNa"-->
+        <!--</createTable>-->
+    <!--</changeSet>-->
+
+</databaseChangeLog>
