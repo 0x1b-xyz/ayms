@@ -19,7 +19,7 @@ import spock.lang.Specification
 /**
  * @author jason@stiefel.io
  */
-@ContextConfiguration(locations = ['classpath:io/stiefel/ayms/context.xml'])
+@ContextConfiguration(classes = Context)
 class PersistenceSpecIT extends Specification {
 
     @Autowired CompanyDao companyDao
