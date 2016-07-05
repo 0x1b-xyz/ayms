@@ -1,5 +1,6 @@
 package io.stiefel.ayms.domain
 
+import com.fasterxml.jackson.annotation.JsonView
 import groovy.transform.Canonical
 
 import javax.persistence.*
@@ -14,12 +15,15 @@ class Company implements Serializable {
 
     @Id
     @GeneratedValue
+    @JsonView(View.Summary)
     Long id;
 
     @Column(unique = true, nullable = false, length = 100)
+    @JsonView(View.Summary)
     String name;
 
     @Embedded
+    @JsonView(View.Summary)
     Address address
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = 'company', orphanRemoval = true)
