@@ -1,10 +1,10 @@
 package io.stiefel.ayms.web
 
 import com.fasterxml.jackson.annotation.JsonView
-import groovy.transform.Canonical
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import io.stiefel.ayms.domain.View
+import org.springframework.validation.FieldError
 
 /**
  * Outcome of call to a web endpoint

@@ -1,9 +1,10 @@
-package io.stiefel.ayms.web
+package io.stiefel.ayms.web.controller
 
 import com.fasterxml.jackson.annotation.JsonView
 import io.stiefel.ayms.dao.CompanyDao
 import io.stiefel.ayms.domain.Company
 import io.stiefel.ayms.domain.View
+import io.stiefel.ayms.web.Result
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.validation.BindingResult
@@ -39,12 +40,12 @@ class CompanyController {
         new Result(companyDao.find(companyId))
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    String save(@Valid Company company, BindingResult binding) {
+    @RequestMapping(method = RequestMethod.POST, produces = 'application/json')
+    Result save(@Valid Company company, BindingResult binding) {
         if (binding.hasErrors())
-            return 'company/index'
+            return new Result(false, binding.fieldErrors)
         companyDao.save(company)
-        'redirect:/company'
+        new Result(company.id)
     }
 
 }
