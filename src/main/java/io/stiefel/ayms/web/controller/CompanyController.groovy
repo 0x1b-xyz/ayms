@@ -41,9 +41,9 @@ class CompanyController {
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = 'application/json')
-    Result save(@Valid Company company, BindingResult binding) {
+    Result<Long> save(@Valid Company company, BindingResult binding) {
         if (binding.hasErrors())
-            return new Result(false, binding.fieldErrors)
+            return new Result(false, null).binding(binding)
         companyDao.save(company)
         new Result(company.id)
     }

@@ -12,7 +12,6 @@ import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.ModelAndView
 
@@ -48,9 +47,9 @@ class UserController {
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = 'application/json')
-    Result save(@PathVariable Long companyId, @Valid User user, BindingResult binding) {
+    Result<Long> save(@PathVariable Long companyId, @Valid User user, BindingResult binding) {
         if (binding.hasErrors())
-            return new Result(false, binding.fieldErrors)
+            return new Result(false, null).binding(binding)
         user.company = companyDao.find(companyId)
         userDao.save(user)
         new Result(user.id)

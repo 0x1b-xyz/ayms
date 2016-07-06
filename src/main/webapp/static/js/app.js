@@ -53,8 +53,8 @@ function form(frm, tpl, tbl) {
             success: function (result) {
                 if (!result.success) {
                     form.siblings('.alert').removeClass('hidden');
-                    result.data.forEach(function (fieldError) {
-                        form.find(toId(fieldError.field)).parents('.form-group').addClass('has-error')
+                    result.fields.forEach(function (field) {
+                        form.find(toId(field.name)).parents('.form-group').addClass('has-error')
                     });
                     return;
                 }

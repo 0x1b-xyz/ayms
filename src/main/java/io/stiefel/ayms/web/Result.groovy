@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import io.stiefel.ayms.domain.View
+import org.springframework.validation.BindingResult
 import org.springframework.validation.FieldError
 
 /**
@@ -19,10 +20,14 @@ class Result<T> implements Serializable {
     boolean success = true
 
     @JsonView(View.Summary)
+    List<Field> fields
+
+    @JsonView(View.Summary)
     T data
 
     @JsonView(View.Summary)
     String message
+
 
     Result(T data) {
         this.data = data
@@ -36,6 +41,16 @@ class Result<T> implements Serializable {
     Result(Throwable t) {
         success = false
         message = t.message
+    }
+
+    /**
+     * Extracts all the {@link Field} errors from the provided {@link BindingResult}.
+     */
+    Result binding(BindingResult bindingResult) {
+        fields = bindingResult.fieldErrors.collect {
+            new Field(it.objectName, it.field, it.rejectedValue.toString(), it.code)
+        }
+        this
     }
 
 }
