@@ -31,17 +31,11 @@ function rows(url, tpl, tbl, clear) {
 }
 
 /**
- * Escapes an element id with a period or colon in it and prepends
- * an '#'
- * @param id
- * @returns {string}
- */
-function toId(id) {
-    return "#" + id.replace( /(:|\.|\[|\]|,)/g, "\\$1" );
-}
-
-/**
+ * Hooks into the submit on the specified form, serializing the data to send to the form action.
+ * Handles the Result when returned, activating the alert when there are errors and attempts to
+ * highlight the fields.
  *
+ * Assuming the submit was successful will reload data using {@link rows}
  */
 function form(frm, tpl, tbl) {
 
@@ -76,5 +70,15 @@ function form(frm, tpl, tbl) {
 
     })
 
-
 }
+
+/**
+ * Escapes an element id with a period or colon in it and prepends
+ * an '#'
+ * @param id
+ * @returns {string}
+ */
+function toId(id) {
+    return "#" + id.replace( /(:|\.|\[|\]|,)/g, "\\$1" );
+}
+

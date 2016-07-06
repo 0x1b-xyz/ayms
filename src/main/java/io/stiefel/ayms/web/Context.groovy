@@ -4,6 +4,7 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType
 import org.springframework.web.servlet.config.annotation.*
+import org.springframework.web.servlet.mvc.WebContentInterceptor
 
 /**
  * Web configuration context.
@@ -29,6 +30,12 @@ class Context extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new UserInterceptor())
                 .addPathPatterns("/**").excludePathPatterns("/login/**");
+        registry.addInterceptor(new WebContentInterceptor(
+                cacheSeconds: 0,
+                useExpiresHeader: true,
+                useCacheControlHeader: true,
+                useCacheControlNoStore: true
+        ))
     }
 
     @Override
