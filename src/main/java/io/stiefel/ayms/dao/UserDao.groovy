@@ -10,10 +10,10 @@ import org.springframework.stereotype.Repository
 @Repository
 class UserDao extends AbstractDao<User, Long> {
 
-    User findByIdAndCompany(Long id, Company company) {
-        em.createNamedQuery('User.findByIdAndCompany', User)
-                .setParameter('id', id)
+    User findByCompanyAndId(Company company, Long id) {
+        em.createNamedQuery('User.findByCompanyAndId', User)
                 .setParameter('company', company)
+                .setParameter('id', id)
                 .singleResult
     }
 
@@ -21,7 +21,7 @@ class UserDao extends AbstractDao<User, Long> {
         em.createNamedQuery('User.findByName', User).setParameter('name', name).singleResult
     }
 
-    List<User> findByCompany(Company company) {
+    List<User> findAllByCompany(Company company) {
         em.createNamedQuery('User.findAllByCompany').setParameter('company', company).resultList
     }
 

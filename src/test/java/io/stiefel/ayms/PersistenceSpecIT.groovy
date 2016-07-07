@@ -27,7 +27,7 @@ class PersistenceSpecIT extends Specification {
     @Autowired ClientDao clientDao
     @Autowired ServiceDao serviceDao
 
-    Address address = new Address('Somewhere in', null, null, null, 'Charlotte', 'NC', '28205')
+    Address address = new Address('Somewhere in', null, 'Charlotte', 'NC', '28205')
     Company company = new Company(
             name: RandomStringUtils.randomAlphabetic(10),
             address: address
@@ -55,7 +55,7 @@ class PersistenceSpecIT extends Specification {
         userDao.save(user)
 
         then:
-        userDao.findByCompany(company)[0] == user
+        userDao.findAllByCompany(company)[0] == user
         userDao.findByName(user.name) == user
 
     }

@@ -46,19 +46,19 @@
 
     <form class="form-horizontal" id="user-frm" method="post">
         <div class="form-group">
-            <label for="name" class="col-sm-2 control-label">User Name</label>
+            <label for="name" class="col-sm-2 control-label">User</label>
             <div class="col-sm-8">
                 <input name="name" id="name" type="text" class="form-control" placeholder="Name">
             </div>
         </div>
         <div class="form-group">
-            <label for="firstName" class="col-sm-2 control-label">Full Name</label>
+            <label for="firstName" class="col-sm-2 control-label">Name</label>
             <div class="col-sm-8">
                 <div class="form-group row">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <input name="firstName" type="text" class="form-control" id="firstName" placeholder="First">
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <input name="lastName" type="text" class="form-control" id="lastName" placeholder="Last">
                     </div>
                 </div>

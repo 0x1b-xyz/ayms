@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull
 @Table(name = 'aym_user')
 @Canonical(includes = 'id')
 @NamedQueries([
-        @NamedQuery(name = 'User.findByIdAndCompany', query = 'select u from User u where u.id = :id and u.company = :company'),
+        @NamedQuery(name = 'User.findByCompanyAndId', query = 'select u from User u where u.company = :company and u.id = :id'),
         @NamedQuery(name = 'User.findByName', query = 'select u from User u where u.name = :name'),
         @NamedQuery(name = 'User.findAllByCompany', query = 'select u from User u where u.company = :company')
 ])
@@ -40,11 +40,12 @@ class User {
     @JsonView(View.Summary)
     @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
     @JsonIdentityReference(alwaysAsId=true)
+    @NotNull
     Company company
 
     @Column(nullable = false)
-    @NotNull
     @JsonView(View.Summary)
+    @NotNull
     Role role = Role.COMPANY_USER
 
     @Column(nullable = false, unique = true, length = 20)

@@ -1,28 +1,33 @@
+<%@ page import="io.stiefel.ayms.domain.User" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
 <html>
 <head>
-    <title>Companies</title>
+    <title>Clients</title>
 </head>
 <body>
 
 <div class="row">
 
-    <h2>Companies</h2>
+    <h2>Clients</h2>
     <ol class="breadcrumb">
         <li><a href="<s:url value="/"/>">Home</a></li>
-        <li class="active">Companies</li>
+        <li><a href="<s:url value="/company/${companyId}"/>">Company</a>
+        </li>
+        <li class="active">Clients</li>
     </ol>
     <div class="table-responsive">
         <caption>table caption</caption>
-        <table id="company-tbl" class="table table-hover">
+        <table id="client-tbl" class="table table-hover">
             <thead>
             <tr>
                 <th>#</th>
-                <th>Name</th>
-                <th>Address</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>DOB</th>
+                <th>SSN</th>
                 <th></th>
             </tr>
             </thead>
@@ -40,13 +45,37 @@
         submitting again.
     </div>
 
-    <form class="form-horizontal" id="company-frm" action="<s:url value="/company"/>" method="post">
+    <form class="form-horizontal" id="client-frm" method="post">
+
         <div class="form-group">
-            <label for="name" class="col-sm-2 control-label">Company Name</label>
+            <label for="firstName" class="col-sm-2 control-label">Name</label>
             <div class="col-sm-8">
-                <input name="name" id="name" type="text" class="form-control" placeholder="Name">
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <input name="firstName" type="text" class="form-control" id="firstName" placeholder="First"/>
+                    </div>
+                    <div class="col-sm-6">
+                        <input name="lastName" type="text" class="form-control" id="lastName" placeholder="Last"/>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-8">
+                <div class="form-group row">
+                    <label for="dateOfBirth" class="col-sm-1 control-label">DOB</label>
+                    <div class="col-sm-5">
+                        <input name="dateOfBirth" type="date" class="form-control" id="dateOfBirth"/>
+                    </div>
+                    <label for="ssn" class="col-sm-1 control-label">SSN</label>
+                    <div class="col-sm-5">
+                        <input name="ssn" type="text" class="form-control" id="ssn" placeholder="000-00-0000"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="form-group">
             <label for="address.line1" class="col-sm-2 control-label">Address</label>
             <div class="col-sm-8">
@@ -131,7 +160,6 @@
                 </div>
             </div>
         </div>
-
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" class="btn btn-success">Save</button>
@@ -141,26 +169,25 @@
 
 </div>
 
-<script id="company-tpl" type="text/x-handlebars-template">
+<script id="client-tpl" type="text/x-handlebars-template">
     <tr>
-        <td><a href="<s:url value="/company/{{id}}"/>">{{id}}</a></td>
-        <td>{{name}}</td>
-        <td>{{#if address.line1}}{{address.line1}} {{address.city}}, {{address.state}} {{address.zipCode}}{{/if}}</td>
-        <td>
-            <a href="<s:url value="/company/{{id}}/user"/>" class="btn btn-info" role="button">Users</a>
-            <a href="<s:url value="/company/{{id}}/client"/>" class="btn btn-default" role="button">Clients</a>
-        </td>
+        <td><a href="<s:url value="/company/{{company}}/client/{{id}}"/>">{{id}}</a></td>
+        <td>{{firstName}}</td>
+        <td>{{lastName}}</td>
+        <td>{{dateOfBirth}}</td>
+        <td>{{ssn}}</td>
+        <td><a href="<s:url value="/company/{{company}}/client/{{id}}/service"/>" class="btn btn-info" role="button">Services</a></td>
     </tr>
 </script>
 
 <script type="text/javascript">
     jQuery(document).ready(function () {
 
+        jQuery('#ssn').mask('000-00-0000');
         jQuery('#address\\.zipcode').mask('00000');
 
-        rows('', '#company-tpl', '#company-tbl');
-        form('#company-frm', '#company-tpl', '#company-tbl')
-
+        rows('', '#client-tpl', '#client-tbl');
+        form('#client-frm', '#client-tpl', '#client-tbl');
     })
 </script>
 

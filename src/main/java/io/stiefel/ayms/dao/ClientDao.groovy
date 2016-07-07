@@ -10,6 +10,13 @@ import org.springframework.stereotype.Repository
 @Repository
 class ClientDao extends AbstractDao<Client, Long> {
 
+    Client findByCompanyAndId(Company company, Long id) {
+        em.createNamedQuery('Client.findByCompanyAndId', Client)
+                .setParameter('company', company)
+                .setParameter('id', id)
+                .singleResult
+    }
+
     List<Client> findAllByCompany(Company company) {
         em.createNamedQuery('Client.findAllByCompany', Client).setParameter('company', company).resultList
     }

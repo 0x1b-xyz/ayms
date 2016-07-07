@@ -21,7 +21,9 @@
 
     <script src="<c:url value="/static/js/jquery-2.2.4.js"/>"></script>
     <script src="<c:url value="/static/js/jquery.serializejson.js"/>"></script>
+    <script src="<c:url value="/static/js/jquery.mask.js"/>"></script>
     <script src="<c:url value="/static/js/handlebars-v4.0.5.js"/>"></script>
+    <script src="<c:url value="/static/js/handlebars-intl.js"/>"></script>
     <script src="<c:url value="/static/js/bootstrap.js"/>"></script>
     <script src="<c:url value="/static/js/app.js"/>"></script>
 
@@ -57,9 +59,16 @@
 </div>
 
 <script>
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
+
+    HandlebarsIntl.registerWith(Handlebars);
+
+    jQuery(document).ready(function() {
+
+        $("#menu-toggle").click(function(e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+
     });
 </script>
 
