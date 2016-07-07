@@ -119,6 +119,7 @@ class PersistenceSpecIT extends Specification {
         client.dateOfBirth = new Date() - RandomUtils.nextInt(3000)
         client.firstName = RandomStringUtils.randomAlphabetic(20)
         client.lastName = RandomStringUtils.randomAlphabetic(20)
+        client.ssn = "000-00-0000"
         client
     }
 

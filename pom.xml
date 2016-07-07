@@ -415,6 +415,26 @@
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>9.4.0.M0</version>
+                <configuration>
+                    <stopPort>9090</stopPort>
+                    <stopKey>alpha</stopKey>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>start-webapp</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>stop-webapp</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
         </plugins>
