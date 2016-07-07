@@ -174,7 +174,7 @@
         <td><a href="<s:url value="/company/{{company}}/client/{{id}}"/>">{{id}}</a></td>
         <td>{{firstName}}</td>
         <td>{{lastName}}</td>
-        <td>{{dateOfBirth}}</td>
+        <td>{{formatDate dateOfBirth day="numeric" month="long" year="numeric"}}</td>
         <td>{{ssn}}</td>
         <td><a href="<s:url value="/company/{{company}}/client/{{id}}/service"/>" class="btn btn-info" role="button">Services</a></td>
     </tr>
