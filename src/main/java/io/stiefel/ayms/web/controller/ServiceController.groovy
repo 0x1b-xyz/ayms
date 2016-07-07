@@ -4,11 +4,11 @@ import com.fasterxml.jackson.annotation.JsonView
 import io.stiefel.ayms.dao.ClientDao
 import io.stiefel.ayms.dao.CompanyDao
 import io.stiefel.ayms.dao.ServiceDao
-import io.stiefel.ayms.dao.UserDao
+import io.stiefel.ayms.dao.EmployeeDao
 import io.stiefel.ayms.domain.Client
 import io.stiefel.ayms.domain.Company
 import io.stiefel.ayms.domain.Service
-import io.stiefel.ayms.domain.User
+import io.stiefel.ayms.domain.Employee
 import io.stiefel.ayms.domain.View
 import io.stiefel.ayms.web.Result
 import org.springframework.beans.factory.annotation.Autowired
@@ -36,7 +36,7 @@ class ServiceController {
     @Autowired
     ServiceDao serviceDao
     @Autowired
-    UserDao userDao
+    EmployeeDao employeeDao
 
     @InitBinder
     void initBinder(WebDataBinder binder) {
@@ -44,10 +44,10 @@ class ServiceController {
                 Date, new CustomDateEditor(new SimpleDateFormat('yyyy-MM-dd'), false)
         )
         binder.registerCustomEditor(
-                User, new PropertyEditorSupport() {
+                Employee, new PropertyEditorSupport() {
             @Override
             void setAsText(String text) throws IllegalArgumentException {
-                setValue(userDao.find(Long.valueOf(text)))
+                setValue(employeeDao.find(Long.valueOf(text)))
             }
         })
     }
@@ -58,7 +58,7 @@ class ServiceController {
         new ModelAndView('service', [
                 companyId: companyId,
                 clientId : clientId,
-                users    : userDao.findAllByCompany(company).sort { "${it.lastName}, ${it.firstName}" }
+                employees    : employeeDao.findAllByCompany(company).sort { "${it.lastName}, ${it.firstName}" }
         ])
     }
 

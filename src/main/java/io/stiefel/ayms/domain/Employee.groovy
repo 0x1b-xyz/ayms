@@ -14,14 +14,14 @@ import javax.validation.constraints.NotNull
  * @author jason@stiefel.io
  */
 @Entity
-@Table(name = 'aym_user')
+@Table(name = 'aym_employee')
 @Canonical(includes = 'id')
 @NamedQueries([
-        @NamedQuery(name = 'User.findByCompanyAndId', query = 'select u from User u where u.company = :company and u.id = :id'),
-        @NamedQuery(name = 'User.findByName', query = 'select u from User u where u.name = :name'),
-        @NamedQuery(name = 'User.findAllByCompany', query = 'select u from User u where u.company = :company')
+        @NamedQuery(name = 'Employee.findByCompanyAndId', query = 'select u from Employee u where u.company = :company and u.id = :id'),
+        @NamedQuery(name = 'Employee.findByName', query = 'select u from Employee u where u.name = :name'),
+        @NamedQuery(name = 'Employee.findAllByCompany', query = 'select u from Employee u where u.company = :company')
 ])
-class User {
+class Employee {
 
     enum Role {
         AYM_ADMIN,
@@ -62,7 +62,7 @@ class User {
     @JsonView(View.Summary)
     String lastName
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = 'user', orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = 'employee', orphanRemoval = true)
     List<Service> services;
 
 }

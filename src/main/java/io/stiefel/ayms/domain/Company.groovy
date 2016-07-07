@@ -31,7 +31,7 @@ class Company implements Serializable {
     Address address
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = 'company', orphanRemoval = true)
-    List<User> users;
+    List<Employee> employees;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = 'company', orphanRemoval = true)
     List<Client> clients;

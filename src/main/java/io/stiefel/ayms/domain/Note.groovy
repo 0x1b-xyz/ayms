@@ -40,7 +40,7 @@ class Note {
     @JsonView(View.Summary)
     @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
     @JsonIdentityReference(alwaysAsId=true)
-    User user
+    Employee employee
 
     @Column
     @JsonView(View.Summary)

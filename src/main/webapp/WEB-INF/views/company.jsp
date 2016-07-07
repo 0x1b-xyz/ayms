@@ -147,7 +147,7 @@
         <td>{{name}}</td>
         <td>{{#if address.line1}}{{address.line1}} {{address.city}}, {{address.state}} {{address.zipCode}}{{/if}}</td>
         <td>
-            <a href="<s:url value="/company/{{id}}/user"/>" class="btn btn-info" role="button">Users</a>
+            <a href="<s:url value="/company/{{id}}/employee"/>" class="btn btn-info" role="button">Employees</a>
             <a href="<s:url value="/company/{{id}}/client"/>" class="btn btn-default" role="button">Clients</a>
         </td>
     </tr>

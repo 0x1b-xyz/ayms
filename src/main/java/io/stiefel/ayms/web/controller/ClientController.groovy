@@ -3,10 +3,9 @@ package io.stiefel.ayms.web.controller
 import com.fasterxml.jackson.annotation.JsonView
 import io.stiefel.ayms.dao.ClientDao
 import io.stiefel.ayms.dao.CompanyDao
-import io.stiefel.ayms.dao.UserDao
 import io.stiefel.ayms.domain.Client
 import io.stiefel.ayms.domain.Company
-import io.stiefel.ayms.domain.User
+import io.stiefel.ayms.domain.Employee
 import io.stiefel.ayms.domain.View
 import io.stiefel.ayms.web.Result
 import org.springframework.beans.factory.annotation.Autowired
@@ -54,7 +53,7 @@ class ClientController {
 
     @RequestMapping(path = '/{clientId}', method = RequestMethod.GET, produces = 'application/json')
     @JsonView(View.Summary)
-    Result<User> find(@PathVariable Long companyId, @PathVariable Long clientId) {
+    Result<Employee> find(@PathVariable Long companyId, @PathVariable Long clientId) {
         Company company = companyDao.find(companyId)
         new Result(clientDao.findByCompanyAndId(company, clientId))
     }

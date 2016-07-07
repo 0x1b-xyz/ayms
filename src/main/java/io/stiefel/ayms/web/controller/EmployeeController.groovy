@@ -2,9 +2,9 @@ package io.stiefel.ayms.web.controller
 
 import com.fasterxml.jackson.annotation.JsonView
 import io.stiefel.ayms.dao.CompanyDao
-import io.stiefel.ayms.dao.UserDao
+import io.stiefel.ayms.dao.EmployeeDao
 import io.stiefel.ayms.domain.Company
-import io.stiefel.ayms.domain.User
+import io.stiefel.ayms.domain.Employee
 import io.stiefel.ayms.domain.View
 import io.stiefel.ayms.web.Result
 import org.springframework.beans.factory.annotation.Autowired
@@ -21,38 +21,38 @@ import javax.validation.Valid
  * @author jason@stiefel.io
  */
 @RestController
-@RequestMapping(value = '/company/{companyId}/user')
-class UserController {
+@RequestMapping(value = '/company/{companyId}/employee')
+class EmployeeController {
 
     @Autowired CompanyDao companyDao
-    @Autowired UserDao userDao
+    @Autowired EmployeeDao employeeDao
 
     @RequestMapping(method = RequestMethod.GET, produces = 'text/html')
     ModelAndView index(@PathVariable Long companyId) {
-        new ModelAndView('user', [companyId: companyId])
+        new ModelAndView('employee', [companyId: companyId])
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     @JsonView(View.Summary)
-    Result<List<User>> findAll(@PathVariable Long companyId) {
+    Result<List<Employee>> findAll(@PathVariable Long companyId) {
         Company company = companyDao.find(companyId)
-        new Result(userDao.findAllByCompany(company))
+        new Result(employeeDao.findAllByCompany(company))
     }
 
-    @RequestMapping(path = '/{userId}', method = RequestMethod.GET, produces = 'application/json')
+    @RequestMapping(path = '/{employeeId}', method = RequestMethod.GET, produces = 'application/json')
     @JsonView(View.Summary)
-    Result<User> find(@PathVariable Long companyId, @PathVariable Long userId) {
+    Result<Employee> find(@PathVariable Long companyId, @PathVariable Long employeeId) {
         Company company = companyDao.find(companyId)
-        new Result(userDao.findByCompanyAndId(company, userId))
+        new Result(employeeDao.findByCompanyAndId(company, employeeId))
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = 'application/json')
-    Result<Long> save(@PathVariable Long companyId, @Valid User user, BindingResult binding) {
+    Result<Long> save(@PathVariable Long companyId, @Valid Employee employee, BindingResult binding) {
         if (binding.hasErrors())
             return new Result(false, null).binding(binding)
-        user.company = companyDao.find(companyId)
-        userDao.save(user)
-        new Result(user.id)
+        employee.company = companyDao.find(companyId)
+        employeeDao.save(employee)
+        new Result(employee.id)
     }
 
 }

@@ -44,7 +44,7 @@ class Service {
     @JsonView(View.Summary)
     @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
     @JsonIdentityReference(alwaysAsId=true)
-    User user
+    Employee employee
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)

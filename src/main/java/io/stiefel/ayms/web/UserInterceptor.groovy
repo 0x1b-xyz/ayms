@@ -17,7 +17,7 @@ class UserInterceptor extends HandlerInterceptorAdapter {
     @Override
     boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        log.info("Looking for user ...")
+        //log.info("Looking for user ...")
         super.preHandle(request, response, handler)
     }
 }

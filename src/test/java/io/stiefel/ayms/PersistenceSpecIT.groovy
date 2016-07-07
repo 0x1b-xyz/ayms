@@ -3,12 +3,12 @@ package io.stiefel.ayms
 import io.stiefel.ayms.dao.ClientDao
 import io.stiefel.ayms.dao.CompanyDao
 import io.stiefel.ayms.dao.ServiceDao
-import io.stiefel.ayms.dao.UserDao
+import io.stiefel.ayms.dao.EmployeeDao
 import io.stiefel.ayms.domain.Address
 import io.stiefel.ayms.domain.Client
 import io.stiefel.ayms.domain.Company
 import io.stiefel.ayms.domain.Service
-import io.stiefel.ayms.domain.User
+import io.stiefel.ayms.domain.Employee
 import org.apache.commons.lang.RandomStringUtils
 import org.apache.commons.lang.math.RandomUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,7 +23,7 @@ import spock.lang.Specification
 class PersistenceSpecIT extends Specification {
 
     @Autowired CompanyDao companyDao
-    @Autowired UserDao userDao
+    @Autowired EmployeeDao employeeDao
     @Autowired ClientDao clientDao
     @Autowired ServiceDao serviceDao
 
@@ -48,15 +48,15 @@ class PersistenceSpecIT extends Specification {
 
     }
 
-    def "saves and finds user"() {
+    def "saves and finds employee"() {
 
         when:
-        User user = user()
-        userDao.save(user)
+        Employee employee = employee()
+        employeeDao.save(employee)
 
         then:
-        userDao.findAllByCompany(company)[0] == user
-        userDao.findByName(user.name) == user
+        employeeDao.findAllByCompany(company)[0] == employee
+        employeeDao.findByName(employee.name) == employee
 
     }
 
@@ -82,12 +82,12 @@ class PersistenceSpecIT extends Specification {
     def "saves and finds services"() {
 
         when:
-        User user = user()
-        userDao.save(user)
+        Employee employee = employee()
+        employeeDao.save(employee)
         Client client = client()
         clientDao.save(client)
         Service svc = new Service()
-        svc.user = user
+        svc.user = employee
         svc.client = client
         serviceDao.save(svc)
 
@@ -123,14 +123,14 @@ class PersistenceSpecIT extends Specification {
         client
     }
 
-    User user() {
-        User user = new User()
-        user.company = company
-        user.role = User.Role.COMPANY_ADMIN
-        user.name = RandomStringUtils.randomAlphabetic(5)
-        user.firstName = RandomStringUtils.randomAlphabetic(10)
-        user.lastName = RandomStringUtils.randomAlphabetic(10)
-        user
+    Employee employee() {
+        Employee employee = new Employee()
+        employee.company = company
+        employee.role = Employee.Role.COMPANY_ADMIN
+        employee.name = RandomStringUtils.randomAlphabetic(5)
+        employee.firstName = RandomStringUtils.randomAlphabetic(10)
+        employee.lastName = RandomStringUtils.randomAlphabetic(10)
+        employee
     }
 
 }
