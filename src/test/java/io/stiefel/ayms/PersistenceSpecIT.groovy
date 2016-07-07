@@ -2,11 +2,13 @@ package io.stiefel.ayms
 
 import io.stiefel.ayms.dao.ClientDao
 import io.stiefel.ayms.dao.CompanyDao
+import io.stiefel.ayms.dao.NoteDao
 import io.stiefel.ayms.dao.ServiceDao
 import io.stiefel.ayms.dao.EmployeeDao
 import io.stiefel.ayms.domain.Address
 import io.stiefel.ayms.domain.Client
 import io.stiefel.ayms.domain.Company
+import io.stiefel.ayms.domain.Note
 import io.stiefel.ayms.domain.Service
 import io.stiefel.ayms.domain.Employee
 import org.apache.commons.lang.RandomStringUtils
@@ -26,6 +28,7 @@ class PersistenceSpecIT extends Specification {
     @Autowired EmployeeDao employeeDao
     @Autowired ClientDao clientDao
     @Autowired ServiceDao serviceDao
+    @Autowired NoteDao noteDao
 
     Address address = new Address('Somewhere in', null, 'Charlotte', 'NC', '28205')
     Company company = new Company(
@@ -75,8 +78,8 @@ class PersistenceSpecIT extends Specification {
     }
 
     /**
-     * We're executing multiple saves here so
-     * @return
+     * We're executing multiple saves here so we have to make the method transactional until we
+     * move the logic into a service class.
      */
     @Transactional
     def "saves and finds services"() {
@@ -87,7 +90,7 @@ class PersistenceSpecIT extends Specification {
         Client client = client()
         clientDao.save(client)
         Service svc = new Service()
-        svc.user = employee
+        svc.employee = employee
         svc.client = client
         serviceDao.save(svc)
 
@@ -111,6 +114,30 @@ class PersistenceSpecIT extends Specification {
         serviceDao.find(svc.id) == svc
 
     }
+
+    def "saves and finds notes"() {
+
+        when:
+        Client client = client()
+        clientDao.save(client)
+        Employee employee = employee()
+        employeeDao.save(employee)
+        Service svc = new Service()
+        svc.employee = employee
+        svc.client = client
+        serviceDao.save(svc)
+
+        Note note = new Note()
+        note.service = svc
+        note.employee = employee
+        note.text = RandomStringUtils.randomAlphabetic(200)
+        noteDao.save(note)
+
+        then:
+        noteDao.find(note.id) == note
+
+    }
+
 
     Client client() {
         Client client = new Client()
