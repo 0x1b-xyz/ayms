@@ -40,7 +40,6 @@ class User {
     @JsonView(View.Summary)
     @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
     @JsonIdentityReference(alwaysAsId=true)
-    @NotNull
     Company company
 
     @Column(nullable = false)
