@@ -169,25 +169,14 @@
 
 </div>
 
-<script id="client-tpl" type="text/x-handlebars-template">
-    <tr>
-        <td><a href="<s:url value="/company/{{company}}/client/{{id}}"/>">{{id}}</a></td>
-        <td>{{firstName}}</td>
-        <td>{{lastName}}</td>
-        <td>{{formatDate dateOfBirth day="numeric" month="long" year="numeric"}}</td>
-        <td>{{ssn}}</td>
-        <td><a href="<s:url value="/company/{{company}}/client/{{id}}/service"/>" class="btn btn-info" role="button">Services</a></td>
-    </tr>
-</script>
-
 <script type="text/javascript">
     jQuery(document).ready(function () {
 
         jQuery('#ssn').mask('000-00-0000');
         jQuery('#address\\.zipcode').mask('00000');
 
-        rows('', '#client-tpl', '#client-tbl');
-        form('#client-frm', '#client-tpl', '#client-tbl');
+        rows('', 'row-Client', '#client-tbl');
+        form('#client-frm', 'row-Client', '#client-tbl');
     })
 </script>
 

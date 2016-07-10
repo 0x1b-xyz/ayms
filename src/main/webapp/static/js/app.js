@@ -1,4 +1,11 @@
 /**
+ * Base url for templates or just urls. You should rewrite them using the <s:url/> tag so the context
+ * switches correctly
+ */
+var URL_PREFIX = '/';
+var TPL_PREFIX = URL_PREFIX + 'static/hbs/';
+
+/**
  * @param url Endpoint url, expects a Result<T> outcome
  * @param tpl Template used to append rows
  * @param tbl Table we'll append rows into
@@ -8,7 +15,6 @@ function rows(url, tpl, tbl, clear) {
 
     if (clear == undefined)
         clear = true;
-    var template = Handlebars.compile(jQuery(tpl).html());
     var tbody = jQuery(tbl + ' > tbody');
 
     jQuery.ajax(url, {
@@ -23,7 +29,7 @@ function rows(url, tpl, tbl, clear) {
             }
 
             result.data.forEach(function(row) {
-                tbody.append(template(row))
+                tbody.append(getTemplate(tpl)(row));
             })
         }
     })
@@ -82,23 +88,103 @@ function toId(id) {
     return "#" + id.replace( /(:|\.|\[|\]|,)/g, "\\$1" );
 }
 
+/**
+ * Not totally guaranteed but not a bad unique id generator. Good 'enuff at least.
+ * @returns {string}
+ */
+function uniqueId() {
+    var result, i, j;
+    result = '';
+    for(j=0; j<32; j++) {
+        if( j == 8 || j == 12|| j == 16|| j == 20)
+            result = result + '-';
+        i = Math.floor(Math.random()*16).toString(16).toUpperCase();
+        result = result + i;
+    }
+    return result
+}
 
+/**
+ * Adds formatting functions to handlebars
+ */
+HandlebarsIntl.registerWith(Handlebars);
 
-var FormTextControl = function(options) {
+/**
+ * Adds a useful comparison helper to handlebars.
+ *
+ * http://doginthehat.com.au/2012/02/comparison-block-helper-for-handlebars-templates/#comment-44
+ */
+Handlebars.registerHelper('compare', function (lvalue, operator, rvalue, options) {
 
-    var self = this;
-    var vars = {
-        something: 'jason'
+    var operators, result;
+
+    if (arguments.length < 3) {
+        throw new Error("Handlerbars Helper 'compare' needs 2 parameters");
+    }
+
+    if (options === undefined) {
+        options = rvalue;
+        rvalue = operator;
+        operator = "===";
+    }
+
+    operators = {
+        '==': function (l, r) { return l == r; },
+        '===': function (l, r) { return l === r; },
+        '!=': function (l, r) { return l != r; },
+        '!==': function (l, r) { return l !== r; },
+        '<': function (l, r) { return l < r; },
+        '>': function (l, r) { return l > r; },
+        '<=': function (l, r) { return l <= r; },
+        '>=': function (l, r) { return l >= r; },
+        'typeof': function (l, r) { return typeof l == r; }
     };
 
-    this.construct = function(options) {
-        $.extend(vars, options)
-    };
+    if (!operators[operator]) {
+        throw new Error("Handlerbars Helper 'compare' doesn't know the operator " + operator);
+    }
 
-    this.alert = function() {
-        alert(vars.something);
-    };
+    result = operators[operator](lvalue, rvalue);
 
-    this.construct(options);
+    if (result) {
+        return options.fn(this);
+    } else {
+        return options.inverse(this);
+    }
 
-};
+});
+
+/**
+ * Prepends the {@link #URL_PREFIX} onto the path given. Will strip a leading slash if
+ * it finds one.
+ */
+Handlebars.registerHelper('url', function(options) {
+    var url = options.fn(this);
+    console.log(url);
+    if (url.startsWith('/'))
+        url = url.substring(1, url.length);
+    return URL_PREFIX + url;
+});
+
+/**
+ * Lazily loads and compiles the '.hbs' template from the {@link TPL_PREFIX}, returning
+ * an executable template.
+ *
+ * @param path
+ */
+function getTemplate(path) {
+    if (Handlebars.templates == undefined)
+        Handlebars.templates = {};
+    if (Handlebars.templates[path] == undefined) {
+        let myPath = TPL_PREFIX + path + '.hbs';
+        jQuery.ajax(myPath, {
+            async: false,
+            success: function(response) {
+                Handlebars.templates[path] = Handlebars.compile(response);
+            }
+        }).fail(function() {
+            throw new Exception("Could not load template from path: " + myPath);
+        })
+    }
+    return Handlebars.templates[path];
+}

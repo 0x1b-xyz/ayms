@@ -1,4 +1,3 @@
-<%@ page import="io.stiefel.ayms.domain.Employee" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
@@ -79,20 +78,10 @@
 
 </div>
 
-<script id="service-tpl" type="text/x-handlebars-template">
-    <tr>
-        <td><a href="<s:url value="/company/{{company}}/client/{{client}}/service/{{id}}"/>">{{id}}</a></td>
-        <td>{{employee}}</td>
-        <td>{{formatDate scheduled day="numeric" month="long" year="numeric"}} {{formatTime scheduled hour="numeric" minute="numeric"}}</td>
-        <td>{{formatDate arrived day="numeric" month="long" year="numeric"}} {{formatTime arrived hour="numeric" minute="numeric"}}</td>
-    </tr>
-</script>
-
 <script type="text/javascript">
     jQuery(document).ready(function () {
-
-        rows('', '#service-tpl', '#service-tbl');
-        form('#service-frm', '#service-tpl', '#service-tbl');
+        rows('', 'row-Service', '#service-tbl');
+        form('#service-frm', 'row-Service', '#service-tbl');
     })
 </script>
 

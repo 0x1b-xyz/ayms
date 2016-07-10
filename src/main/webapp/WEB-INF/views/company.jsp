@@ -141,25 +141,13 @@
 
 </div>
 
-<script id="company-tpl" type="text/x-handlebars-template">
-    <tr>
-        <td><a href="<s:url value="/company/{{id}}"/>">{{id}}</a></td>
-        <td>{{name}}</td>
-        <td>{{#if address.line1}}{{address.line1}} {{address.city}}, {{address.state}} {{address.zipCode}}{{/if}}</td>
-        <td>
-            <a href="<s:url value="/company/{{id}}/employee"/>" class="btn btn-info" role="button">Employees</a>
-            <a href="<s:url value="/company/{{id}}/client"/>" class="btn btn-default" role="button">Clients</a>
-        </td>
-    </tr>
-</script>
-
 <script type="text/javascript">
     jQuery(document).ready(function () {
 
         jQuery('#address\\.zipcode').mask('00000');
 
-        rows('', '#company-tpl', '#company-tbl');
-        form('#company-frm', '#company-tpl', '#company-tbl')
+        rows('', 'row-Company', '#company-tbl');
+        form('#company-frm', 'row-Company', '#company-tbl')
 
     })
 </script>

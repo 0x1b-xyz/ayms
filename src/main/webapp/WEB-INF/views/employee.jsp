@@ -84,20 +84,10 @@
 
 </div>
 
-<script id="employee-tpl" type="text/x-handlebars-template">
-    <tr>
-        <td><a href="<s:url value="/company/{{company}}/employee/{{id}}"/>">{{id}}</a></td>
-        <td>{{name}}</td>
-        <td>{{firstName}}</td>
-        <td>{{lastName}}</td>
-        <td>{{role}}</td>
-    </tr>
-</script>
-
 <script type="text/javascript">
     jQuery(document).ready(function () {
-        rows('', '#employee-tpl', '#employee-tbl');
-        form('#employee-frm', '#employee-tpl', '#employee-tbl');
+        rows('', 'row-Employee', '#employee-tbl');
+        form('#employee-frm', 'row-Employee', '#employee-tbl');
     })
 </script>
 

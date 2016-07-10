@@ -29,6 +29,10 @@
     <script src="<c:url value="/static/js/bootstrap.js"/>"></script>
     <script src="<c:url value="/static/js/app.js"/>"></script>
 
+    <script type="text/javascript">
+        URL_PREFIX = '<s:url value="/"/>';
+    </script>
+
     <dec:head/>
 </head>
 <body>
@@ -64,8 +68,6 @@
 </div>
 
 <script>
-
-    HandlebarsIntl.registerWith(Handlebars);
 
     jQuery(document).ready(function() {
 
