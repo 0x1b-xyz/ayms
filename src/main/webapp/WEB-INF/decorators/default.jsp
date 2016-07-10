@@ -10,6 +10,7 @@
     <title>ayms - <dec:title default="default"/></title>
 
     <link href="<c:url value="/static/css/bootstrap.min.css"/>" rel="stylesheet">
+    <link href="<c:url value="/static/css/font-awesome.min.css"/>" rel="stylesheet">
     <link href="<c:url value="/static/css/app.css"/>" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -20,6 +21,7 @@
     <%--<![endif]-->--%>
 
     <script src="<c:url value="/static/js/jquery-2.2.4.js"/>"></script>
+    <script src="<c:url value="/static/js/jquery-ui.js"/>"></script>
     <script src="<c:url value="/static/js/jquery.serializejson.js"/>"></script>
     <script src="<c:url value="/static/js/jquery.mask.js"/>"></script>
     <script src="<c:url value="/static/js/handlebars-v4.0.5.js"/>"></script>
@@ -40,6 +42,9 @@
             </li>
             <li>
                 <a href="<s:url value="/company"/>">Companies</a>
+            </li>
+            <li>
+                <a href="<s:url value="/form"/>">Forms</a>
             </li>
         </ul>
     </div>

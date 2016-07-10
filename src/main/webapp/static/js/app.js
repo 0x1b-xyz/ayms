@@ -82,3 +82,23 @@ function toId(id) {
     return "#" + id.replace( /(:|\.|\[|\]|,)/g, "\\$1" );
 }
 
+
+
+var FormTextControl = function(options) {
+
+    var self = this;
+    var vars = {
+        something: 'jason'
+    };
+
+    this.construct = function(options) {
+        $.extend(vars, options)
+    };
+
+    this.alert = function() {
+        alert(vars.something);
+    };
+
+    this.construct(options);
+
+};
