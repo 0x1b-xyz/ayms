@@ -418,6 +418,7 @@
                 <configuration>
                     <stopPort>9090</stopPort>
                     <stopKey>alpha</stopKey>
+                    <skip>${skipTests}</skip>
                 </configuration>
                 <executions>
                     <execution>
