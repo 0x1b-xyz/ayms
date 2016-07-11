@@ -38,13 +38,25 @@ class Context {
         new PropertySourcesPlaceholderConfigurer();
     }
 
+//    @Bean
+//    URI dbUri() {
+//        System.getenv().each {
+//            println "${it.key}\t\t\t${it.value}"
+//        }
+//        if (env.getProperty('database.url')) {
+//            return new URI(env.getProperty('database.url'))
+//        }
+//        new URI(env.getProperty('ayms.jdbc.url'))
+//    }
+
     @Bean(destroyMethod = 'close')
     DataSource dataSource() {
+        URI dbUri = new URI(env.getProperty('ayms.jdbc.url'))
         new BasicDataSource(
                 driverClassName: env.getProperty('ayms.jdbc.driver'),
-                url: env.getProperty('ayms.jdbc.url'),
-                username: env.getProperty('ayms.jdbc.username'),
-                password: env.getProperty('ayms.jdbc.password')
+                url: "jdbc:postgresql://${dbUri.host}:${dbUri.port}${dbUri.path}",
+                username: dbUri.userInfo.split(':')[0],
+                password: dbUri.userInfo.split(':')[1]
         )
     }
 
