@@ -38,7 +38,7 @@ body {
 #page-content-wrapper {
     width: 100%;
     position: absolute;
-    padding: 15px;
+    padding: 10px 10px 10px 5px;
 }
 
 #wrapper.toggled #page-content-wrapper {
@@ -112,7 +112,7 @@ body {
     }
 
     #page-content-wrapper {
-        padding: 20px;
+        /*padding: 20px;*/
         position: relative;
     }
 

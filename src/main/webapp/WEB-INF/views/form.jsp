@@ -12,18 +12,22 @@
 
     <style type="text/css">
 
+        .container-fluid {
+            padding: 0;
+        }
+
         .form-control-list .list-group-item {
             padding: 5px 10px;
         }
 
         .grid-stack-item-content {
-            background-color: #c4e3f3;
+            background-color: whitesmoke;
             padding: 3px 3px 0 3px;
         }
 
         /* Override bootstrap fields to work inside the gridstack */
 
-        .form-group {
+        .grid-stack-frm .form-group {
             margin: 0;
         }
 
@@ -39,48 +43,22 @@
 <div class="row">
 
     <div class="col-lg-9">
-
-        <form id="grid-stack-frm" method="post">
-
-            <div class="grid-stack">
-                <%--<div class="grid-stack-item" data-gs-x="0" data-gs-y="0" data-gs-width="6" data-gs-height="2">--%>
-                <%--<div class="grid-stack-item-content">--%>
-                <%--<div class="form-group">--%>
-                <%--<label for="name">Employee</label>--%>
-                <%--&lt;%&ndash;<div class="col-sm-10">&ndash;%&gt;--%>
-                <%--<input name="name" id="name" type="text" class="form-control" placeholder="Name">--%>
-                <%--&lt;%&ndash;</div>&ndash;%&gt;--%>
-                <%--</div>--%>
-                <%--</div>--%>
-                <%--</div>--%>
-                <%--<div class="grid-stack-item" data-gs-x="4" data-gs-y="2" data-gs-width="4" data-gs-height="3">--%>
-                <%--<div class="grid-stack-item-content">--%>
-                <%--<div class="form-group">--%>
-                <%--<label for="text" class="col-sm-2 control-label">Some Text</label>--%>
-                <%--<div class="col-sm-10 form-control-wrapper">--%>
-                <%--<textarea class="form-control" name="text" id="text"></textarea>--%>
-                <%--</div>--%>
-                <%--</div>--%>
-
-                <%--</div>--%>
-                <%--</div>--%>
-            </div>
-
+        <form id="grid-stack-frm" method="post" class="form-horizontal">
+            <div class="grid-stack"></div>
         </form>
-
     </div>
 
     <div class="col-lg-3 form-control-list">
         <h6>Layout Controls</h6>
         <div class="list-group">
-            <button type="button" class="list-group-item btn-sm" data-ctrl-type="HeaderText" data-edit-tpl="ctrl-header-tpl"><i class="fa fa-bold fa-sm" aria-hidden="true"></i>&nbsp; Header</button>
-            <button type="button" class="list-group-item btn-sm" data-edit-tpl="ctrl-text-block-tpl"><i class="fa fa-italic fa-sm" aria-hidden="true"></i>&nbsp; Text Block</button>
+            <button type="button" class="list-group-item btn-sm" data-ctrl-type="HeaderText"><i class="fa fa-bold fa-sm" aria-hidden="true"></i>&nbsp; Header</button>
+            <button type="button" class="list-group-item btn-sm" data-ctrl-type="TextBlock"><i class="fa fa-italic fa-sm" aria-hidden="true"></i>&nbsp; Text Block</button>
         </div>
         <h6>Text Controls</h6>
         <div class="list-group">
-            <button type="button" class="list-group-item btn-sm" data-edit-tpl="ctrl-text-field-tpl"><i class="fa fa-font fa-sm" aria-hidden="true"></i>&nbsp; Text Field</button>
-            <button type="button" class="list-group-item btn-sm" data-edit-tpl="ctrl-textarea-field-tpl"><i class="fa fa-edit fa-sm" aria-hidden="true"></i>&nbsp; Text Area Field</button>
-            <button type="button" class="list-group-item btn-sm" data-edit-tpl="ctrl-password-field-tpl"><i class="fa fa-user-secret fa-sm" aria-hidden="true"></i>&nbsp; Password Field</button>
+            <button type="button" class="list-group-item btn-sm" data-ctrl-type="TextField"><i class="fa fa-font fa-sm" aria-hidden="true"></i>&nbsp; Text Field</button>
+            <button type="button" class="list-group-item btn-sm" data-ctrl-type="TextAreaField"><i class="fa fa-edit fa-sm" aria-hidden="true"></i>&nbsp; Text Area Field</button>
+            <button type="button" class="list-group-item btn-sm" data-ctrl-type="PasswordField"><i class="fa fa-user-secret fa-sm" aria-hidden="true"></i>&nbsp; Password Field</button>
         </div>
         <h6>Typed Controls</h6>
         <div class="list-group">
@@ -103,23 +81,6 @@
     </div>
 
 </div>
-
-
-<script id="text-tpl" type="text/x-handlebars-template">
-    <div class="grid-stack-item" data-gs-x="0" data-gs-y="99" data-gs-width="6" data-gs-height="2">
-        <div class="grid-stack-item-content">
-            <div class="form-group">
-                <label for="name" class="col-sm-2 control-label">employee new</label>
-                <div class="col-sm-10">
-                <input name="name" id="name" type="text" class="form-control" placeholder="Name">
-                </div>
-            </div>
-        </div>
-    </div>
-</script>
-
-<script id="ctrl-header-tpl" type="text/x-handlebars-template">
-</script>
 
 <div id="ctrl-modal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -144,12 +105,59 @@
     var ctrlModal;
     var ctrlModalFrm;
     var grid;
+    var ctrlIdRe = /\-[0-9A-F]{8}[0-9A-F]{4}[0-9A-F]{4}[0-9A-F]{4}[0-9A-F]{12}/g;
 
-    jQuery(document).ready(function () {
+    function newCtrl() {
+
+        let ctrlId = uniqueId();
+        let ctrlType = $(this).data('ctrl-type');
+        let ctrlLabel = $(this).html();
+        let formEle = getTemplate('ctrl-' + ctrlType + '-edit');
+
+        ctrlModal.find('.modal-title').html(ctrlLabel);
+
+        ctrlModalFrm.data('ctrl-id', ctrlId);
+        ctrlModalFrm.data('ctrl-type', ctrlType);
+        ctrlModalFrm.html(formEle({
+            id: ctrlId
+        }));
+
+        ctrlModal.modal();
+
+    }
+
+    function addCtrl() {
+
+        let ctrlId = ctrlModalFrm.data('ctrl-id');
+        let ctrlType = ctrlModalFrm.data('ctrl-type');
+        let ctrlData = $('#ctrl-modal-frm').serializeJSON();
+
+        // Strip the ctrlId off the field names
+        for (var key in ctrlData) {
+            if (!ctrlData.hasOwnProperty(key))
+                continue;
+            var newKey = key.replace(ctrlIdRe, '');
+            ctrlData[newKey] = ctrlData[key];
+            delete ctrlData[key];
+        }
+
+        let widget = getTemplate('ctrl-Wrapper')({
+            id: ctrlId,
+            x: 0, y: 10, width: 12, height: 2
+        });
+
+        grid.addWidget(widget);
+        $(toId(ctrlId)).html(getTemplate('ctrl-' + ctrlType + '-render')(ctrlData));
+
+        ctrlModal.modal('hide');
+
+    }
+
+    $(document).ready(function () {
 
         var gridStack = jQuery('.grid-stack');
         gridStack.gridstack({
-            cellHeight: 30,
+            cellHeight: 15,
             verticalMargin: 10
         });
 
@@ -157,30 +165,11 @@
         ctrlModal = $('#ctrl-modal');
         ctrlModalFrm = ctrlModal.find('#ctrl-modal-frm');
 
-        jQuery('.form-control-list').find('button').on('click', function () {
+        $('.form-control-list').find('button').on('click', newCtrl);
+        $('#ctrl-modal-add').on('click', addCtrl);
 
-            let ctrlType = jQuery(this).data('ctrl-type');
-            let formEle = getTemplate(ctrlType + '-edit');
-
-            ctrlModalFrm.data('ctrl-type', ctrlType);
-            ctrlModalFrm.html(formEle());
-            ctrlModal.modal();
-        })
     });
 
-    function addCtrl() {
-        let ctrlData = $('#ctrl-modal-frm').serializeJSON();
-        let ctrlType = ctrlModalFrm.data('ctrl-type');
-        let ctrlId = uniqueId();
-        let widget = getTemplate('GridStackItem')({
-            id: ctrlId,
-            x: 0, y: 10, width: 12, height: 2
-        });
-        grid.addWidget(widget);
-        jQuery(toId(ctrlId)).html(getTemplate(ctrlType + '-render')(ctrlData));
-        ctrlModal.modal('hide');
-    }
-    $('#ctrl-modal-add').on('click', addCtrl);
 
 </script>
 

@@ -96,12 +96,10 @@ function uniqueId() {
     var result, i, j;
     result = '';
     for(j=0; j<32; j++) {
-        if( j == 8 || j == 12|| j == 16|| j == 20)
-            result = result + '-';
         i = Math.floor(Math.random()*16).toString(16).toUpperCase();
         result = result + i;
     }
-    return result
+    return result;
 }
 
 /**
@@ -183,7 +181,7 @@ function getTemplate(path) {
                 Handlebars.templates[path] = Handlebars.compile(response);
             }
         }).fail(function() {
-            throw new Exception("Could not load template from path: " + myPath);
+            throw new Error("Could not load template from path: " + myPath);
         })
     }
     return Handlebars.templates[path];

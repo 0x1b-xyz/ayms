@@ -1,0 +1,16 @@
+<div class="form-group">
+    <label for="text-{{id}}" class="col-sm-2 control-label">Text</label>
+    <div class="col-sm-8">
+        <input name="text-{{id}}" id="text-{{id}}" type="text" class="form-control" placeholder="Header Text" value="{{text}}">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-2 control-label">Size</label>
+    <div class="col-sm-8">
+        <label class="radio-inline"><input type="radio" name="size-{{id}}" value="1" {{#compare size "1"}}checked{{/compare}}> H1</label>
+        <label class="radio-inline"><input type="radio" name="size-{{id}}" value="2" {{#compare size "1"}}checked{{/compare}}> H2</label>
+        <label class="radio-inline"><input type="radio" name="size-{{id}}" value="3" {{#compare size "1"}}checked{{/compare}}> H3</label>
+        <label class="radio-inline"><input type="radio" name="size-{{id}}" value="4" {{#compare size "1"}}checked{{/compare}}> H4</label>
+        <label class="radio-inline"><input type="radio" name="size-{{id}}" value="5" {{#compare size "1"}}checked{{/compare}}> H5</label>
+    </div>
+</div>
