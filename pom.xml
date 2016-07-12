@@ -13,7 +13,8 @@
 
         <dollar>$</dollar>
 
-        <skipTests>false</skipTests>
+        <jetty.skip>false</jetty.skip>
+        <docker.skip>false</docker.skip>
 
     </properties>
 
@@ -352,7 +353,7 @@
                             <goal>start</goal>
                         </goals>
                         <configuration>
-                            <skip>${skipTests}</skip>
+                            <skip>${docker.skip}</skip>
                         </configuration>
                     </execution>
                     <execution>
@@ -362,7 +363,7 @@
                             <goal>stop</goal>
                         </goals>
                         <configuration>
-                            <skip>${skipTests}</skip>
+                            <skip>${docker.skip}</skip>
                         </configuration>
                     </execution>
                     <!--<execution>-->
@@ -418,7 +419,6 @@
                 <configuration>
                     <stopPort>9090</stopPort>
                     <stopKey>alpha</stopKey>
-                    <skip>${skipTests}</skip>
                 </configuration>
                 <executions>
                     <execution>
@@ -463,5 +463,21 @@
         </plugins>
 
     </build>
+
+    <profiles>
+        <profile>
+            <id>skipping-tests</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>skipTests</name>
+                </property>
+            </activation>
+            <properties>
+                <jetty.skip>true</jetty.skip>
+                <docker.skip>true</docker.skip>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>

@@ -6,6 +6,8 @@
 
     <script type="text/javascript" src="<s:url value="/static/js/lodash.min.js"/>"></script>
     <script type="text/javascript" src="<s:url value="/static/js/gridstack.js"/>"></script>
+    <script type="text/javascript" src="<s:url value="/static/js/bootstrap-wysiwyg.js"/>"></script>
+    <script type="text/javascript" src="<s:url value="/static/js/jquery.hotkeys.js"/>"></script>
 
     <link href="<s:url value="/static/css/gridstack.css"/>" rel="stylesheet"/>
     <link href="<s:url value="/static/css/gridstack-extra.css"/>" rel="stylesheet"/>
@@ -35,6 +37,22 @@
             height: 95%;
         }
 
+        .text-editor {
+            max-height: 250px;
+            height: 250px;
+            background-color: white;
+            border-collapse: separate;
+            border: 1px solid rgb(204, 204, 204);
+            padding: 4px;
+            box-sizing: content-box;
+            -webkit-box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
+            box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
+            border-top-right-radius: 3px; border-bottom-right-radius: 3px;
+            border-bottom-left-radius: 3px; border-top-left-radius: 3px;
+            overflow: scroll;
+            outline: none;
+        }
+
     </style>
 
 </head>
@@ -43,9 +61,13 @@
 <div class="row">
 
     <div class="col-lg-9">
+
+        <hr>
         <form id="grid-stack-frm" method="post" class="form-horizontal">
             <div class="grid-stack"></div>
         </form>
+        <hr>
+
     </div>
 
     <div class="col-lg-3 form-control-list">
