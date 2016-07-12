@@ -37,6 +37,35 @@
             height: 95%;
         }
 
+        .form-group.inner-form-group {
+            margin-bottom: 0;
+        }
+
+        /*These classes make it possible to embed a vertical form field in a */
+        /*horizontal form.*/
+
+        .form-vertical .form-horizontal .form-group > label {
+            text-align: left;
+        }
+        .form-horizontal .form-vertical .form-group > label {
+            float: none;
+            padding-top: 0;
+            text-align: left;
+            width: 100%
+        }
+        .form-horizontal .form-vertical .form-control {
+            margin-left: 0;
+        }
+        .form-horizontal .form-vertical.form-actions,
+        .form-horizontal .form-vertical .form-actions {
+            padding-left: 20px;
+        }
+        .form-group .form-group {
+            margin-bottom: 0;
+        }
+
+        /*end vertical form classes*/
+
         .text-editor {
             max-height: 250px;
             height: 250px;
