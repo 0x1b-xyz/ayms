@@ -112,9 +112,9 @@
         </div>
         <h6>Typed Controls</h6>
         <div class="list-group">
-            <button type="button" class="list-group-item btn-sm" data-edit-tpl="ctrl-phone-field-tpl"><i class="fa fa-volume-control-phone fa-sm" aria-hidden="true"></i>&nbsp; Phone Number Field</button>
-            <button type="button" class="list-group-item btn-sm" data-edit-tpl="ctrl-email-field-tpl"><i class="fa fa-envelope fa-sm" aria-hidden="true"></i>&nbsp; Email Field</button>
-            <button type="button" class="list-group-item btn-sm" data-edit-tpl="ctrl-currency-field-tpl"><i class="fa fa-money fa-sm" aria-hidden="true"></i>&nbsp; Currency Field</button>
+            <button type="button" class="list-group-item btn-sm" data-ctrl-type="PhoneNumberField"><i class="fa fa-volume-control-phone fa-sm" aria-hidden="true"></i>&nbsp; Phone Number Field</button>
+            <button type="button" class="list-group-item btn-sm" data-ctrl-type="EmailField"><i class="fa fa-envelope fa-sm" aria-hidden="true"></i>&nbsp; Email Field</button>
+            <button type="button" class="list-group-item btn-sm" data-ctrl-type="CurrencyField"><i class="fa fa-money fa-sm" aria-hidden="true"></i>&nbsp; Currency Field</button>
         </div>
         <h6>Date/Time Controls</h6>
         <div class="list-group">
