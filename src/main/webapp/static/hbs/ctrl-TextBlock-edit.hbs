@@ -44,7 +44,6 @@
     var editorField = $(toId('text-{{id}}'));
     editor.wysiwyg();
     editor.bind("DOMSubtreeModified",function(){
-        console.log(editor.html())
         editorField.val(editor.html());
     });
 </script>

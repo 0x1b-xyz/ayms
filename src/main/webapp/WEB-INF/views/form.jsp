@@ -109,7 +109,6 @@
         <div class="list-group">
             <button type="button" class="list-group-item btn-sm" data-ctrl-type="TextField"><i class="fa fa-font fa-sm" aria-hidden="true"></i>&nbsp; Text Field</button>
             <button type="button" class="list-group-item btn-sm" data-ctrl-type="TextAreaField"><i class="fa fa-edit fa-sm" aria-hidden="true"></i>&nbsp; Text Area Field</button>
-            <button type="button" class="list-group-item btn-sm" data-ctrl-type="PasswordField"><i class="fa fa-user-secret fa-sm" aria-hidden="true"></i>&nbsp; Password Field</button>
         </div>
         <h6>Typed Controls</h6>
         <div class="list-group">
