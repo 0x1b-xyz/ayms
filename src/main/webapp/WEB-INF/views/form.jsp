@@ -116,11 +116,11 @@
             <button type="button" class="list-group-item btn-sm" data-ctrl-type="EmailField"><i class="fa fa-envelope fa-sm" aria-hidden="true"></i>&nbsp; Email Field</button>
             <button type="button" class="list-group-item btn-sm" data-ctrl-type="CurrencyField"><i class="fa fa-money fa-sm" aria-hidden="true"></i>&nbsp; Currency Field</button>
         </div>
-        <h6>Date/Time Controls</h6>
-        <div class="list-group">
-            <button type="button" class="list-group-item btn-sm" data-edit-tpl="ctrl-date-field-tpl"><i class="fa fa-calendar fa-sm" aria-hidden="true"></i>&nbsp; Date Field</button>
-            <button type="button" class="list-group-item btn-sm" data-edit-tpl="ctrl-time-field-tpl"><i class="fa fa-clock-o fa-sm" aria-hidden="true"></i>&nbsp; Time Field</button>
-        </div>
+        <%--<h6>Date/Time Controls</h6>--%>
+        <%--<div class="list-group">--%>
+            <%--<button type="button" class="list-group-item btn-sm" data-ctrl-type="DateField"><i class="fa fa-calendar fa-sm" aria-hidden="true"></i>&nbsp; Date Field</button>--%>
+            <%--<button type="button" class="list-group-item btn-sm" data-edit-tpl="ctrl-time-field-tpl"><i class="fa fa-clock-o fa-sm" aria-hidden="true"></i>&nbsp; Time Field</button>--%>
+        <%--</div>--%>
         <h6>Selections Controls</h6>
         <div class="list-group">
             <button type="button" class="list-group-item btn-sm" data-edit-tpl="ctrl-dropdown-field-tpl"><i class="fa fa-reorder fa-lg" aria-hidden="true"></i>&nbsp; Dropdown</button>
