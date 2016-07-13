@@ -1,0 +1,18 @@
+{{#compare labelAlign "horizontal"}}
+<div class="form-group">
+    <label for="{{name}}" class="col-sm-2 control-label">{{label}}</label>
+    <div class="col-sm-10">
+        <input name="{{name}}" id="{{name}}" type="text" class="form-control" placeholder="{{placeholder}}">
+    </div>
+</div>
+{{/compare}}
+{{#compare labelAlign "vertical"}}
+<div class="form-vertical">
+    <label for="{{name}}">{{label}}</label>
+    <input name="{{name}}" id="{{name}}" type="text" class="form-control" placeholder="{{placeholder}}">
+</div>
+{{/compare}}
+
+<script type="text/javascript">
+    $(toId('{{name}}')).mask("#,##0.00", {reverse: true})
+</script>
