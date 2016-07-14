@@ -1,0 +1,78 @@
+/*.container-fluid {*/
+/*padding: 0;*/
+/*}*/
+
+.form-control-list .list-group-item {
+    padding: 5px 10px;
+}
+
+.grid-stack-item-content {
+    background-color: whitesmoke;
+    padding: 3px 3px 0 3px;
+}
+
+.grid-stack-item-delete {
+    top: 40%;
+    left: 100%;
+    margin-left: -25px;
+    margin-right: 12px;
+}
+
+/* Override bootstrap fields to work inside the gridstack */
+
+.grid-stack-item-content .form-group {
+    margin: 0;
+}
+
+.form-group, .form-control-wrapper, .form-control-wrapper textarea {
+    height: 95%;
+}
+
+.form-group.inner-form-group {
+    margin-bottom: 0;
+}
+
+.grid-stack-item-content div[class*="col-"] {
+    padding-right: 0;
+}
+
+/*These classes make it possible to embed a vertical form field in a */
+/*horizontal form.*/
+
+.form-vertical .form-horizontal .form-group > label {
+    text-align: left;
+}
+.form-horizontal .form-vertical .form-group > label {
+    float: none;
+    padding-top: 0;
+    text-align: left;
+    width: 100%
+}
+.form-horizontal .form-vertical .form-control {
+    margin-left: 0;
+}
+.form-horizontal .form-vertical.form-actions,
+.form-horizontal .form-vertical .form-actions {
+    padding-left: 20px;
+}
+.form-group .form-group {
+    margin-bottom: 0;
+}
+
+/*end vertical form classes*/
+
+.text-editor {
+    max-height: 250px;
+    height: 250px;
+    background-color: white;
+    border-collapse: separate;
+    border: 1px solid rgb(204, 204, 204);
+    padding: 4px;
+    box-sizing: content-box;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
+    box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
+    border-top-right-radius: 3px; border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px; border-top-left-radius: 3px;
+    overflow: scroll;
+    outline: none;
+}
