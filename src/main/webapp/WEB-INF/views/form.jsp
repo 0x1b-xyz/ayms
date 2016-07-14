@@ -159,24 +159,31 @@
     var appendHdefault = 2;
 
     /**
-     * Renders the {@code ctrl-CTRLTYPE-edit} template into the edit modal.
+     * Renders the {@code ctrl-CTRLTYPE-edit} template into the edit modal. Once the initial rendering
+     * is completed we look for a method called {@code load_CTRLID} that we'll pass whatever data we
+     * have to. It's the responsibility of this method to push the {@code ctrlData} values into the
+     * rendered form.
      */
     function newCtrl() {
 
         let ctrlId = uniqueId();
         let ctrlType = $(this).data('ctrl-type');
         let ctrlLabel = $(this).html();
+        let ctrlData = {id: ctrlId};
         let formEle = getTemplate('ctrl-' + ctrlType + '-edit');
 
         ctrlModal.find('.modal-title').html(ctrlLabel);
 
         ctrlModalFrm.data('ctrl-id', ctrlId);
         ctrlModalFrm.data('ctrl-type', ctrlType);
-        ctrlModalFrm.html(formEle({
-            id: ctrlId
-        }));
+        ctrlModalFrm.html(formEle(ctrlData));
 
         ctrlModal.modal();
+
+        if (eval("typeof load_" + ctrlId) != 'undefined') {
+            let loadCall = "return load_" + ctrlId + "(ctrlId, ctrlType, ctrlData)";
+            new Function('ctrlId', 'ctrlType', 'ctrlData', loadCall)(ctrlId, ctrlType, ctrlData);
+        }
 
     }
 
@@ -202,8 +209,9 @@
         }
 
         var added = false;
-        if (eval("typeof edit_" + ctrlId) != 'undefined') {
-            added = eval("edit_" + ctrlId + "(ctrlId, ctrlType, ctrlData)");
+        if (eval("typeof append_" + ctrlId) != 'undefined') {
+            let addCall = 'return append_' + ctrlId + '(ctrlId, ctrlType, ctrlData)';
+            added = new Function('ctrlId', 'ctrlType', 'ctrlData', addCall)(ctrlId, ctrlType, ctrlData);
         } else {
             added = appendCtrl(ctrlId, ctrlType, ctrlData, appendXdefault,
                                     appendYdefault, appendWdefault, appendHdefault);

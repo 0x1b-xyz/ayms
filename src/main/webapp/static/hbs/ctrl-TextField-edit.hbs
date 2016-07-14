@@ -49,7 +49,11 @@
 </div>
 
 <script type="text/javascript">
-    function edit_{{id}}(ctrlId, ctrlType, ctrlData) {
+    function load_{{id}}(ctrlId, ctrlType, ctrlData) {
+        console.log('need to load this data into the form:');
+        console.log(ctrlData);
+    }
+    function append_{{id}}(ctrlId, ctrlType, ctrlData) {
         var height = (ctrlData.labelAlign == 'horizontal') ? 2 : 3;
         return appendCtrl(ctrlId, ctrlType, ctrlData, 0, 50, 20, height)
     }
