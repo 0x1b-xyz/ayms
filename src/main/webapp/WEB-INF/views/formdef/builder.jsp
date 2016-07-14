@@ -14,9 +14,9 @@
 
     <style type="text/css">
 
-        .container-fluid {
-            padding: 0;
-        }
+        /*.container-fluid {*/
+            /*padding: 0;*/
+        /*}*/
 
         .form-control-list .list-group-item {
             padding: 5px 10px;
@@ -89,18 +89,26 @@
 
 <div class="row">
 
-    <div class="col-lg-9">
+    <h2>${formdef.name} <small>${formdef.description}</small></h2>
+    <ol class="breadcrumb">
+        <li><a href="<s:url value="/"/>">Home</a></li>
+        <li><a href="<s:url value="/formdef"/>">Form Definitions</a></li>
+        <li class="active">${formdef.name}</li>
+    </ol>
+
+    <div class="col-lg-10">
 
         <form id="grid-stack-frm" method="post" class="form-horizontal">
             <hr>
             <div class="grid-stack"></div>
             <hr>
+            <a href="<s:url value="/formdef"/>" type="button" role="button" class="btn btn-default">Cancel</a>
             <button type="submit" class="btn btn-primary">Save</button>
         </form>
 
     </div>
 
-    <div class="col-lg-3 form-control-list">
+    <div class="col-lg-2 form-control-list">
         <h6>Layout Controls</h6>
         <div class="list-group">
             <button type="button" class="list-group-item btn-sm" data-ctrl-type="HeaderText"><i class="fa fa-bold fa-sm" aria-hidden="true"></i>&nbsp; Header</button>
@@ -109,13 +117,13 @@
         <h6>Text Controls</h6>
         <div class="list-group">
             <button type="button" class="list-group-item btn-sm" data-ctrl-type="TextField"><i class="fa fa-font fa-sm" aria-hidden="true"></i>&nbsp; Text Field</button>
-            <button type="button" class="list-group-item btn-sm" data-ctrl-type="TextAreaField"><i class="fa fa-edit fa-sm" aria-hidden="true"></i>&nbsp; Text Area Field</button>
+            <button type="button" class="list-group-item btn-sm" data-ctrl-type="TextAreaField"><i class="fa fa-edit fa-sm" aria-hidden="true"></i>&nbsp; Text Area</button>
         </div>
         <h6>Typed Controls</h6>
         <div class="list-group">
-            <button type="button" class="list-group-item btn-sm" data-ctrl-type="PhoneNumberField"><i class="fa fa-volume-control-phone fa-sm" aria-hidden="true"></i>&nbsp; Phone Number Field</button>
-            <button type="button" class="list-group-item btn-sm" data-ctrl-type="EmailField"><i class="fa fa-envelope fa-sm" aria-hidden="true"></i>&nbsp; Email Field</button>
-            <button type="button" class="list-group-item btn-sm" data-ctrl-type="CurrencyField"><i class="fa fa-money fa-sm" aria-hidden="true"></i>&nbsp; Currency Field</button>
+            <button type="button" class="list-group-item btn-sm" data-ctrl-type="PhoneNumberField"><i class="fa fa-volume-control-phone fa-sm" aria-hidden="true"></i>&nbsp; Phone Number</button>
+            <button type="button" class="list-group-item btn-sm" data-ctrl-type="EmailField"><i class="fa fa-envelope fa-sm" aria-hidden="true"></i>&nbsp; Email</button>
+            <button type="button" class="list-group-item btn-sm" data-ctrl-type="CurrencyField"><i class="fa fa-money fa-sm" aria-hidden="true"></i>&nbsp; Currency</button>
         </div>
         <h6>Selections Controls</h6>
         <div class="list-group">
