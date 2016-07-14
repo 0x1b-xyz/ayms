@@ -30,6 +30,7 @@
                 <select name="labelAlign-{{id}}" id="labelAlign-{{id}}" class="form-control">
                     <option value="horizontal">Horizontal</option>
                     <option value="vertical">Vertical</option>
+                    <option value="none">None</option>
                 </select>
             </div>
         </div>
@@ -49,12 +50,12 @@
 </div>
 
 <script type="text/javascript">
+    var heights = {'vertical':3,'horizontal':2,'none':2};
     function load_{{id}}(ctrlId, ctrlType, ctrlData) {
         console.log('need to load this data into the form:');
         console.log(ctrlData);
     }
     function append_{{id}}(ctrlId, ctrlType, ctrlData) {
-        var height = (ctrlData.labelAlign == 'horizontal') ? 2 : 3;
-        return appendCtrl(ctrlId, ctrlType, ctrlData, 0, 50, 20, height)
+        return appendCtrl(ctrlId, ctrlType, ctrlData, 0, 50, 20, heights[ctrlData.labelAlign])
     }
 </script>
