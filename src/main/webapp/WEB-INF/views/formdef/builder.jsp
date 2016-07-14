@@ -27,9 +27,16 @@
             padding: 3px 3px 0 3px;
         }
 
+        .grid-stack-item-delete {
+            top: 40%;
+            left: 100%;
+            margin-left: -25px;
+            margin-right: 12px;
+        }
+
         /* Override bootstrap fields to work inside the gridstack */
 
-        .grid-stack-frm .form-group {
+        .grid-stack-item-content .form-group {
             margin: 0;
         }
 
@@ -245,6 +252,15 @@
 
         return true;
 
+    }
+
+    /**
+     * Removes a control
+     */
+    function delCtrl(ctrlId) {
+        let widget = $(toId(ctrlId)).parent();
+        grid.removeWidget(widget);
+        widget.remove();
     }
 
     /**
