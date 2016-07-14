@@ -45,7 +45,7 @@ class Context extends WebMvcConfigurerAdapter {
 
     @Override
     void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController('/').setViewName('index')
+        registry.addViewController('/').setViewName('redirect:/company')
     }
 
 }
