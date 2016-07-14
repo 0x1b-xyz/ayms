@@ -48,7 +48,7 @@
                 <a href="<s:url value="/company"/>">Companies</a>
             </li>
             <li>
-                <a href="<s:url value="/formdef"/>">Forms</a>
+                <a href="<s:url value="/formDefinition"/>">Forms</a>
             </li>
         </ul>
     </div>

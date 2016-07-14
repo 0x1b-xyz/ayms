@@ -2,18 +2,23 @@ package io.stiefel.ayms
 
 import io.stiefel.ayms.dao.ClientDao
 import io.stiefel.ayms.dao.CompanyDao
+import io.stiefel.ayms.dao.FormCtrlDao
+import io.stiefel.ayms.dao.FormDefinitionDao
 import io.stiefel.ayms.dao.NoteDao
 import io.stiefel.ayms.dao.ServiceDao
 import io.stiefel.ayms.dao.EmployeeDao
 import io.stiefel.ayms.domain.Address
 import io.stiefel.ayms.domain.Client
 import io.stiefel.ayms.domain.Company
+import io.stiefel.ayms.domain.FormCtrl
+import io.stiefel.ayms.domain.FormDefinition
 import io.stiefel.ayms.domain.Note
 import io.stiefel.ayms.domain.Service
 import io.stiefel.ayms.domain.Employee
 import org.apache.commons.lang.RandomStringUtils
 import org.apache.commons.lang.math.RandomUtils
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.transaction.annotation.Transactional
 import spock.lang.Specification
@@ -22,6 +27,8 @@ import spock.lang.Specification
  * @author jason@stiefel.io
  */
 @ContextConfiguration(classes = Context)
+@Transactional
+@Rollback(false)
 class PersistenceSpecIT extends Specification {
 
     @Autowired CompanyDao companyDao
@@ -29,6 +36,8 @@ class PersistenceSpecIT extends Specification {
     @Autowired ClientDao clientDao
     @Autowired ServiceDao serviceDao
     @Autowired NoteDao noteDao
+    @Autowired FormDefinitionDao formDefinitionDao
+    @Autowired FormCtrlDao formCtrlDao
 
     Address address = new Address('Somewhere in', null, 'Charlotte', 'NC', '28205')
     Company company = new Company(
@@ -77,11 +86,27 @@ class PersistenceSpecIT extends Specification {
 
     }
 
+    def "saves and finds form ctrls"() {
+
+        when:
+        FormDefinition formDef = new FormDefinition(null, "form-${UUID.randomUUID()}", 'description')
+        formDefinitionDao.save(formDef)
+        FormCtrl ctrl = new FormCtrl(UUID.randomUUID().toString(), formDef,
+                "firstName",
+                'TextField', ['labelAlign': 'horizontal'])
+        formCtrlDao.save(ctrl);
+
+        then:
+        formCtrlDao.find(ctrl.id).definition == formDef
+        formCtrlDao.find(ctrl.id) == ctrl
+        formCtrlDao.find(ctrl.id).attr['labelAlign'] == 'horizontal'
+
+    }
+
     /**
      * We're executing multiple saves here so we have to make the method transactional until we
      * move the logic into a service class.
      */
-    @Transactional
     def "saves and finds services"() {
 
         when:

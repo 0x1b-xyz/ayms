@@ -17,7 +17,7 @@
     </ol>
     <div class="table-responsive">
         <caption>table caption</caption>
-        <table id="formdef-tbl" class="table table-hover">
+        <table id="formDefinition-tbl" class="table table-hover">
             <thead>
             <tr>
                 <th>#</th>
@@ -40,7 +40,7 @@
         submitting again.
     </div>
 
-    <form class="form-horizontal" id="formdef-frm" method="post">
+    <form class="form-horizontal" id="formDefinition-frm" method="post">
         <div class="form-group">
             <label for="name" class="col-sm-2 control-label">Name</label>
             <div class="col-sm-8">
@@ -66,8 +66,8 @@
 <script type="text/javascript">
     jQuery(document).ready(function () {
 
-        rows('', 'row-Formdef', '#formdef-tbl');
-        form('#formdef-frm', 'row-Formdef', '#formdef-tbl')
+        rows('', 'row-FormDefinition', '#formDefinition-tbl');
+        form('#formDefinition-frm', 'row-FormDefinition', '#formDefinition-tbl')
 
     })
 </script>

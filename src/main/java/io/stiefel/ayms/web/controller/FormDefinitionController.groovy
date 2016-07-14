@@ -1,13 +1,11 @@
 package io.stiefel.ayms.web.controller
 
 import com.fasterxml.jackson.annotation.JsonView
-import io.stiefel.ayms.dao.FormDefDao
-import io.stiefel.ayms.domain.Company
-import io.stiefel.ayms.domain.FormDef
+import io.stiefel.ayms.dao.FormDefinitionDao
+import io.stiefel.ayms.domain.FormDefinition
 import io.stiefel.ayms.domain.View
 import io.stiefel.ayms.web.Result
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Controller
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -21,34 +19,34 @@ import javax.validation.Valid
  * @author jason@stiefel.io
  */
 @RestController
-@RequestMapping(value = '/formdef')
-class FormDefController {
+@RequestMapping(value = '/formDefinition')
+class FormDefinitionController {
 
-    @Autowired FormDefDao dao
+    @Autowired FormDefinitionDao dao
 
     @RequestMapping(method = RequestMethod.GET, produces = 'text/html')
     ModelAndView index() {
-        new ModelAndView('formdef/index')
+        new ModelAndView('formDefinition/index')
     }
 
-    @RequestMapping(path = '/{formdefId}', method = RequestMethod.GET, produces = 'text/html')
+    @RequestMapping(path = '/{formDefinitionId}', method = RequestMethod.GET, produces = 'text/html')
     @JsonView(View.Summary)
-    ModelAndView find(@PathVariable Long formdefId) {
-        return new ModelAndView('formdef/builder', [formdef: dao.find(formdefId)])
+    ModelAndView find(@PathVariable Long formDefinitionId) {
+        return new ModelAndView('formDefinition/builder', [formDefinition: dao.find(formDefinitionId)])
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     @JsonView(View.Summary)
-    Result<List<FormDef>> findAll() {
+    Result<List<FormDefinition>> findAll() {
         new Result(dao.findAll())
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = 'application/json')
-    Result<Long> save(@Valid FormDef formdef, BindingResult binding) {
+    Result<Long> save(@Valid FormDefinition formDefinition, BindingResult binding) {
         if (binding.hasErrors())
             return new Result(false, null).binding(binding)
-        dao.save(formdef)
-        new Result(formdef.id)
+        dao.save(formDefinition)
+        new Result(formDefinition.id)
     }
 
 

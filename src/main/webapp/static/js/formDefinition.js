@@ -11,7 +11,7 @@ var appendHdefault = 2;
 /**
  * Renders the {@code ctrl-CTRLTYPE-edit} template into the edit modal. Once the initial rendering
  * is completed we look for a method called {@code load_CTRLID} that we'll pass whatever data we
- * have to. It's the responsibility of this method to push the {@code ctrlData} values into the
+ * have to. It's the responsibility of this method to push the {@code ctrlAttr} values into the
  * rendered form.
  */
 function newCtrl() {
@@ -19,7 +19,7 @@ function newCtrl() {
     let ctrlId = uniqueId();
     let ctrlType = $(this).data('ctrl-type');
     let ctrlLabel = $(this).html();
-    let ctrlData = {id: ctrlId};
+    let ctrlAttr = {id: ctrlId};
     let formEle = getTemplate('ctrl-' + ctrlType + '-edit');
 
     ctrlModal.find('.modal-title').html(ctrlLabel);
@@ -27,20 +27,20 @@ function newCtrl() {
     ctrlModalFrm.empty();
     ctrlModalFrm.data('ctrl-id', ctrlId);
     ctrlModalFrm.data('ctrl-type', ctrlType);
-    ctrlModalFrm.html(formEle(ctrlData));
+    ctrlModalFrm.html(formEle(ctrlAttr));
 
     ctrlModal.modal();
 
     if (eval("typeof load_" + ctrlId) != 'undefined') {
-        let loadCall = "return load_" + ctrlId + "(ctrlId, ctrlType, ctrlData)";
-        new Function('ctrlId', 'ctrlType', 'ctrlData', loadCall)(ctrlId, ctrlType, ctrlData);
+        let loadCall = "return load_" + ctrlId + "(ctrlId, ctrlType, ctrlAttr)";
+        new Function('ctrlId', 'ctrlType', 'ctrlAttr', loadCall)(ctrlId, ctrlType, ctrlAttr);
     }
 
 }
 
 /**
  * Pulls the ctrlId, type and data from the edit form. Then we'll look for a function called
- * {@code edit_CTRLID} to call with the {@code ctrlId, ctrlType, ctrlData}. That function
+ * {@code edit_CTRLID} to call with the {@code ctrlId, ctrlType, ctrlAttr}. That function
  * should make a call back to {@link #appendCtrl} and then return {@code true}. If the function
  * is not found we'll simply call {@link #appendCtrl} with default settings.
  */
@@ -48,23 +48,23 @@ function addCtrl() {
 
     let ctrlId = ctrlModalFrm.data('ctrl-id');
     let ctrlType = ctrlModalFrm.data('ctrl-type');
-    let ctrlData = $('#ctrl-modal-frm').serializeJSON();
+    let ctrlAttr = $('#ctrl-modal-frm').serializeJSON();
 
     // Strip the ctrlId off the field names
-    for (var key in ctrlData) {
-        if (!ctrlData.hasOwnProperty(key))
+    for (var key in ctrlAttr) {
+        if (!ctrlAttr.hasOwnProperty(key))
             continue;
         var newKey = key.replace(ctrlIdRe, '');
-        ctrlData[newKey] = ctrlData[key];
-        delete ctrlData[key];
+        ctrlAttr[newKey] = ctrlAttr[key];
+        delete ctrlAttr[key];
     }
 
     var added = false;
     if (eval("typeof append_" + ctrlId) != 'undefined') {
-        let addCall = 'return append_' + ctrlId + '(ctrlId, ctrlType, ctrlData)';
-        added = new Function('ctrlId', 'ctrlType', 'ctrlData', addCall)(ctrlId, ctrlType, ctrlData);
+        let addCall = 'return append_' + ctrlId + '(ctrlId, ctrlType, ctrlAttr)';
+        added = new Function('ctrlId', 'ctrlType', 'ctrlAttr', addCall)(ctrlId, ctrlType, ctrlAttr);
     } else {
-        added = appendCtrl(ctrlId, ctrlType, ctrlData, appendXdefault,
+        added = appendCtrl(ctrlId, ctrlType, ctrlAttr, appendXdefault,
             appendYdefault, appendWdefault, appendHdefault);
     }
 
@@ -76,7 +76,7 @@ function addCtrl() {
 /**
  * Appends the output of the {@code ctrl-CTRLTYPE-render} template into the layout grid.
  */
-function appendCtrl(ctrlId, ctrlType, ctrlData, x, y, width, height) {
+function appendCtrl(ctrlId, ctrlType, ctrlAttr, x, y, width, height) {
 
     let widget = getTemplate('ctrl-Wrapper')({
         id: ctrlId,
@@ -84,7 +84,7 @@ function appendCtrl(ctrlId, ctrlType, ctrlData, x, y, width, height) {
     });
 
     grid.addWidget(widget);
-    $(toId(ctrlId)).html(getTemplate('ctrl-' + ctrlType + '-render')(ctrlData));
+    $(toId(ctrlId)).html(getTemplate('ctrl-' + ctrlType + '-render')(ctrlAttr));
 
     return true;
 

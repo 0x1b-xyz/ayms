@@ -8,22 +8,22 @@
     <script type="text/javascript" src="<s:url value="/static/js/gridstack.js"/>"></script>
     <script type="text/javascript" src="<s:url value="/static/js/bootstrap-wysiwyg.js"/>"></script>
     <script type="text/javascript" src="<s:url value="/static/js/jquery.hotkeys.js"/>"></script>
-    <script type="text/javascript" src="<s:url value="/static/js/formdef.js"/>"></script>
+    <script type="text/javascript" src="<s:url value="/static/js/formDefinition.js"/>"></script>
 
     <link href="<s:url value="/static/css/gridstack.css"/>" rel="stylesheet"/>
     <link href="<s:url value="/static/css/gridstack-extra.css"/>" rel="stylesheet"/>
-    <link href="<s:url value="/static/css/formdef.css"/>" rel="stylesheet"/>
+    <link href="<s:url value="/static/css/formDefinition.css"/>" rel="stylesheet"/>
 
 </head>
 <body>
 
 <div class="row">
 
-    <h2>${formdef.name} <small>${formdef.description}</small></h2>
+    <h2>${formDefinition.name} <small>${formDefinition.description}</small></h2>
     <ol class="breadcrumb">
         <li><a href="<s:url value="/"/>">Home</a></li>
-        <li><a href="<s:url value="/formdef"/>">Form Definitions</a></li>
-        <li class="active">${formdef.name}</li>
+        <li><a href="<s:url value="/formDefinition"/>">Form Definitions</a></li>
+        <li class="active">${formDefinition.name}</li>
     </ol>
 
     <div class="col-lg-10">
@@ -32,8 +32,8 @@
             <hr>
             <div class="grid-stack"></div>
             <hr>
-            <a href="<s:url value="/formdef"/>" type="button" role="button" class="btn btn-default">Cancel</a>
-            <button type="submit" class="btn btn-primary">Save</button>
+            <a href="<s:url value="/formDefinition"/>" type="button" role="button" class="btn btn-default">Cancel</a>
+            <button id="grid-stack-frm-submit" type="button" class="btn btn-primary">Save</button>
         </form>
 
     </div>

@@ -17,19 +17,19 @@
 
 <script type="text/javascript">
 
-    function load_{{id}}(ctrlId, ctrlType, ctrlData) {
+    function load_{{id}}(ctrlId, ctrlType, ctrlAttr) {
         // We could do this using a #cond on the input tag but this seemed like more fun
         var sizeField = getCtrlField(ctrlId, 'size');
-        if (!ctrlData.size) {
+        if (!ctrlAttr.size) {
             sizeField.filter("[value='1']").prop('checked', true);
         } else {
-            sizeField.filter("[value='" + ctrlData.size + "']").prop('checked, true');
+            sizeField.filter("[value='" + ctrlAttr.size + "']").prop('checked, true');
         }
     }
 
     var heights = {'1': 3, '2': 3, '3': 3, '4': 2, '5': 2};
-    function append_{{id}}(ctrlId, ctrlType, ctrlData) {
-        var height = heights[ctrlData.size];
-        return appendCtrl(ctrlId, ctrlType, ctrlData, 0, 50, 20, height)
+    function append_{{id}}(ctrlId, ctrlType, ctrlAttr) {
+        var height = heights[ctrlAttr.size];
+        return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, height)
     }
 </script>
