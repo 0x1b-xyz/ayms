@@ -133,14 +133,14 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Add a Header</h4>
+                <h4 class="modal-title">Add a Ctrl</h4>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" id="ctrl-modal-frm"></form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="ctrl-modal-add">Add</button>
+                <button type="button" role="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" role="button" class="btn btn-primary" id="ctrl-modal-add">Add</button>
             </div>
         </div>
     </div>
@@ -153,6 +153,14 @@
     var grid;
     var ctrlIdRe = /\-[0-9A-F]{8}[0-9A-F]{4}[0-9A-F]{4}[0-9A-F]{4}[0-9A-F]{12}/g;
 
+    var appendXdefault = 0;
+    var appendYdefault = 99;
+    var appendWdefault = 12;
+    var appendHdefault = 2;
+
+    /**
+     * Renders the {@code ctrl-CTRLTYPE-edit} template into the edit modal.
+     */
     function newCtrl() {
 
         let ctrlId = uniqueId();
@@ -172,6 +180,12 @@
 
     }
 
+    /**
+     * Pulls the ctrlId, type and data from the edit form. Then we'll look for a function called
+     * {@code edit_CTRLID} to call with the {@code ctrlId, ctrlType, ctrlData}. That function
+     * should make a call back to {@link #appendCtrl}. If the function is not found we'll simply
+     * call {@link #appendCtrl} with default settings.
+     */
     function addCtrl() {
 
         let ctrlId = ctrlModalFrm.data('ctrl-id');
@@ -187,15 +201,29 @@
             delete ctrlData[key];
         }
 
+        if (eval("typeof edit_" + ctrlId) != 'undefined') {
+            eval("edit_" + ctrlId + "(ctrlId, ctrlType, ctrlData)");
+        } else {
+            appendCtrl(ctrlId, ctrlType, ctrlData, appendXdefault,
+                    appendYdefault, appendWdefault, appendHdefault);
+        }
+
+        ctrlModal.modal('hide');
+
+    }
+
+    /**
+     * Appends the output of the {@code ctrl-CTRLTYPE-render} template into the layout grid.
+     */
+    function appendCtrl(ctrlId, ctrlType, ctrlData, x, y, width, height) {
+
         let widget = getTemplate('ctrl-Wrapper')({
             id: ctrlId,
-            x: 0, y: 10, width: 12, height: 2
+            x: x, y: y, width: width, height: height
         });
 
         grid.addWidget(widget);
         $(toId(ctrlId)).html(getTemplate('ctrl-' + ctrlType + '-render')(ctrlData));
-
-        ctrlModal.modal('hide');
 
     }
 
@@ -211,7 +239,10 @@
         ctrlModal = $('#ctrl-modal');
         ctrlModalFrm = ctrlModal.find('#ctrl-modal-frm');
 
+        // Bind the {@link #newCtrl} method to all our form control buttons
         $('.form-control-list').find('button').on('click', newCtrl);
+
+        // Call {@link #addCtrl} when the modal "Add" button is clicked
         $('#ctrl-modal-add').on('click', addCtrl);
 
     });
