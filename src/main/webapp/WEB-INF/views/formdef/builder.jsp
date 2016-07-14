@@ -48,6 +48,10 @@
             margin-bottom: 0;
         }
 
+        .grid-stack-item-content div[class*="col-"] {
+            padding-right: 0;
+        }
+
         /*These classes make it possible to embed a vertical form field in a */
         /*horizontal form.*/
 
