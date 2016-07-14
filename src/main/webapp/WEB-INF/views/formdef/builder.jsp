@@ -189,6 +189,7 @@
 
         ctrlModal.find('.modal-title').html(ctrlLabel);
 
+        ctrlModalFrm.empty();
         ctrlModalFrm.data('ctrl-id', ctrlId);
         ctrlModalFrm.data('ctrl-type', ctrlType);
         ctrlModalFrm.html(formEle(ctrlData));
