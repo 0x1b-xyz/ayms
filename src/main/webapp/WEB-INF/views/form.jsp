@@ -239,6 +239,13 @@
 
     }
 
+    /**
+     * Looks up a field by name within the {@code #ctrl-modal-frm}
+     */
+    function getCtrlField(ctrlId, fieldName) {
+        return $('#ctrl-modal-frm').find("input[name='" + fieldName + '-' + ctrlId + "']");
+    }
+
     $(document).ready(function () {
 
         var gridStack = jQuery('.grid-stack');
