@@ -183,8 +183,8 @@
     /**
      * Pulls the ctrlId, type and data from the edit form. Then we'll look for a function called
      * {@code edit_CTRLID} to call with the {@code ctrlId, ctrlType, ctrlData}. That function
-     * should make a call back to {@link #appendCtrl}. If the function is not found we'll simply
-     * call {@link #appendCtrl} with default settings.
+     * should make a call back to {@link #appendCtrl} and then return {@code true}. If the function
+     * is not found we'll simply call {@link #appendCtrl} with default settings.
      */
     function addCtrl() {
 
@@ -201,14 +201,16 @@
             delete ctrlData[key];
         }
 
+        var added = false;
         if (eval("typeof edit_" + ctrlId) != 'undefined') {
-            eval("edit_" + ctrlId + "(ctrlId, ctrlType, ctrlData)");
+            added = eval("edit_" + ctrlId + "(ctrlId, ctrlType, ctrlData)");
         } else {
-            appendCtrl(ctrlId, ctrlType, ctrlData, appendXdefault,
-                    appendYdefault, appendWdefault, appendHdefault);
+            added = appendCtrl(ctrlId, ctrlType, ctrlData, appendXdefault,
+                                    appendYdefault, appendWdefault, appendHdefault);
         }
 
-        ctrlModal.modal('hide');
+        if (added)
+            ctrlModal.modal('hide');
 
     }
 
@@ -224,6 +226,8 @@
 
         grid.addWidget(widget);
         $(toId(ctrlId)).html(getTemplate('ctrl-' + ctrlType + '-render')(ctrlData));
+
+        return true;
 
     }
 
