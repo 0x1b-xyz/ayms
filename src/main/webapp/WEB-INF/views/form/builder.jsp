@@ -4,7 +4,7 @@
 <head>
     <title>forms</title>
 
-    <script type="text/javascript" src="<s:url value="/assets/formDefinition.js"/>"></script>
+    <script type="text/javascript" src="<s:url value="/assets/form-builder.js"/>"></script>
     <link href="<s:url value="/assets/formDefinition.css"/>" rel="stylesheet"/>
 
 </head>

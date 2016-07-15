@@ -168,7 +168,6 @@ Handlebars.registerHelper('compare', function (lvalue, operator, rvalue, options
  */
 Handlebars.registerHelper('url', function(options) {
     var url = options.fn(this);
-    console.log(url);
     if (url.startsWith('/'))
         url = url.substring(1, url.length);
     return URL_PREFIX + url;

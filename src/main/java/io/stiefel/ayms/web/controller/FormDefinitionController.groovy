@@ -26,13 +26,13 @@ class FormDefinitionController {
 
     @RequestMapping(method = RequestMethod.GET, produces = 'text/html')
     ModelAndView index() {
-        new ModelAndView('formDefinition/index')
+        new ModelAndView('form/index')
     }
 
     @RequestMapping(path = '/{formDefinitionId}', method = RequestMethod.GET, produces = 'text/html')
     @JsonView(View.Summary)
     ModelAndView find(@PathVariable Long formDefinitionId) {
-        return new ModelAndView('formDefinition/builder', [formDefinition: dao.find(formDefinitionId)])
+        return new ModelAndView('form/builder', [formDefinition: dao.find(formDefinitionId)])
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")

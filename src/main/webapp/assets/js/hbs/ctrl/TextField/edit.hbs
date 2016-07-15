@@ -51,10 +51,6 @@
 
 <script type="text/javascript">
     var heights = {'vertical':3,'horizontal':2,'none':2};
-    function load_{{id}}(ctrlId, ctrlType, ctrlAttr) {
-        console.log('need to load this data into the form:');
-        console.log(ctrlAttr);
-    }
     function append_{{id}}(ctrlId, ctrlType, ctrlAttr) {
         return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign])
     }

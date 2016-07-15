@@ -66,8 +66,8 @@
 <script type="text/javascript">
     jQuery(document).ready(function () {
 
-        rows('', 'formDefinition/row', '#formDefinition-tbl');
-        form('#formDefinition-frm', 'formDefinition/row', '#formDefinition-tbl')
+        rows('', 'form/definition-row', '#formDefinition-tbl');
+        form('#formDefinition-frm', 'form/definition-row', '#formDefinition-tbl')
 
     })
 </script>

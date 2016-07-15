@@ -24,17 +24,19 @@ class Initializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     final Class<?>[] servletConfigClasses = [Context]
     final String[] servletMappings = ['/']
 
+    /**
+     * Configures the {@link asset.pipeline.servlet.AssetPipelineFilter}
+     *
+     * @todo Add a gzip filter?
+     */
     @Override
     void onStartup(ServletContext servletContext) throws ServletException {
-
-//        WebApplicationContext ctx = WebApplicationContextUtils.findWebApplicationContext(servletContext)
-//
-//        10.times { println "!!!! ${ctx.environment.getProperty('ayms.jdbc.url')}" }
 
         AssetPipelineConfigHolder.registerResolver(
                 new FileSystemAssetResolver('testAssets', 'src/main/webapp/assets')
         )
         AssetPipelineConfigHolder.config = [
+                cacheLocation: 'target/asset-cache',
                 handlebars: [
                         'templateRoot': 'hbs',
                         'templatePathSeperator': '/'
@@ -47,6 +49,9 @@ class Initializer extends AbstractAnnotationConfigDispatcherServletInitializer {
         super.onStartup(servletContext)
     }
 
+    /**
+     * Adds the {@link CharacterEncodingFilter} and {@link SiteMeshFilter}
+     */
     @Override
     protected Filter[] getServletFilters() {
         [new CharacterEncodingFilter(encoding: "UTF-8"), new SiteMeshFilter()]

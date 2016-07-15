@@ -32,7 +32,7 @@ function newCtrl() {
     let ctrlType = $(this).data('ctrl-type');
     let ctrlLabel = $(this).html();
     let ctrlAttr = {id: ctrlId};
-    let formEle = getTemplate('ctrl-' + ctrlType + '-edit');
+    let formEle = getTemplate('ctrl/' + ctrlType + '/edit');
 
     ctrlModal.find('.modal-title').html(ctrlLabel);
 
@@ -91,13 +91,13 @@ function addCtrl() {
  */
 function appendCtrl(ctrlId, ctrlType, ctrlAttr, x, y, width, height) {
 
-    let widget = getTemplate('ctrl-Wrapper')({
+    let widget = getTemplate('ctrl/wrapper')({
         id: ctrlId,
         x: x, y: y, width: width, height: height
     });
 
     grid.addWidget(widget);
-    $(toId(ctrlId)).html(getTemplate('ctrl-' + ctrlType + '-render')(ctrlAttr));
+    $(toId(ctrlId)).html(getTemplate('ctrl/' + ctrlType + '/render')(ctrlAttr));
 
     ctrls[ctrlId] = {
         id: ctrlId,
@@ -169,7 +169,6 @@ function loadCtrls() {
         },
         success: function(response) {
             response.data.forEach(function(ctrl) {
-                console.log(ctrl);
                 appendCtrl(ctrl.id, ctrl.type, ctrl.attr,
                     ctrl.layout.x, ctrl.layout.y, ctrl.layout.width, ctrl.layout.height)
             });
