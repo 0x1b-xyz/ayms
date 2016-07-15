@@ -18,7 +18,7 @@ import javax.servlet.ServletException
 /**
  * @author jason@stiefel.io
  */
-class Initializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+class WebInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     final Class<?>[] rootConfigClasses = [io.stiefel.ayms.Context]
     final Class<?>[] servletConfigClasses = [Context]
