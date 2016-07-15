@@ -3,6 +3,7 @@ package io.stiefel.ayms.dao
 import org.springframework.transaction.annotation.Transactional
 
 import javax.persistence.EntityManager
+import javax.persistence.EntityNotFoundException
 import javax.persistence.PersistenceContext
 import java.lang.reflect.ParameterizedType
 
@@ -25,12 +26,20 @@ abstract class AbstractDao<E,K> {
         em.persist(entity)
     }
 
+    void removeById(K key) {
+        E entity = find(key);
+        remove(entity);
+    }
+
     void remove(E entity) {
         em.remove(entity)
     }
 
     E find(K key) {
-        em.find(type, key)
+        E entity = em.find(type, key)
+        if (!entity)
+            throw new EntityNotFoundException("${type}:${key}")
+        entity
     }
 
     List<E> findAll() {

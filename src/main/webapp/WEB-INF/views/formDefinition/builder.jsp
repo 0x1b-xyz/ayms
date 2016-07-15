@@ -7,6 +7,7 @@
     <script type="text/javascript" src="<s:url value="/static/js/lodash.min.js"/>"></script>
     <script type="text/javascript" src="<s:url value="/static/js/gridstack.js"/>"></script>
     <script type="text/javascript" src="<s:url value="/static/js/bootstrap-wysiwyg.js"/>"></script>
+    <script type="text/javascript" src="<s:url value="/static/js/jquery.blockUI.js"/>"></script>
     <script type="text/javascript" src="<s:url value="/static/js/jquery.hotkeys.js"/>"></script>
     <script type="text/javascript" src="<s:url value="/static/js/formDefinition.js"/>"></script>
 

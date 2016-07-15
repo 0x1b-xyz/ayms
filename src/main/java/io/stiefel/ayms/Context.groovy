@@ -28,7 +28,7 @@ import javax.sql.DataSource
         @PropertySource(value = 'file://#{systemProperties["ayms.properties"]}', ignoreResourceNotFound = true)
 ])
 @EnableTransactionManagement
-@ComponentScan(['io.stiefel.ayms.dao'])
+@ComponentScan(['io.stiefel.ayms.dao', 'io.stiefel.ayms.service'])
 class Context {
 
     @Autowired Environment env
@@ -37,17 +37,6 @@ class Context {
     public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
         new PropertySourcesPlaceholderConfigurer();
     }
-
-//    @Bean
-//    URI dbUri() {
-//        System.getenv().each {
-//            println "${it.key}\t\t\t${it.value}"
-//        }
-//        if (env.getProperty('database.url')) {
-//            return new URI(env.getProperty('database.url'))
-//        }
-//        new URI(env.getProperty('ayms.jdbc.url'))
-//    }
 
     @Bean(destroyMethod = 'close')
     DataSource dataSource() {

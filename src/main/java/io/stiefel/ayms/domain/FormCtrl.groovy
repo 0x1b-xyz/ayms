@@ -15,7 +15,10 @@ import javax.persistence.*
  */
 @Entity
 @Table(name = "aym_form_ctrl", uniqueConstraints = [
-        @UniqueConstraint(columnNames = ["form_definition_id", "name"])
+//        @UniqueConstraint(columnNames = ["form_definition_id", "name"])
+])
+@NamedQueries([
+    @NamedQuery(name = 'FormCtrl.findAllByDefinition', query = 'select ctrl from FormCtrl ctrl where ctrl.definition = :definition'),
 ])
 @Canonical
 @EqualsAndHashCode
@@ -35,14 +38,9 @@ class FormCtrl {
     @Column(nullable = false, length = 50)
     @JsonView(View.Summary)
     @NotEmpty
-    String name;
-
-    @Column(nullable = false, length = 50)
-    @JsonView(View.Summary)
-    @NotEmpty
     String type;
 
-    @Column(nullable = true)
+    @Column(name = 'value', nullable = true)
     @ElementCollection(fetch = FetchType.EAGER)
     @MapKeyColumn(name = "key")
     @CollectionTable(name = "aym_form_ctrl_attr",
@@ -50,5 +48,9 @@ class FormCtrl {
     @JsonView(View.Summary)
     @NotEmpty
     Map<String,String> attr;
+
+    @Embedded
+    @JsonView(View.Summary)
+    Layout layout;
 
 }

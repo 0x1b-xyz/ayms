@@ -6,14 +6,18 @@ import io.stiefel.ayms.dao.FormDefinitionDao
 import io.stiefel.ayms.domain.FormCtrl
 import io.stiefel.ayms.domain.FormDefinition
 import io.stiefel.ayms.domain.View
+import io.stiefel.ayms.service.FormDefinitionService
 import io.stiefel.ayms.web.Result
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 
+import javax.persistence.EntityNotFoundException
+import javax.servlet.http.HttpServletResponse
 import javax.validation.Valid
 
 /**
@@ -22,6 +26,8 @@ import javax.validation.Valid
 @RestController
 @RequestMapping(value = '/formDefinition/{formDefinitionId}/formCtrl')
 class FormCtrlController {
+
+    @Autowired FormDefinitionService service
 
     @Autowired FormDefinitionDao definitionDao
     @Autowired FormCtrlDao ctrlDao
@@ -39,6 +45,15 @@ class FormCtrlController {
             return new Result(false, null).binding(binding)
         ctrlDao.save(formCtrl)
         new Result(formCtrl.id)
+    }
+
+    @RequestMapping(path = '/replace', method = RequestMethod.POST)
+    void replace(@PathVariable Long formDefinitionId,
+                 @RequestBody List<FormCtrl> ctrls, HttpServletResponse response) {
+
+        service.replace(formDefinitionId, ctrls)
+        response.status = 200
+
     }
 
 }

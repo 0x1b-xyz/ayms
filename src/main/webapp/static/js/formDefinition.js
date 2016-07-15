@@ -9,6 +9,11 @@ var appendWdefault = 12;
 var appendHdefault = 2;
 
 /**
+ * Map of controls that have are in the grid 
+ */
+var ctrls = {};
+
+/**
  * Renders the {@code ctrl-CTRLTYPE-edit} template into the edit modal. Once the initial rendering
  * is completed we look for a method called {@code load_CTRLID} that we'll pass whatever data we
  * have to. It's the responsibility of this method to push the {@code ctrlAttr} values into the
@@ -74,7 +79,8 @@ function addCtrl() {
 }
 
 /**
- * Appends the output of the {@code ctrl-CTRLTYPE-render} template into the layout grid.
+ * Appends the output of the {@code ctrl-CTRLTYPE-render} template into the layout grid and
+ * sticks the ctrl definition into {@link #ctrls}.
  */
 function appendCtrl(ctrlId, ctrlType, ctrlAttr, x, y, width, height) {
 
@@ -86,7 +92,85 @@ function appendCtrl(ctrlId, ctrlType, ctrlAttr, x, y, width, height) {
     grid.addWidget(widget);
     $(toId(ctrlId)).html(getTemplate('ctrl-' + ctrlType + '-render')(ctrlAttr));
 
+    ctrls[ctrlId] = {
+        id: ctrlId,
+        type: ctrlType,
+        attr: ctrlAttr
+    };
+    
     return true;
+
+}
+
+/**
+ * Extracts the layout info from the grid and merges it with the ctrl definition from the
+ * {@link #ctrls} map.
+ */
+function getCtrls() {
+
+    return jQuery.map($('.grid-stack .grid-stack-item:visible'), function(item) {
+        item = $(item);
+        var node = item.data('_gridstack_node');
+        var ctrlId = item.data('ctrl-id');
+        return jQuery.extend(ctrls[ctrlId], {
+            layout: {
+                x: node.x,
+                y: node.y,
+                width: node.width,
+                height: node.height
+            }
+        });
+    });
+
+}
+
+/**
+ * Replaces all controls all the form definition with what we get from {@link #getCtrls}
+ */
+function saveCtrls() {
+
+    let ctrls = getCtrls();
+    jQuery.ajax({
+        type: 'post',
+        url: window.location.href + "/formCtrl/replace",
+        contentType: 'application/json',
+        data: JSON.stringify(ctrls),
+        beforeSend: function() {
+            $.blockUI()
+        },
+        success: function() {
+            console.log('good to go!')
+        },
+        complete: function() {
+            $.unblockUI();
+        }
+    })
+
+}
+
+/**
+ * Loads all controls for the form definition
+ */
+function loadCtrls() {
+
+    jQuery.ajax({
+        type: 'get',
+        url: window.location.href + '/formCtrl',
+        contentType: 'application/json',
+        beforeSend: function() {
+            $.blockUI();
+        },
+        success: function(response) {
+            response.data.forEach(function(ctrl) {
+                console.log(ctrl);
+                appendCtrl(ctrl.id, ctrl.type, ctrl.attr,
+                    ctrl.layout.x, ctrl.layout.y, ctrl.layout.width, ctrl.layout.height)
+            });
+        },
+        complete: function() {
+            $.unblockUI();
+        }
+    });
 
 }
 
@@ -97,6 +181,7 @@ function delCtrl(ctrlId) {
     let widget = $(toId(ctrlId)).parent();
     grid.removeWidget(widget);
     widget.remove();
+    delete ctrls[ctrlId];
 }
 
 /**
@@ -123,5 +208,9 @@ $(document).ready(function () {
 
     // Call {@link #addCtrl} when the modal "Add" button is clicked
     $('#ctrl-modal-add').on('click', addCtrl);
+
+    $('#grid-stack-frm-submit').on('click', saveCtrls);
+
+    loadCtrls();
 
 });

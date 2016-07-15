@@ -12,6 +12,7 @@ import io.stiefel.ayms.domain.Client
 import io.stiefel.ayms.domain.Company
 import io.stiefel.ayms.domain.FormCtrl
 import io.stiefel.ayms.domain.FormDefinition
+import io.stiefel.ayms.domain.Layout
 import io.stiefel.ayms.domain.Note
 import io.stiefel.ayms.domain.Service
 import io.stiefel.ayms.domain.Employee
@@ -92,14 +93,16 @@ class PersistenceSpecIT extends Specification {
         FormDefinition formDef = new FormDefinition(null, "form-${UUID.randomUUID()}", 'description')
         formDefinitionDao.save(formDef)
         FormCtrl ctrl = new FormCtrl(UUID.randomUUID().toString(), formDef,
-                "firstName",
                 'TextField', ['labelAlign': 'horizontal'])
+        ctrl.layout = new Layout(1, 2, 100, 200)
         formCtrlDao.save(ctrl);
 
         then:
         formCtrlDao.find(ctrl.id).definition == formDef
         formCtrlDao.find(ctrl.id) == ctrl
         formCtrlDao.find(ctrl.id).attr['labelAlign'] == 'horizontal'
+        formCtrlDao.find(ctrl.id).layout.x == 1
+        formCtrlDao.find(ctrl.id).layout.width == 100
 
     }
 
