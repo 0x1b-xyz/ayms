@@ -1,10 +1,14 @@
 package io.stiefel.ayms.web
 
+import org.springframework.beans.factory.InitializingBean
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType
 import org.springframework.web.servlet.config.annotation.*
 import org.springframework.web.servlet.mvc.WebContentInterceptor
+
+import javax.servlet.ServletContext
 
 /**
  * Web configuration context.
@@ -13,8 +17,15 @@ import org.springframework.web.servlet.mvc.WebContentInterceptor
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan('io.stiefel.ayms.web')
-class Context extends WebMvcConfigurerAdapter {
+@ComponentScan(['io.stiefel.ayms.web','asset.pipeline.springboot'])
+class Context extends WebMvcConfigurerAdapter implements InitializingBean {
+
+    @Autowired ServletContext servletContext
+
+    @Override
+    void afterPropertiesSet() throws Exception {
+        println "!!!! ${servletContext}"
+    }
 
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {

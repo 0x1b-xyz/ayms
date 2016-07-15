@@ -80,8 +80,8 @@
 
 <script type="text/javascript">
     jQuery(document).ready(function () {
-        rows('', 'row-Service', '#service-tbl');
-        form('#service-frm', 'row-Service', '#service-tbl');
+        rows('', 'service/row', '#service-tbl');
+        form('#service-frm', 'service/row', '#service-tbl');
     })
 </script>
 

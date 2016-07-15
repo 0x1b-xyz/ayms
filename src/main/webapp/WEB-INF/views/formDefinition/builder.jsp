@@ -4,16 +4,8 @@
 <head>
     <title>forms</title>
 
-    <script type="text/javascript" src="<s:url value="/static/js/lodash.min.js"/>"></script>
-    <script type="text/javascript" src="<s:url value="/static/js/gridstack.js"/>"></script>
-    <script type="text/javascript" src="<s:url value="/static/js/bootstrap-wysiwyg.js"/>"></script>
-    <script type="text/javascript" src="<s:url value="/static/js/jquery.blockUI.js"/>"></script>
-    <script type="text/javascript" src="<s:url value="/static/js/jquery.hotkeys.js"/>"></script>
-    <script type="text/javascript" src="<s:url value="/static/js/formDefinition.js"/>"></script>
-
-    <link href="<s:url value="/static/css/gridstack.css"/>" rel="stylesheet"/>
-    <link href="<s:url value="/static/css/gridstack-extra.css"/>" rel="stylesheet"/>
-    <link href="<s:url value="/static/css/formDefinition.css"/>" rel="stylesheet"/>
+    <script type="text/javascript" src="<s:url value="/assets/formDefinition.js"/>"></script>
+    <link href="<s:url value="/assets/formDefinition.css"/>" rel="stylesheet"/>
 
 </head>
 <body>

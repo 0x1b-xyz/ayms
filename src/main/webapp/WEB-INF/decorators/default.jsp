@@ -9,9 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ayms - <dec:title default="default"/></title>
 
-    <link href="<c:url value="/static/css/bootstrap.min.css"/>" rel="stylesheet">
-    <link href="<c:url value="/static/css/font-awesome.min.css"/>" rel="stylesheet">
-    <link href="<c:url value="/static/css/app.css"/>" rel="stylesheet">
+    <link href="<c:url value="/assets/app.css"/>" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -20,14 +18,7 @@
     <!--<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>-->
     <%--<![endif]-->--%>
 
-    <script src="<c:url value="/static/js/jquery-2.2.4.js"/>"></script>
-    <script src="<c:url value="/static/js/jquery-ui.js"/>"></script>
-    <script src="<c:url value="/static/js/jquery.serializejson.js"/>"></script>
-    <script src="<c:url value="/static/js/jquery.mask.js"/>"></script>
-    <script src="<c:url value="/static/js/handlebars-v4.0.5.js"/>"></script>
-    <script src="<c:url value="/static/js/handlebars-intl.js"/>"></script>
-    <script src="<c:url value="/static/js/bootstrap.js"/>"></script>
-    <script src="<c:url value="/static/js/app.js"/>"></script>
+    <script src="<c:url value="/assets/app.js"/>"></script>
 
     <script type="text/javascript">
         URL_PREFIX = '<s:url value="/"/>';

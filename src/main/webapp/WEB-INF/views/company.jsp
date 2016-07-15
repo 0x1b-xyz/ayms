@@ -146,8 +146,8 @@
 
         jQuery('#address\\.zipcode').mask('00000');
 
-        rows('', 'row-Company', '#company-tbl');
-        form('#company-frm', 'row-Company', '#company-tbl')
+        rows('', 'company/row', '#company-tbl');
+        form('#company-frm', 'company/row', '#company-tbl')
 
     })
 </script>

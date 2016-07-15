@@ -1,3 +1,10 @@
+//= require app
+//= require lodash
+//= require bootstrap-wysiwyg
+//= require jquery.blockUI
+//= require jquery.hotkeys
+//= require gridstack
+
 var ctrlModal;
 var ctrlModalFrm;
 var grid;

@@ -175,8 +175,8 @@
         jQuery('#ssn').mask('000-00-0000');
         jQuery('#address\\.zipcode').mask('00000');
 
-        rows('', 'row-Client', '#client-tbl');
-        form('#client-frm', 'row-Client', '#client-tbl');
+        rows('', 'client/row', '#client-tbl');
+        form('#client-frm', 'client/row', '#client-tbl');
     })
 </script>
 

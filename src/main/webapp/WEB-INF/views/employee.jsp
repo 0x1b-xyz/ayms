@@ -86,8 +86,8 @@
 
 <script type="text/javascript">
     jQuery(document).ready(function () {
-        rows('', 'row-Employee', '#employee-tbl');
-        form('#employee-frm', 'row-Employee', '#employee-tbl');
+        rows('', 'employee/row', '#employee-tbl');
+        form('#employee-frm', 'employee/row', '#employee-tbl');
     })
 </script>
 

@@ -1,3 +1,8 @@
+/*
+ *= require bootstrap
+ *= require font-awesome
+ */
+
 body {
     overflow-x: hidden;
 }

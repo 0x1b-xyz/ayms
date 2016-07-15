@@ -1,3 +1,13 @@
+//= require jquery
+//= require jquery-ui
+//= require jquery.serializejson
+//= require jquery.mask
+//= require bootstrap
+//= require handlebars
+//= require handlebars-intl
+
+//= require_tree hbs
+
 /**
  * Base url for templates or just urls. You should rewrite them using the <s:url/> tag so the context
  * switches correctly
@@ -171,18 +181,7 @@ Handlebars.registerHelper('url', function(options) {
  * @param path
  */
 function getTemplate(path) {
-    if (Handlebars.templates == undefined)
-        Handlebars.templates = {};
-    if (Handlebars.templates[path] == undefined) {
-        let myPath = TPL_PREFIX + path + '.hbs';
-        jQuery.ajax(myPath, {
-            async: false,
-            success: function(response) {
-                Handlebars.templates[path] = Handlebars.compile(response);
-            }
-        }).fail(function() {
-            throw new Error("Could not load template from path: " + myPath);
-        })
-    }
+    if (!Handlebars.templates.hasOwnProperty(path))
+        throw new Error("Could not load template from path: " + path);
     return Handlebars.templates[path];
 }
