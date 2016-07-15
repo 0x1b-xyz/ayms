@@ -139,7 +139,7 @@ function saveCtrls() {
     let ctrls = getCtrls();
     jQuery.ajax({
         type: 'post',
-        url: window.location.href + "/formCtrl/replace",
+        url: window.location.href + "/ctrl/replace",
         contentType: 'application/json',
         data: JSON.stringify(ctrls),
         beforeSend: function() {
@@ -162,7 +162,7 @@ function loadCtrls() {
 
     jQuery.ajax({
         type: 'get',
-        url: window.location.href + '/formCtrl',
+        url: window.location.href + '/ctrl',
         contentType: 'application/json',
         beforeSend: function() {
             $.blockUI();

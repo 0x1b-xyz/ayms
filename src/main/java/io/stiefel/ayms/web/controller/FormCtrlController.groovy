@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 
-import javax.persistence.EntityNotFoundException
 import javax.servlet.http.HttpServletResponse
 import javax.validation.Valid
 
@@ -24,7 +23,7 @@ import javax.validation.Valid
  * @author jason@stiefel.io
  */
 @RestController
-@RequestMapping(value = '/formDefinition/{formDefinitionId}/formCtrl')
+@RequestMapping(value = '/form/definition/{definitionId}/ctrl')
 class FormCtrlController {
 
     @Autowired FormDefinitionService service
@@ -34,8 +33,8 @@ class FormCtrlController {
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     @JsonView(View.Summary)
-    Result<List<FormDefinition>> findAll(@PathVariable Long formDefinitionId) {
-        FormDefinition definition = definitionDao.find(formDefinitionId)
+    Result<List<FormDefinition>> findAll(@PathVariable Long definitionId) {
+        FormDefinition definition = definitionDao.find(definitionId)
         new Result(ctrlDao.findAllByDefinition(definition))
     }
 

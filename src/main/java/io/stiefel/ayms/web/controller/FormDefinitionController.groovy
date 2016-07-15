@@ -19,7 +19,7 @@ import javax.validation.Valid
  * @author jason@stiefel.io
  */
 @RestController
-@RequestMapping(value = '/formDefinition')
+@RequestMapping(value = '/form/definition')
 class FormDefinitionController {
 
     @Autowired FormDefinitionDao dao
@@ -29,10 +29,10 @@ class FormDefinitionController {
         new ModelAndView('form/index')
     }
 
-    @RequestMapping(path = '/{formDefinitionId}', method = RequestMethod.GET, produces = 'text/html')
+    @RequestMapping(path = '/{definitionId}', method = RequestMethod.GET, produces = 'text/html')
     @JsonView(View.Summary)
-    ModelAndView find(@PathVariable Long formDefinitionId) {
-        return new ModelAndView('form/builder', [formDefinition: dao.find(formDefinitionId)])
+    ModelAndView find(@PathVariable Long definitionId) {
+        return new ModelAndView('form/builder', [formDefinition: dao.find(definitionId)])
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
