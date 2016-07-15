@@ -25,7 +25,7 @@
             <hr>
             <div class="grid-stack"></div>
             <hr>
-            <a href="<s:url value="/formDefinition"/>" type="button" role="button" class="btn btn-default">Cancel</a>
+            <a href="<s:url value="/form/definition"/>" type="button" role="button" class="btn btn-default">Cancel</a>
             <button id="grid-stack-frm-submit" type="button" class="btn btn-primary">Save</button>
         </form>
 
