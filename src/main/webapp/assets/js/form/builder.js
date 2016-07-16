@@ -21,6 +21,26 @@ var appendHdefault = 2;
 var ctrls = {};
 
 /**
+ * Calls a "dynamic" function on a control with the {@code ctrlId, ctrlType and ctrlAttr}
+ *
+ * @param functionName Name of the function (will be suffixed with {@code _CTRLID})
+ * @param ctrlId Identifier of control
+ * @param ctrlType Type of control
+ * @param ctrlAttr Control attributes
+ *
+ * @return Result of function call or {@code null} if function does not exist.
+ */
+function ctrlFunction(functionName, ctrlId, ctrlType, ctrlAttr) {
+
+    if (eval("typeof " + functionName + "_" + ctrlId) != 'undefined') {
+        let call = 'return ' + functionName + '_' + ctrlId + '(ctrlId, ctrlType, ctrlAttr)';
+        return new Function('ctrlId','ctrlType','ctrlAttr', call)(ctrlId, ctrlType, ctrlAttr);
+    }
+    return null;
+
+}
+
+/**
  * Renders the {@code ctrl-CTRLTYPE-edit} template into the edit modal. Once the initial rendering
  * is completed we look for a method called {@code load_CTRLID} that we'll pass whatever data we
  * have to. It's the responsibility of this method to push the {@code ctrlAttr} values into the
@@ -43,10 +63,7 @@ function newCtrl() {
 
     ctrlModal.modal();
 
-    if (eval("typeof load_" + ctrlId) != 'undefined') {
-        let loadCall = "return load_" + ctrlId + "(ctrlId, ctrlType, ctrlAttr)";
-        new Function('ctrlId', 'ctrlType', 'ctrlAttr', loadCall)(ctrlId, ctrlType, ctrlAttr);
-    }
+    ctrlFunction('load', ctrlId, ctrlType, ctrlAttr);
 
 }
 
@@ -71,14 +88,10 @@ function addCtrl() {
         delete ctrlAttr[key];
     }
 
-    var added = false;
-    if (eval("typeof append_" + ctrlId) != 'undefined') {
-        let addCall = 'return append_' + ctrlId + '(ctrlId, ctrlType, ctrlAttr)';
-        added = new Function('ctrlId', 'ctrlType', 'ctrlAttr', addCall)(ctrlId, ctrlType, ctrlAttr);
-    } else {
+    var added = ctrlFunction('append', ctrlId, ctrlType, ctrlAttr);
+    if (added == null)
         added = appendCtrl(ctrlId, ctrlType, ctrlAttr, appendXdefault,
             appendYdefault, appendWdefault, appendHdefault);
-    }
 
     if (added)
         ctrlModal.modal('hide');
@@ -99,12 +112,20 @@ function appendCtrl(ctrlId, ctrlType, ctrlAttr, x, y, width, height) {
     grid.addWidget(widget);
     $(toId(ctrlId)).html(getTemplate('ctrl/' + ctrlType + '/render')(ctrlAttr));
 
+    // Attach the delete handler
+    $(toId(ctrlId)).parent().find('.grid-stack-item-delete a').on('click', function() {
+        delCtrl(ctrlId);
+    });
+
     ctrls[ctrlId] = {
         id: ctrlId,
         type: ctrlType,
         attr: ctrlAttr
     };
-    
+
+    console.log("Calling render on " + ctrlId);
+    ctrlFunction('render', ctrlId, ctrlType, ctrlAttr);
+
     return true;
 
 }
@@ -181,7 +202,9 @@ function loadCtrls() {
 }
 
 /**
- * Removes a control
+ * Removes a control from the grid
+ *
+ * @param ctrlId Identifier of control
  */
 function delCtrl(ctrlId) {
     let widget = $(toId(ctrlId)).parent();
@@ -192,6 +215,9 @@ function delCtrl(ctrlId) {
 
 /**
  * Looks up a field by name within the {@code #ctrl-modal-frm}
+ *
+ * @param ctrlId Identifier of control
+ * @param fieldName Name of field within control edit form
  */
 function getCtrlField(ctrlId, fieldName) {
     return $('#ctrl-modal-frm').find("input[name='" + fieldName + '-' + ctrlId + "']");

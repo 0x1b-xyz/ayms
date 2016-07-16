@@ -4,7 +4,7 @@
 <head>
     <title>forms</title>
 
-    <script type="text/javascript" src="<s:url value="/assets/form-builder.js"/>"></script>
+    <script type="text/javascript" src="<s:url value="/assets/form/builder.js"/>"></script>
     <link href="<s:url value="/assets/formDefinition.css"/>" rel="stylesheet"/>
 
 </head>
@@ -54,6 +54,10 @@
             <button type="button" class="list-group-item btn-sm" data-edit-tpl="ctrl-radio-field-tpl"><i class="fa fa-circle-o fa-fw" aria-hidden="true"></i>&nbsp; Radio Buttons</button>
             <button type="button" class="list-group-item btn-sm" data-edit-tpl="ctrl-checkbox-field-tpl"><i class="fa fa-check-square-o fa-fw" aria-hidden="true"></i>&nbsp; Checkboxes</button>
             <button type="button" class="list-group-item btn-sm" data-edit-tpl="ctrl-yesno-field-tpl"><i class="fa fa-eraser fa-fw" aria-hidden="true"></i>&nbsp; Yes/No</button>
+        </div>
+        <h6>Entity Controls</h6>
+        <div class="list-group">
+            <button type="button" class="list-group-item btn-sm" data-ctrl-type="CompanyField"><i class="fa fa-building fa-sm" aria-hidden="true"></i>&nbsp; Company</button>
         </div>
     </div>
 

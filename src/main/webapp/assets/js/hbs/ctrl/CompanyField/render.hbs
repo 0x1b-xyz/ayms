@@ -1,0 +1,35 @@
+{{#compare labelAlign "horizontal"}}
+<div class="form-group">
+    <label for="{{name}}" class="col-sm-2 control-label">{{label}}</label>
+    <div class="col-sm-10">
+        <select name="{{name}}-{{id}}" id="{{name}}-{{id}}" class="form-control">
+            <option value="" disabled selected>{{placeholder}}</option>
+        </select>
+    </div>
+</div>
+{{/compare}}
+{{#compare labelAlign "vertical"}}
+<div class="form-vertical">
+    <label for="{{name}}">{{label}}</label>
+    <select name="{{name}}-{{id}}" id="{{name}}-{{id}}" class="form-control">
+        <option value="" disabled selected>{{placeholder}}</option>
+    </select>
+</div>
+{{/compare}}
+{{#compare labelAlign "none"}}
+<select name="{{name}}-{{id}}" id="{{name}}-{{id}}" class="form-control">
+    <option value="" disabled selected>{{placeholder}}</option>
+</select>
+{{/compare}}
+
+<script type="text/javascript">
+function render_{{id}}(ctrlId, ctrlType, ctrlAttr) {
+    console.log('calling for companies');
+    $.get(URL_PREFIX + '/company',
+        function(response) {
+            console.log(response.data)
+        },
+            'json'
+    )
+}
+</script>
