@@ -19,7 +19,7 @@
 
     function load_{{id}}(ctrlId, ctrlType, ctrlAttr) {
         // We could do this using a #cond on the input tag but this seemed like more fun
-        var sizeField = getCtrlField(ctrlId, 'size');
+        var sizeField = getCtrlEditField(ctrlId, 'size');
         if (!ctrlAttr.size) {
             sizeField.filter("[value='1']").prop('checked', true);
         } else {

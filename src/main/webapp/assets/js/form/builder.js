@@ -112,7 +112,11 @@ function appendCtrl(ctrlId, ctrlType, ctrlAttr, x, y, width, height) {
     });
 
     grid.addWidget(widget);
-    $(toId(ctrlId)).html(getTemplate('ctrl/' + ctrlType + '/render')(ctrlAttr));
+    $(toId(ctrlId)).html(getTemplate('ctrl/' + ctrlType + '/render')(
+        $.extend(ctrlAttr, {
+            id: ctrlId
+        })
+    ));
 
     // Attach the delete handler
     $(toId(ctrlId)).parent().find('.grid-stack-item-delete a').on('click', function() {
@@ -221,8 +225,18 @@ function delCtrl(ctrlId) {
  * @param ctrlId Identifier of control
  * @param fieldName Name of field within control edit form
  */
-function getCtrlField(ctrlId, fieldName) {
+function getCtrlEditField(ctrlId, fieldName) {
     return $('#ctrl-modal-frm').find(toId(fieldName + '-' + ctrlId));
+}
+
+/**
+ * Looks up a field by id within the {@code #grid-stack-frm}
+ *
+ * @param ctrlId Identifier of control
+ * @param fieldName Name of rendered field in form
+ */
+function getCtrlRenderField(ctrlId, fieldName) {
+    return $('#grid-stack-frm').find(toId(fieldName + '-' + ctrlId));
 }
 
 $(document).ready(function () {
