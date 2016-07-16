@@ -80,13 +80,15 @@ function addCtrl() {
     let ctrlAttr = $('#ctrl-modal-frm').serializeJSON();
 
     // Strip the ctrlId off the field names
-    for (var key in ctrlAttr) {
-        if (!ctrlAttr.hasOwnProperty(key))
-            continue;
-        var newKey = key.replace(ctrlIdRe, '');
-        ctrlAttr[newKey] = ctrlAttr[key];
-        delete ctrlAttr[key];
-    }
+    // note - no longer appending ctrlId to field names
+    // for (var key in ctrlAttr) {
+    //     if (!ctrlAttr.hasOwnProperty(key))
+    //         continue;
+    //     var newKey = key.replace(ctrlIdRe, '');
+    //     ctrlAttr[newKey] = ctrlAttr[key];
+    //     delete ctrlAttr[key];
+    // }
+    console.log(ctrlAttr);
 
     var added = ctrlFunction('append', ctrlId, ctrlType, ctrlAttr);
     if (added == null)
@@ -214,13 +216,13 @@ function delCtrl(ctrlId) {
 }
 
 /**
- * Looks up a field by name within the {@code #ctrl-modal-frm}
+ * Looks up a field by id within the {@code #ctrl-modal-frm}
  *
  * @param ctrlId Identifier of control
  * @param fieldName Name of field within control edit form
  */
 function getCtrlField(ctrlId, fieldName) {
-    return $('#ctrl-modal-frm').find("input[name='" + fieldName + '-' + ctrlId + "']");
+    return $('#ctrl-modal-frm').find(toId(fieldName + '-' + ctrlId));
 }
 
 $(document).ready(function () {

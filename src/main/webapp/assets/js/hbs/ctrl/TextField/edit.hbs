@@ -1,12 +1,12 @@
 <div class="form-group">
-    <label for="name-{{id}}" class="col-sm-2 control-label">Name</label>
+    <label for="name" class="col-sm-2 control-label">Name</label>
     <div class="col-sm-9">
         <div class="form-group inner-form-group">
             <div class="col-sm-7">
-                <input name="name-{{id}}" id="name-{{id}}" type="text" class="form-control" placeholder="Field Name" value="{{name}}">
+                <input name="name" id="name-{{id}}" type="text" class="form-control" placeholder="Field Name" value="{{name}}">
             </div>
             <div class="col-sm-5">
-                <select name="type-{{id}}" id="type-{{id}}" class="form-control">
+                <select name="type" id="type-{{id}}" class="form-control">
                     <option value="text">Text</option>
                     <option value="date">Date</option>
                     <option value="datetime-local">Date/Time</option>
@@ -24,10 +24,10 @@
     <div class="col-sm-9">
         <div class="form-group inner-form-group">
             <div class="col-sm-7">
-                <input name="label-{{id}}" id="label-{{id}}" type="text" class="form-control" placeholder="Label Text" value="{{label}}">
+                <input name="label" id="label-{{id}}" type="text" class="form-control" placeholder="Label Text" value="{{label}}">
             </div>
             <div class="col-sm-5">
-                <select name="labelAlign-{{id}}" id="labelAlign-{{id}}" class="form-control">
+                <select name="labelAlign" id="labelAlign-{{id}}" class="form-control">
                     <option value="horizontal">Horizontal</option>
                     <option value="vertical">Vertical</option>
                     <option value="none">None</option>
@@ -39,19 +39,19 @@
 <div class="form-group">
     <label for="placeholder-{{id}}" class="col-sm-2 control-label">Placeholder</label>
     <div class="col-sm-9">
-        <input name="placeholder-{{id}}" id="placeholder-{{id}}" type="text" class="form-control" placeholder="Placeholder Text" value="{{placeholder}}">
+        <input name="placeholder" id="placeholder-{{id}}" type="text" class="form-control" placeholder="Placeholder Text" value="{{placeholder}}">
     </div>
 </div>
 <div class="form-group">
     <label for="maxlength-{{id}}" class="col-sm-2 control-label">Max Length</label>
     <div class="col-sm-2">
-        <input name="maxlength-{{id}}" id="maxlength-{{id}}" type="number" class="form-control" placeholder="" size="5" value="{{maxlength}}">
+        <input name="maxlength" id="maxlength-{{id}}" type="number" class="form-control" placeholder="" size="5" value="{{maxlength}}">
     </div>
 </div>
 
 <script type="text/javascript">
-    var heights = {'vertical':3,'horizontal':2,'none':2};
     function append_{{id}}(ctrlId, ctrlType, ctrlAttr) {
+        let heights = {'vertical':3,'horizontal':2,'none':2};
         return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign])
     }
 </script>
