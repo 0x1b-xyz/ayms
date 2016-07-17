@@ -32,15 +32,11 @@
 
     <div id="sidebar-wrapper">
         <ul class="sidebar-nav">
-            <li class="sidebar-brand">
-                <a href="<s:url value="/"/>">ayms</a>
-            </li>
-            <li>
-                <a href="<s:url value="/company"/>">Companies</a>
-            </li>
-            <li>
-                <a href="<s:url value="/form/definition"/>">Forms</a>
-            </li>
+            <li class="sidebar-brand"><a href="<s:url value="/"/>">ayms</a></li>
+            <li><a href="<s:url value="/company"/>">Companies</a></li>
+            <li><a href="<s:url value="/employee"/>">Employees</a></li>
+            <li><a href="<s:url value="/client"/>">Clients</a></li>
+            <li><a href="<s:url value="/form/definition"/>">Forms</a></li>
         </ul>
     </div>
 
