@@ -1,9 +1,9 @@
 package io.stiefel.ayms.service
 
-import io.stiefel.ayms.dao.FormCtrlDao
-import io.stiefel.ayms.dao.FormDefinitionDao
 import io.stiefel.ayms.domain.FormCtrl
-import io.stiefel.ayms.domain.FormDefinition
+import io.stiefel.ayms.domain.FormDef
+import io.stiefel.ayms.repo.FormCtrlRepo
+import io.stiefel.ayms.repo.FormDefRepo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -13,21 +13,20 @@ import org.springframework.transaction.annotation.Transactional
  */
 @Service
 @Transactional
-class FormDefinitionService {
+class FormDefService {
 
-    @Autowired FormDefinitionDao definitionDao
-    @Autowired FormCtrlDao ctrlDao
+    @Autowired FormDefRepo formDefRepo
+    @Autowired FormCtrlRepo formCtrlRepo
 
     /**
      * Replaces any existing {@link FormCtrl}s on the definition with the new set.
      */
     void replace(Long formDefinitionId, List<FormCtrl> ctrls) {
 
-        FormDefinition definition = definitionDao.find(formDefinitionId)
-        ctrlDao.removeByDefinition(definition.id)
+        FormDef formDef = formDefRepo.findOne(formDefinitionId)
+        formCtrlRepo.delete(formCtrlRepo.findByDefinitionId(formDef.id))
         ctrls.each {
-            it.definition = definition
-            ctrlDao.save(it)
+            formCtrlRepo.save(it)
         }
 
     }

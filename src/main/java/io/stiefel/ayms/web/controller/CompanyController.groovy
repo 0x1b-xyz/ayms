@@ -1,12 +1,11 @@
 package io.stiefel.ayms.web.controller
 
 import com.fasterxml.jackson.annotation.JsonView
-import io.stiefel.ayms.dao.CompanyDao
 import io.stiefel.ayms.domain.Company
 import io.stiefel.ayms.domain.View
+import io.stiefel.ayms.repo.CompanyRepo
 import io.stiefel.ayms.web.Result
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.MediaType
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -23,7 +22,7 @@ import javax.validation.Valid
 @RequestMapping(value = '/company')
 class CompanyController {
 
-    @Autowired CompanyDao companyDao
+    @Autowired CompanyRepo repo
 
     @RequestMapping(method = RequestMethod.GET, produces = 'text/html')
     ModelAndView index() { new ModelAndView('company') }
@@ -31,20 +30,20 @@ class CompanyController {
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     @JsonView(View.Summary)
     Result<List<Company>> findAll() {
-        new Result(companyDao.findAll())
+        new Result(repo.findAll())
     }
 
     @RequestMapping(path = '/{companyId}', method = RequestMethod.GET, produces = 'application/json')
     @JsonView(View.Summary)
     Result<Company> find(@PathVariable Long companyId) {
-        new Result(companyDao.find(companyId))
+        new Result(repo.findOne(companyId))
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = 'application/json')
     Result<Long> save(@Valid Company company, BindingResult binding) {
         if (binding.hasErrors())
             return new Result(false, null).binding(binding)
-        companyDao.save(company)
+        repo.save(company)
         new Result(company.id)
     }
 

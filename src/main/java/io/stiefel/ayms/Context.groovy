@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.*
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer
 import org.springframework.core.env.Environment
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.orm.jpa.JpaTransactionManager
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter
@@ -29,6 +30,7 @@ import javax.sql.DataSource
 ])
 @EnableTransactionManagement
 @ComponentScan(['io.stiefel.ayms.dao', 'io.stiefel.ayms.service'])
+@EnableJpaRepositories(basePackages = 'io.stiefel.ayms.repo', entityManagerFactoryRef = 'emf')
 class Context {
 
     @Autowired Environment env

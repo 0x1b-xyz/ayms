@@ -1,21 +1,13 @@
 package io.stiefel.ayms
 
-import io.stiefel.ayms.dao.ClientDao
-import io.stiefel.ayms.dao.CompanyDao
-import io.stiefel.ayms.dao.FormCtrlDao
-import io.stiefel.ayms.dao.FormDefinitionDao
-import io.stiefel.ayms.dao.NoteDao
-import io.stiefel.ayms.dao.ServiceDao
-import io.stiefel.ayms.dao.EmployeeDao
-import io.stiefel.ayms.domain.Address
-import io.stiefel.ayms.domain.Client
-import io.stiefel.ayms.domain.Company
-import io.stiefel.ayms.domain.FormCtrl
-import io.stiefel.ayms.domain.FormDefinition
-import io.stiefel.ayms.domain.Layout
-import io.stiefel.ayms.domain.Note
-import io.stiefel.ayms.domain.Service
-import io.stiefel.ayms.domain.Employee
+import io.stiefel.ayms.domain.*
+import io.stiefel.ayms.repo.ClientRepo
+import io.stiefel.ayms.repo.CompanyRepo
+import io.stiefel.ayms.repo.EmployeeRepo
+import io.stiefel.ayms.repo.FormCtrlRepo
+import io.stiefel.ayms.repo.FormDefRepo
+import io.stiefel.ayms.repo.NoteRepo
+import io.stiefel.ayms.repo.ServiceRepo
 import org.apache.commons.lang.RandomStringUtils
 import org.apache.commons.lang.math.RandomUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,13 +24,13 @@ import spock.lang.Specification
 @Rollback(false)
 class PersistenceSpecIT extends Specification {
 
-    @Autowired CompanyDao companyDao
-    @Autowired EmployeeDao employeeDao
-    @Autowired ClientDao clientDao
-    @Autowired ServiceDao serviceDao
-    @Autowired NoteDao noteDao
-    @Autowired FormDefinitionDao formDefinitionDao
-    @Autowired FormCtrlDao formCtrlDao
+    @Autowired CompanyRepo companyRepo
+    @Autowired EmployeeRepo employeeRepo
+    @Autowired ClientRepo clientRepo
+    @Autowired ServiceRepo serviceRepo
+    @Autowired NoteRepo noteRepo
+    @Autowired FormDefRepo formDefRepo
+    @Autowired FormCtrlRepo formCtrlRepo
 
     Address address = new Address('Somewhere in', null, 'Charlotte', 'NC', '28205')
     Company company = new Company(
@@ -47,8 +39,7 @@ class PersistenceSpecIT extends Specification {
     )
 
     def setup() {
-        companyDao.remove(company)
-        companyDao.save(company)
+        companyRepo.save(company)
     }
 
     def "saves and finds company"() {
@@ -57,7 +48,7 @@ class PersistenceSpecIT extends Specification {
         new Date()
 
         then:
-        companyDao.find(company.id) == company
+        companyRepo.findOne(company.id) == company
 
     }
 
@@ -65,11 +56,10 @@ class PersistenceSpecIT extends Specification {
 
         when:
         Employee employee = employee()
-        employeeDao.save(employee)
+        employeeRepo.save(employee)
 
         then:
-        employeeDao.findAllByCompany(company)[0] == employee
-        employeeDao.findByName(employee.name) == employee
+        employeeRepo.findByCompanyId(company.id)[0] == employee
 
     }
 
@@ -77,32 +67,13 @@ class PersistenceSpecIT extends Specification {
 
         when:
         Client client = client()
-        clientDao.save(client)
+        clientRepo.save(client)
 
         then:
-        clientDao.find(client.id) == client
-        clientDao.find(client.id).company == company
-        clientDao.findAllByCompany(company)[0] == client
-        clientDao.findAllByCompanyAndState(company, client.address.state)[0] == client
-
-    }
-
-    def "saves and finds form ctrls"() {
-
-        when:
-        FormDefinition formDef = new FormDefinition(null, "form-${UUID.randomUUID()}", 'description')
-        formDefinitionDao.save(formDef)
-        FormCtrl ctrl = new FormCtrl(UUID.randomUUID().toString(), formDef,
-                'TextField', ['labelAlign': 'horizontal'])
-        ctrl.layout = new Layout(1, 2, 100, 200)
-        formCtrlDao.save(ctrl);
-
-        then:
-        formCtrlDao.find(ctrl.id).definition == formDef
-        formCtrlDao.find(ctrl.id) == ctrl
-        formCtrlDao.find(ctrl.id).attr['labelAlign'] == 'horizontal'
-        formCtrlDao.find(ctrl.id).layout.x == 1
-        formCtrlDao.find(ctrl.id).layout.width == 100
+        clientRepo.findOne(client.id) == client
+        clientRepo.findOne(client.id).company == company
+        clientRepo.findByCompanyId(company.id)[0] == client
+        clientRepo.findByCompanyIdAndAddressState(company.id, client.address.state)[0] == client
 
     }
 
@@ -114,32 +85,32 @@ class PersistenceSpecIT extends Specification {
 
         when:
         Employee employee = employee()
-        employeeDao.save(employee)
+        employeeRepo.save(employee)
         Client client = client()
-        clientDao.save(client)
+        employeeRepo.save(client)
         Service svc = new Service()
         svc.employee = employee
         svc.client = client
-        serviceDao.save(svc)
+        serviceRepo.save(svc)
 
         then:
-        serviceDao.find(svc.id) == svc
+        serviceRepo.findOne(svc.id) == svc
 
         when:
         svc.scheduled = new Date() - RandomUtils.nextInt(100)
-        serviceDao.save(svc)
+        serviceRepo.save(svc)
 
         then:
-        serviceDao.find(svc.id).scheduled != null
-        serviceDao.find(svc.id) == svc
+        serviceRepo.findOne(svc.id).scheduled != null
+        serviceRepo.findOne(svc.id) == svc
 
         when:
         svc.arrived = new Date() - RandomUtils.nextInt(25)
-        serviceDao.save(svc)
+        serviceRepo.save(svc)
 
         then:
-        serviceDao.find(svc.id).arrived != null
-        serviceDao.find(svc.id) == svc
+        serviceRepo.findOne(svc.id).arrived != null
+        serviceRepo.findOne(svc.id) == svc
 
     }
 
@@ -147,25 +118,43 @@ class PersistenceSpecIT extends Specification {
 
         when:
         Client client = client()
-        clientDao.save(client)
+        clientRepo.save(client)
         Employee employee = employee()
-        employeeDao.save(employee)
+        employeeRepo.save(employee)
         Service svc = new Service()
         svc.employee = employee
         svc.client = client
-        serviceDao.save(svc)
+        serviceRepo.save(svc)
 
         Note note = new Note()
         note.service = svc
         note.employee = employee
         note.text = RandomStringUtils.randomAlphabetic(200)
-        noteDao.save(note)
+        noteRepo.save(note)
 
         then:
-        noteDao.find(note.id) == note
+        noteRepo.findOne(note.id) == note
 
     }
 
+    def "saves and finds form ctrls"() {
+
+        when:
+        FormDef formDef = new FormDef("form-${UUID.randomUUID()}", 'description')
+        formDefRepo.save(formDef)
+        FormCtrl ctrl = new FormCtrl(UUID.randomUUID().toString(), formDef,
+                'TextField', ['labelAlign': 'horizontal'])
+        ctrl.layout = new Layout(1, 2, 100, 200)
+        formCtrlRepo.save(ctrl);
+
+        then:
+        formCtrlRepo.findOne(ctrl.id).definition == formDef
+        formCtrlRepo.findOne(ctrl.id) == ctrl
+        formCtrlRepo.findOne(ctrl.id).attr['labelAlign'] == 'horizontal'
+        formCtrlRepo.findOne(ctrl.id).layout.x == 1
+        formCtrlRepo.findOne(ctrl.id).layout.width == 100
+
+    }
 
     Client client() {
         Client client = new Client()

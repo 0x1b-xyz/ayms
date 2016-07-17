@@ -23,10 +23,6 @@ import javax.persistence.TemporalType
 @Entity
 @Table(name = 'aym_service')
 @Canonical
-@NamedQueries([
-        @NamedQuery(name = 'Service.findAllByClient', query = 'select s from Service s where s.client = :client'),
-        @NamedQuery(name = 'Service.findByClientAndId', query = 'select s from Service s where s.client = :client and s.id = :id')
-])
 class Service extends AbstractEntity<Long> {
 
     @ManyToOne(optional = false)

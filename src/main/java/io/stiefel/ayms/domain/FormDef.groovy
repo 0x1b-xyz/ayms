@@ -16,7 +16,7 @@ import javax.persistence.Table
 @Entity
 @Table(name = 'aym_form_definition')
 @Canonical
-class FormDefinition extends AbstractEntity<Long> {
+class FormDef extends AbstractEntity<Long> {
 
     @Column(unique = true, nullable = false, length = 100)
     @JsonView(View.Summary)

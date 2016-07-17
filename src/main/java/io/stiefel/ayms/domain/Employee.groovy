@@ -16,11 +16,6 @@ import javax.validation.constraints.NotNull
 @Entity
 @Table(name = 'aym_employee')
 @Canonical
-@NamedQueries([
-        @NamedQuery(name = 'Employee.findByCompanyAndId', query = 'select u from Employee u where u.company = :company and u.id = :id'),
-        @NamedQuery(name = 'Employee.findByName', query = 'select u from Employee u where u.name = :name'),
-        @NamedQuery(name = 'Employee.findAllByCompany', query = 'select u from Employee u where u.company = :company')
-])
 class Employee extends AbstractEntity<Long> {
 
     enum Role {
@@ -35,6 +30,7 @@ class Employee extends AbstractEntity<Long> {
     @JsonView(View.Summary)
     @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
     @JsonIdentityReference(alwaysAsId=true)
+    @NotNull
     Company company
 
     @Column(nullable = false)

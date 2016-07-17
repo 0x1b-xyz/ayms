@@ -17,9 +17,6 @@ import javax.persistence.*
 @Table(name = "aym_form_ctrl", uniqueConstraints = [
 //        @UniqueConstraint(columnNames = ["form_definition_id", "name"])
 ])
-@NamedQueries([
-    @NamedQuery(name = 'FormCtrl.findAllByDefinition', query = 'select ctrl from FormCtrl ctrl where ctrl.definition = :definition'),
-])
 @Canonical
 @EqualsAndHashCode
 class FormCtrl extends AbstractEntity<Long> {
@@ -33,7 +30,7 @@ class FormCtrl extends AbstractEntity<Long> {
     @JsonView(View.Summary)
     @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
     @JsonIdentityReference(alwaysAsId=true)
-    FormDefinition definition
+    FormDef definition
 
     @Column(nullable = false, length = 50)
     @JsonView(View.Summary)
