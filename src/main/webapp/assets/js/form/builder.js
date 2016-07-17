@@ -1,24 +1,30 @@
 //= require app
-//= require lodash
 //= require bootstrap-wysiwyg
 //= require jquery.blockUI
 //= require jquery.hotkeys
+//= require jquery.observer
+//= require lodash
 //= require gridstack
 
-var ctrlModal;
-var ctrlModalFrm;
-var grid;
-var ctrlIdRe = /\-[0-9A-F]{8}[0-9A-F]{4}[0-9A-F]{4}[0-9A-F]{4}[0-9A-F]{12}/g;
+var CTRL_MODAL;
+var CTRL_MODAL_FRM;
+var CTRL_GRID;
+var CTRL_ID_RE = /\-[0-9A-F]{8}[0-9A-F]{4}[0-9A-F]{4}[0-9A-F]{4}[0-9A-F]{12}/g;
 
-var appendXdefault = 0;
-var appendYdefault = 99;
-var appendWdefault = 12;
-var appendHdefault = 2;
+var APPEND_X_DEFAULT = 0;
+var APPEND_Y_DEFAULT = 99;
+var APPEND_W_DEFAULT = 12;
+var APPEND_H_DEFAULT = 2;
 
 /**
- * Map of controls that have are in the grid 
+ * Map of controls that are present in the GRID 
  */
-var ctrls = {};
+var CTRLS = {};
+
+/**
+ * Name of topic where ctrl value changes are published  
+ */
+var TOPIC_VALUE_CHANGE = 'ctrlValueChange';
 
 /**
  * Calls a "dynamic" function on a control with the {@code ctrlId, ctrlType and ctrlAttr}
@@ -54,14 +60,14 @@ function newCtrl() {
     let ctrlAttr = {id: ctrlId};
     let formEle = getTemplate('ctrl/' + ctrlType + '/edit');
 
-    ctrlModal.find('.modal-title').html(ctrlLabel);
+    CTRL_MODAL.find('.modal-title').html(ctrlLabel);
 
-    ctrlModalFrm.empty();
-    ctrlModalFrm.data('ctrl-id', ctrlId);
-    ctrlModalFrm.data('ctrl-type', ctrlType);
-    ctrlModalFrm.html(formEle(ctrlAttr));
+    CTRL_MODAL_FRM.empty();
+    CTRL_MODAL_FRM.data('ctrl-id', ctrlId);
+    CTRL_MODAL_FRM.data('ctrl-type', ctrlType);
+    CTRL_MODAL_FRM.html(formEle(ctrlAttr));
 
-    ctrlModal.modal();
+    CTRL_MODAL.modal();
 
     ctrlFunction('load', ctrlId, ctrlType, ctrlAttr);
 
@@ -75,8 +81,8 @@ function newCtrl() {
  */
 function addCtrl() {
 
-    let ctrlId = ctrlModalFrm.data('ctrl-id');
-    let ctrlType = ctrlModalFrm.data('ctrl-type');
+    let ctrlId = CTRL_MODAL_FRM.data('ctrl-id');
+    let ctrlType = CTRL_MODAL_FRM.data('ctrl-type');
     let ctrlAttr = $('#ctrl-modal-frm').serializeJSON();
 
     // Strip the ctrlId off the field names
@@ -84,25 +90,24 @@ function addCtrl() {
     // for (var key in ctrlAttr) {
     //     if (!ctrlAttr.hasOwnProperty(key))
     //         continue;
-    //     var newKey = key.replace(ctrlIdRe, '');
+    //     var newKey = key.replace(CTRL_ID_RE, '');
     //     ctrlAttr[newKey] = ctrlAttr[key];
     //     delete ctrlAttr[key];
     // }
-    console.log(ctrlAttr);
 
     var added = ctrlFunction('append', ctrlId, ctrlType, ctrlAttr);
     if (added == null)
-        added = appendCtrl(ctrlId, ctrlType, ctrlAttr, appendXdefault,
-            appendYdefault, appendWdefault, appendHdefault);
+        added = appendCtrl(ctrlId, ctrlType, ctrlAttr, APPEND_X_DEFAULT,
+            APPEND_Y_DEFAULT, APPEND_W_DEFAULT, APPEND_H_DEFAULT);
 
     if (added)
-        ctrlModal.modal('hide');
+        CTRL_MODAL.modal('hide');
 
 }
 
 /**
- * Appends the output of the {@code ctrl-CTRLTYPE-render} template into the layout grid and
- * sticks the ctrl definition into {@link #ctrls}.
+ * Appends the output of the {@code ctrl-CTRLTYPE-render} template into the layout CTRL_GRID and
+ * sticks the ctrl definition into {@link #CTRLS}.
  */
 function appendCtrl(ctrlId, ctrlType, ctrlAttr, x, y, width, height) {
 
@@ -111,7 +116,7 @@ function appendCtrl(ctrlId, ctrlType, ctrlAttr, x, y, width, height) {
         x: x, y: y, width: width, height: height
     });
 
-    grid.addWidget(widget);
+    CTRL_GRID.addWidget(widget);
     $(toId(ctrlId)).html(getTemplate('ctrl/' + ctrlType + '/render')(
         $.extend(ctrlAttr, {
             id: ctrlId
@@ -120,16 +125,15 @@ function appendCtrl(ctrlId, ctrlType, ctrlAttr, x, y, width, height) {
 
     // Attach the delete handler
     $(toId(ctrlId)).parent().find('.grid-stack-item-delete a').on('click', function() {
-        delCtrl(ctrlId);
+        removeCtrl(ctrlId);
     });
 
-    ctrls[ctrlId] = {
+    CTRLS[ctrlId] = {
         id: ctrlId,
         type: ctrlType,
         attr: ctrlAttr
     };
 
-    console.log("Calling render on " + ctrlId);
     ctrlFunction('render', ctrlId, ctrlType, ctrlAttr);
 
     return true;
@@ -137,8 +141,8 @@ function appendCtrl(ctrlId, ctrlType, ctrlAttr, x, y, width, height) {
 }
 
 /**
- * Extracts the layout info from the grid and merges it with the ctrl definition from the
- * {@link #ctrls} map.
+ * Extracts the layout info from the CTRL_GRID and merges it with the ctrl definition from the
+ * {@link #CTRLS} map.
  */
 function getCtrls() {
 
@@ -146,7 +150,7 @@ function getCtrls() {
         item = $(item);
         var node = item.data('_gridstack_node');
         var ctrlId = item.data('ctrl-id');
-        return jQuery.extend(ctrls[ctrlId], {
+        return jQuery.extend(CTRLS[ctrlId], {
             layout: {
                 x: node.x,
                 y: node.y,
@@ -208,15 +212,21 @@ function loadCtrls() {
 }
 
 /**
- * Removes a control from the grid
+ * Removes a control from the GRID_CTRL
  *
  * @param ctrlId Identifier of control
  */
-function delCtrl(ctrlId) {
+function removeCtrl(ctrlId) {
+
+    let ctrl = CTRLS[ctrlId];
     let widget = $(toId(ctrlId)).parent();
-    grid.removeWidget(widget);
+
+    CTRL_GRID.removeWidget(widget);
     widget.remove();
-    delete ctrls[ctrlId];
+
+    ctrlFunction('remove', ctrl.id, ctrl.type, ctrl.attr);
+
+    delete CTRLS[ctrlId];
 }
 
 /**
@@ -247,9 +257,9 @@ $(document).ready(function () {
         verticalMargin: 10
     });
 
-    grid = gridStack.data('gridstack');
-    ctrlModal = $('#ctrl-modal');
-    ctrlModalFrm = ctrlModal.find('#ctrl-modal-frm');
+    CTRL_GRID = gridStack.data('gridstack');
+    CTRL_MODAL = $('#ctrl-modal');
+    CTRL_MODAL_FRM = CTRL_MODAL.find('#ctrl-modal-frm');
 
     // Bind the {@link #newCtrl} method to all our form control buttons
     $('.form-control-list').find('button').on('click', newCtrl);
@@ -260,5 +270,34 @@ $(document).ready(function () {
     $('#grid-stack-frm-submit').on('click', saveCtrls);
 
     loadCtrls();
+
+    // function fn1() { console.log('fn1 called', arguments); }
+    // function fn2() { console.log('fn2 called', arguments); }
+    // function fn3() { console.log('fn3 called', arguments); }
+    //
+    // function publish() {
+    //     var args = (1 <= arguments.length) ? Array.prototype.slice.call(arguments, 0) : [];
+    //
+    //     console.group('publish ' + args[0]);
+    //     $.observer.publish.apply($.observer, args);
+    //     console.groupEnd();
+    // }
+    //
+    // $.observer.subscribe('test1', fn1);
+    // $.observer.subscribe('test1', fn2);
+    // $.observer.subscribe('test2', fn3);
+    //
+    // publish('test1', 'strArg1', 'strArg2');
+    // publish('test2', 1, 2, '3');
+    //
+    // $.observer.unsubscribe('test1', fn2);
+    //
+    // publish('test1', {key1: 'val1', key2: 'val2'});
+    // publish('test2');
+    //
+    // $.observer.unsubscribe('test1', fn1);
+    //
+    // publish('test1');
+    // publish('test2');
 
 });

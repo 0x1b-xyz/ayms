@@ -1,0 +1,42 @@
+<div class="form-group">
+    <label for="name-{{id}}" class="col-sm-2 control-label">Name</label>
+    <div class="col-sm-9">
+        <input name="name" id="name-{{id}}" type="text" class="form-control" placeholder="Field Name" value="{{name}}">
+    </div>
+</div>
+<div class="form-group">
+    <label for="label-{{id}}" class="col-sm-2 control-label">Label</label>
+    <div class="col-sm-9">
+        <div class="form-group inner-form-group">
+            <div class="col-sm-7">
+                <input name="label" id="label-{{id}}" type="text" class="form-control" placeholder="Label Text" value="{{label}}">
+            </div>
+            <div class="col-sm-5">
+                <select name="labelAlign" id="labelAlign-{{id}}" class="form-control">
+                    <option value="horizontal">Horizontal</option>
+                    <option value="vertical">Vertical</option>
+                    <option value="none">None</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="placeholder-{{id}}" class="col-sm-2 control-label">Placeholder</label>
+    <div class="col-sm-9">
+        <input name="placeholder" id="placeholder-{{id}}" type="text" class="form-control" placeholder="Placeholder Text" value="{{placeholder}}">
+    </div>
+</div>
+<div class="form-group">
+    <label for="companyField-{{id}}" class="col-sm-2 control-label">Company Field</label>
+    <div class="col-sm-9">
+        <input name="companyField" id="companyField-{{id}}" type="text" class="form-control" placeholder="Name of comapny field to watch" value="{{companyField}}"/>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function append_{{id}}(ctrlId, ctrlType, ctrlAttr) {
+        var heights = {'vertical':3,'horizontal':2,'none':2};
+        return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign])
+    }
+</script>

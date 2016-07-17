@@ -24,6 +24,14 @@
 
 <script type="text/javascript">
     function render_{{id}}(ctrlId, ctrlType, ctrlAttr) {
+
+        // Publish value changes
+        getCtrlRenderField(ctrlId, ctrlAttr.name).change(function() {
+            let companyId = $(this).find('option:selected').val();
+            $.observer.publish(TOPIC_VALUE_CHANGE, ctrlId, ctrlType, ctrlAttr, companyId);
+        });
+
+        // Load companies in
         $.ajax({
             url: URL_PREFIX + 'company',
             dataType: 'json',

@@ -2120,7 +2120,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 		/*
 		 * - Position constraining -
-		 * Constrain the position to a mix of grid, containment.
+		 * Constrain the position to a mix of GRID, containment.
 		 */
 
 		// If we are not dragging yet, we won't check for options
@@ -2153,7 +2153,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 			}
 
 			if (o.grid) {
-				//Check for grid elements set to 0 to prevent divide by 0 error causing invalid argument errors in IE (see ticket #6950)
+				//Check for GRID elements set to 0 to prevent divide by 0 error causing invalid argument errors in IE (see ticket #6950)
 				top = o.grid[1] ? this.originalPageY + Math.round((pageY - this.originalPageY) / o.grid[1]) * o.grid[1] : this.originalPageY;
 				pageY = containment ? ((top - this.offset.click.top >= containment[1] || top - this.offset.click.top > containment[3]) ? top : ((top - this.offset.click.top >= containment[1]) ? top - o.grid[1] : top + o.grid[1])) : top;
 
@@ -4123,7 +4123,7 @@ $.ui.plugin.add("resizable", "ghost", {
 
 });
 
-$.ui.plugin.add("resizable", "grid", {
+$.ui.plugin.add("resizable", "GRID", {
 
 	resize: function() {
 		var outerDimensions,
@@ -5581,7 +5581,7 @@ var sortable = $.widget("ui.sortable", $.ui.mouse, {
 
 		/*
 		 * - Position constraining -
-		 * Constrain the position to a mix of grid, containment.
+		 * Constrain the position to a mix of GRID, containment.
 		 */
 
 		if(this.originalPosition) { //If we are not dragging yet, we won't check for options
