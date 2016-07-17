@@ -21,33 +21,35 @@ import javax.validation.Valid
  * @author jason@stiefel.io
  */
 @RestController
-@RequestMapping(value = '/company/{companyId}/employee')
+@RequestMapping(value = '/employee')
 class EmployeeController {
 
     @Autowired CompanyDao companyDao
     @Autowired EmployeeDao employeeDao
 
     @RequestMapping(method = RequestMethod.GET, produces = 'text/html')
-    ModelAndView index(@PathVariable Long companyId) {
-        new ModelAndView('employee', [companyId: companyId])
+    String index() {
+        'employee'
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     @JsonView(View.Summary)
-    Result<List<Employee>> findAll(@PathVariable Long companyId) {
-        Company company = companyDao.find(companyId)
-        new Result(employeeDao.findAllByCompany(company))
+    Result<List<Employee>> findAll(Long companyId) {
+        if (companyId) {
+            Company company = companyDao.find(companyId)
+            return new Result(employeeDao.findAllByCompany(company))
+        }
+        new Result(employeeDao.findAll())
     }
 
     @RequestMapping(path = '/{employeeId}', method = RequestMethod.GET, produces = 'application/json')
     @JsonView(View.Summary)
-    Result<Employee> find(@PathVariable Long companyId, @PathVariable Long employeeId) {
-        Company company = companyDao.find(companyId)
-        new Result(employeeDao.findByCompanyAndId(company, employeeId))
+    Result<Employee> find(@PathVariable Long employeeId) {
+        new Result(employeeDao.find(employeeId))
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = 'application/json')
-    Result<Long> save(@PathVariable Long companyId, @Valid Employee employee, BindingResult binding) {
+    Result<Long> save(@Valid Employee employee, BindingResult binding) {
         if (binding.hasErrors())
             return new Result(false, null).binding(binding)
         employee.company = companyDao.find(companyId)

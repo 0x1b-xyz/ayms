@@ -42,8 +42,8 @@ class PersistenceSpecIT extends Specification {
 
     Address address = new Address('Somewhere in', null, 'Charlotte', 'NC', '28205')
     Company company = new Company(
-            name: RandomStringUtils.randomAlphabetic(10),
-            address: address
+            "Random Company - ${RandomStringUtils.randomAlphabetic(5)}",
+            address
     )
 
     def setup() {

@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository
  * @author jason@stiefel.io
  */
 @Repository
-class FormDefinitionDao extends AbstractDao<FormDefinition, Long> {
+class FormDefinitionDao extends AbstractDao<Long, FormDefinition> {
 }

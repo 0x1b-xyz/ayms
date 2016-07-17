@@ -17,18 +17,13 @@ import javax.validation.constraints.Pattern
  */
 @Entity
 @Table(name = 'aym_client')
-@Canonical(includes = 'id')
+@Canonical
 @NamedQueries([
         @NamedQuery(name = 'Client.findByCompanyAndId', query = 'select c from Client c where c.company = :company and c.id = :id'),
         @NamedQuery(name = 'Client.findAllByCompany', query = 'select c from Client c where c.company = :company'),
         @NamedQuery(name = 'Client.findAllByCompanyAndState', query = 'select c from Client c where c.company = :company and c.address.state = :state')
 ])
-class Client {
-
-    @Id
-    @GeneratedValue
-    @JsonView(View.Summary)
-    Long id
+class Client extends AbstractEntity<Long> {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = 'company_id')

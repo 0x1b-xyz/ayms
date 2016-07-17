@@ -22,11 +22,11 @@ import javax.persistence.*
 ])
 @Canonical
 @EqualsAndHashCode
-class FormCtrl {
+class FormCtrl extends AbstractEntity<Long> {
 
-    @Id
+    @Column(nullable = false, unique = true)
     @JsonView(View.Summary)
-    String id;
+    String guid
 
     @ManyToOne(optional = false)
     @JoinColumn(name = 'form_definition_id')

@@ -15,13 +15,13 @@ import javax.validation.constraints.NotNull
  */
 @Entity
 @Table(name = 'aym_employee')
-@Canonical(includes = 'id')
+@Canonical
 @NamedQueries([
         @NamedQuery(name = 'Employee.findByCompanyAndId', query = 'select u from Employee u where u.company = :company and u.id = :id'),
         @NamedQuery(name = 'Employee.findByName', query = 'select u from Employee u where u.name = :name'),
         @NamedQuery(name = 'Employee.findAllByCompany', query = 'select u from Employee u where u.company = :company')
 ])
-class Employee {
+class Employee extends AbstractEntity<Long> {
 
     enum Role {
         AYM_ADMIN,
@@ -29,11 +29,6 @@ class Employee {
         COMPANY_ADMIN,
         COMPANY_USER
     }
-
-    @Id
-    @GeneratedValue
-    @JsonView(View.Summary)
-    Long id
 
     @ManyToOne(optional = false)
     @JoinColumn(name = 'company_id')

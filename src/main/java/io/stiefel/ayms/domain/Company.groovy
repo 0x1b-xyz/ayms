@@ -12,13 +12,8 @@ import javax.validation.Valid
  */
 @Entity
 @Table(name = 'aym_company')
-@Canonical(includes = 'id')
-class Company implements Serializable {
-
-    @Id
-    @GeneratedValue
-    @JsonView(View.Summary)
-    Long id;
+@Canonical
+class Company extends AbstractEntity<Long> {
 
     @Column(unique = true, nullable = false, length = 100)
     @JsonView(View.Summary)

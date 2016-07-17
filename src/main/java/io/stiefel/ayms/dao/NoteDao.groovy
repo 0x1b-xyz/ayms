@@ -7,4 +7,4 @@ import org.springframework.stereotype.Repository
  * @author jason@stiefel.io
  */
 @Repository
-class NoteDao extends AbstractDao<Note, Long> {}
+class NoteDao extends AbstractDao<Long, Note> {}

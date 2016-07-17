@@ -7,4 +7,4 @@ import org.springframework.stereotype.Repository
  * @author jason@stiefel.io
  */
 @Repository
-class CompanyDao extends AbstractDao<Company, Long> {}
+class CompanyDao extends AbstractDao<Long, Company> {}

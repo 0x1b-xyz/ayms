@@ -22,13 +22,8 @@ import javax.persistence.TemporalType
  */
 @Entity
 @Table(name = 'aym_note')
-@Canonical(includes = 'id')
-class Note {
-
-    @Id
-    @GeneratedValue
-    @JsonView(View.Summary)
-    Long id
+@Canonical
+class Note extends AbstractEntity<Long> {
 
     @ManyToOne(optional = false)
     @JsonView(View.Summary)

@@ -10,7 +10,7 @@ import javax.persistence.Query
  * @author jason@stiefel.io
  */
 @Repository
-class FormCtrlDao extends AbstractDao<FormCtrl, String> {
+class FormCtrlDao extends AbstractDao<Long, FormCtrl> {
 
     List<FormCtrl> findAllByDefinition(FormDefinition definition) {
         em.createNamedQuery('FormCtrl.findAllByDefinition', FormCtrl)
