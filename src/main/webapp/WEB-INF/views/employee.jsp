@@ -14,16 +14,14 @@
     <h2>Employees</h2>
     <ol class="breadcrumb">
         <li><a href="<s:url value="/"/>">Home</a></li>
-        <li><a href="<s:url value="/company/${companyId}"/>">Company</a>
-        </li>
         <li class="active">Employees</li>
     </ol>
     <div class="table-responsive">
-        <caption>table caption</caption>
         <table id="employee-tbl" class="table table-hover">
             <thead>
             <tr>
                 <th>#</th>
+                <td>Company</td>
                 <th>Name</th>
                 <th>First Name</th>
                 <th>Last Name</th>
