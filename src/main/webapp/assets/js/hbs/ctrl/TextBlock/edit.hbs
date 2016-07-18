@@ -38,12 +38,3 @@
         <input class="hidden" id="text-{{id}}" name="text"/>
     </div>
 </div>
-
-<script type="text/javascript">
-    var editor = $(toId('text-editor-{{id}}'));
-    var editorField = $(toId('text-{{id}}'));
-    editor.wysiwyg();
-    editor.bind("DOMSubtreeModified",function(){
-        editorField.val(editor.html());
-    });
-</script>

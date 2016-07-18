@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author jason@stiefel.io
  */
-public interface FormCtrlRepo extends JpaRepository<FormCtrl, Long> {
+public interface FormCtrlRepo extends JpaRepository<FormCtrl, String> {
 
     List<FormCtrl> findByDefinitionId(Long formDefinitionId);
 

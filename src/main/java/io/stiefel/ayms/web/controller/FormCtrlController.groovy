@@ -51,9 +51,9 @@ class FormCtrlController {
 //    }
 
     @RequestMapping(path = '/replace', method = RequestMethod.POST)
-    void replace(@PathVariable Long definitionId,
+    void replace(@PathVariable Long formDefId,
                  @RequestBody List<FormCtrl> ctrls, HttpServletResponse response) {
-        service.replace(definitionId, ctrls)
+        service.replace(formDefId, ctrls)
         response.status = 200
 
     }

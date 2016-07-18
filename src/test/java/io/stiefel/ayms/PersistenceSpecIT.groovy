@@ -142,7 +142,7 @@ class PersistenceSpecIT extends Specification {
         when:
         FormDef formDef = new FormDef("form-${UUID.randomUUID()}", 'description')
         formDefRepo.save(formDef)
-        FormCtrl ctrl = new FormCtrl(UUID.randomUUID().toString(), formDef,
+        FormCtrl ctrl = new FormCtrl(UUID.randomUUID().toString().replaceAll('-',''), formDef,
                 'TextField', ['labelAlign': 'horizontal'])
         ctrl.layout = new Layout(1, 2, 100, 200)
         formCtrlRepo.save(ctrl);

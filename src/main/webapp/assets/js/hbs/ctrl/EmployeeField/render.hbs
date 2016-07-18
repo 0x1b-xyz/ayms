@@ -2,7 +2,7 @@
 
 {{#compare labelAlign "horizontal"}}
 <div class="form-group">
-    <label for="{{name}}" class="col-sm-2 control-label">{{label}}</label>
+    <label for="{{name}}-{{id}}" class="col-sm-2 control-label">{{label}}</label>
     <div class="col-sm-10">
         <select name="{{name}}" id="{{name}}-{{id}}" class="form-control">
             {{#if placeholder}}<option value="" disabled selected>{{placeholder}}</option>{{/if}}
@@ -12,7 +12,7 @@
 {{/compare}}
 {{#compare labelAlign "vertical"}}
 <div class="form-vertical">
-    <label for="{{name}}">{{label}}</label>
+    <label for="{{name}}-{{id}}">{{label}}</label>
     <select name="{{name}}" id="{{name}}-{{id}}" class="form-control">
         {{#if placeholder}}<option value="" disabled selected>{{placeholder}}</option>{{/if}}
     </select>
@@ -23,33 +23,3 @@
     {{#if placeholder}}<option value="" disabled selected>{{placeholder}}</option>{{/if}}
 </select>
 {{/compare}}
-
-<script type="text/javascript">
-
-    function update_{{id}}(evtCtrlId, evtCtrlType, evtCtrlAttr, evtValue) {
-
-        var self = CTRLS['{{id}}'];
-        if (self.attr.companyField == evtCtrlAttr.name) {
-            console.log('company field change we are watching on: ' + evtCtrlAttr.name);
-            $.ajax({
-                url: URL_PREFIX + 'employee',
-                dataType: 'json',
-                success: function(response) {
-                    let field = getCtrlRenderField(self.id, self.attr.name);
-                    response.data.forEach(function(employee) {
-                        field.append('<option value="' + employee.id + '">' + employee.firstName + ' ' + employee.lastName + '</option>');
-                    });
-                }
-            })
-        }
-    }
-
-    function render_{{id}}(ctrlId, ctrlType, ctrlAttr) {
-        $.observer.subscribe(TOPIC_VALUE_CHANGE, update_{{id}});
-    }
-
-    function remove_{{id}}(ctrlId, ctrlType, ctrlAttr) {
-        $.observer.unsubscribe(TOPIC_VALUE_CHANGE, update_{{id}});
-    }
-
-</script>

@@ -24,8 +24,9 @@ class FormDefService {
     void replace(Long formDefinitionId, List<FormCtrl> ctrls) {
 
         FormDef formDef = formDefRepo.findOne(formDefinitionId)
-        formCtrlRepo.delete(formCtrlRepo.findByDefinitionId(formDef.id))
+        formCtrlRepo.delete((Iterable)formCtrlRepo.findByDefinitionId(formDef.id))
         ctrls.each {
+            it.definition = formDef
             formCtrlRepo.save(it)
         }
 

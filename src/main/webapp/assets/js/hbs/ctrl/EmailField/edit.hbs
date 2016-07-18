@@ -26,11 +26,3 @@
         <input name="placeholder" id="placeholder-{{id}}" type="text" class="form-control" placeholder="Placeholder Text" value="{{placeholder}}">
     </div>
 </div>
-
-<script type="text/javascript">
-    function append_{{id}}(ctrlId, ctrlType, ctrlAttr) {
-        let heights = {'vertical':3,'horizontal':2,'none':2};
-        return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign])
-    }
-</script>
-

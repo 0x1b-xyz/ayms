@@ -17,9 +17,143 @@ var APPEND_W_DEFAULT = 12;
 var APPEND_H_DEFAULT = 2;
 
 /**
+ * These are effectively the control "classes", defining the behaviours of the controls we support
+ */
+var CTRL_DEFS = {
+
+    'TextField': {
+        append: function(ctrlId, ctrlType, ctrlAttr) {
+            let heights = {'vertical':3,'horizontal':2,'none':2};
+            return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign])
+        }
+    },
+
+    'TextBlock': {
+        edit: function(ctrlId, ctrlType, ctrlAttr) {
+            var editor = $(toId('text-editor-' + ctrlId));
+            var editorField = $(toId('text-' + ctrlId));
+            editor.wysiwyg();
+            editor.bind("DOMSubtreeModified",function(){
+                editorField.val(editor.html());
+            });
+        }
+    },
+
+    'TextAreaField': {},
+
+    'PhoneNumberField': {
+        render: function(ctrlId, ctrlType, ctrlAttr) {
+            getCtrlRenderField(ctrlId, ctrlAttr.name).mask('(000) 000-0000')
+        }
+    },
+
+    'HeaderText': {
+        edit: function(ctrlId, ctrlType, ctrlAttr) {
+            // We could do this using a #cond on the input tag but this seemed like more fun
+            var sizeField = getCtrlEditField(ctrlId, 'size');
+            if (!ctrlAttr.size) {
+                sizeField.filter("[value='1']").prop('checked', true);
+            } else {
+                sizeField.filter("[value='" + ctrlAttr.size + "']").prop('checked, true');
+            }
+        },
+        append: function(ctrlId, ctrlType, ctrlAttr) {
+            let heights = {'1': 3, '2': 3, '3': 3, '4': 2, '5': 2};
+            return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.size])
+        }
+    },
+
+    'EmployeeField': {
+        /**
+         * Loads any existing CompanyField names into the companyField selection
+         */
+        edit: function(ctrlId, ctrlType, ctrlAttr) {
+
+            let companyField = getCtrlEditField(ctrlId, 'companyField');
+            $.each(CTRL_INSTANCES, function(ctrlId) {
+                let ctrlDef = CTRL_INSTANCES[ctrlId];
+                if (ctrlDef.type == 'CompanyField') {
+                    companyField.append('<option value="' + ctrlDef.id + '">' + ctrlDef.attr.name + '</option>')
+                }
+            });
+
+        },
+        append: function(ctrlId, ctrlType, ctrlAttr) {
+            let heights = {'vertical':3,'horizontal':2,'none':2};
+            return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign])
+        },
+        update: function(evtCtrlId, evtCtrlType, evtCtrlAttr) {
+            console.log(arguments)
+            var self = getCtrlInstance(ctrlId);
+            if (self.attr.companyField == evtCtrlAttr.name) {
+                console.log('company field change we are watching on: ' + evtCtrlAttr.name);
+                $.ajax({
+                    url: URL_PREFIX + 'employee',
+                    dataType: 'json',
+                    success: function(response) {
+                        let field = getCtrlRenderField(self.id, self.attr.name);
+                        response.data.forEach(function(employee) {
+                            field.append('<option value="' + employee.id + '">' + employee.firstName + ' ' + employee.lastName + '</option>');
+                        });
+                    }
+                })
+            }
+        },
+        render: function(ctrlId, ctrlType, ctrlAttr) {
+            $.observer.subscribe(TOPIC_VALUE_CHANGE, getCtrlFunction('EmployeeField', 'update'));
+        }
+    },
+
+    'EmailField': {
+        append: function(ctrlId, ctrlType, ctrlAttr) {
+            let heights = {'vertical':3,'horizontal':2,'none':2};
+            return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign])
+        }
+    },
+
+    'CurrencyField': {
+        append: function(ctrlId, ctrlType, ctrlAttr) {
+            let heights = {'vertical':3,'horizontal':2,'none':2};
+            return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign])
+        },
+        render: function(ctrlId, ctrlType, ctrlAttr) {
+            getCtrlRenderField(ctrlId, ctrlAttr.name).mask("#,##0.00", {reverse: true})
+        }
+    },
+
+    'CompanyField': {
+        append: function(ctrlId, ctrlType, ctrlAttr) {
+            var heights = {'vertical':3,'horizontal':2,'none':2};
+            return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign])
+        },
+        render: function(ctrlId, ctrlType, ctrlAttr) {
+
+            // Publish value changes
+            getCtrlRenderField(ctrlId, ctrlAttr.name).change(function() {
+                let companyId = $(this).find('option:selected').val();
+                $.observer.publish(TOPIC_VALUE_CHANGE, ctrlId, ctrlType, ctrlAttr, companyId);
+            });
+
+            // Load companies in
+            $.ajax({
+                url: URL_PREFIX + 'company',
+                dataType: 'json',
+                success: function(response) {
+                    let field = getCtrlRenderField(ctrlId, ctrlAttr.name);
+                    response.data.forEach(function(company) {
+                        field.append('<option value="' + company.id + '">' + company.name + '</option>');
+                    });
+                }
+            })
+
+        }
+    }
+};
+
+/**
  * Map of controls that are present in the GRID 
  */
-var CTRLS = {};
+var CTRL_INSTANCES = {};
 
 /**
  * Name of topic where ctrl value changes are published  
@@ -27,7 +161,20 @@ var CTRLS = {};
 var TOPIC_VALUE_CHANGE = 'ctrlValueChange';
 
 /**
- * Calls a "dynamic" function on a control with the {@code ctrlId, ctrlType and ctrlAttr}
+ * Finds a function on a CTRL_DEF
+ *
+ * @param ctrlType Type in {@link #CTRL_DEFS}
+ * @param functionName Name of function in the control definition
+ */
+function getCtrlFunction(ctrlType, functionName) {
+    let func = CTRL_DEFS[ctrlType][functionName];
+    if (!func)
+        throw new Error("Could not find " + ctrlType + "#" + functionName);
+    return func
+}
+
+/**
+ * Calls a function on a CTRL_DEF with the {@code ctrlId, ctrlType and ctrlAttr}
  *
  * @param functionName Name of the function (will be suffixed with {@code _CTRLID})
  * @param ctrlId Identifier of control
@@ -36,14 +183,13 @@ var TOPIC_VALUE_CHANGE = 'ctrlValueChange';
  *
  * @return Result of function call or {@code null} if function does not exist.
  */
-function ctrlFunction(functionName, ctrlId, ctrlType, ctrlAttr) {
-
-    if (eval("typeof " + functionName + "_" + ctrlId) != 'undefined') {
-        let call = 'return ' + functionName + '_' + ctrlId + '(ctrlId, ctrlType, ctrlAttr)';
-        return new Function('ctrlId','ctrlType','ctrlAttr', call)(ctrlId, ctrlType, ctrlAttr);
+function invokeCtrlFunction(functionName, ctrlId, ctrlType, ctrlAttr) {
+    try {
+        var ctrlFunction = getCtrlFunction(ctrlType, functionName);
+        return ctrlFunction(ctrlId, ctrlType, ctrlAttr);
+    } catch (e) {
+        return null
     }
-    return null;
-
 }
 
 /**
@@ -58,18 +204,17 @@ function newCtrl() {
     let ctrlType = $(this).data('ctrl-type');
     let ctrlLabel = $(this).html();
     let ctrlAttr = {id: ctrlId};
-    let formEle = getTemplate('ctrl/' + ctrlType + '/edit');
 
     CTRL_MODAL.find('.modal-title').html(ctrlLabel);
 
     CTRL_MODAL_FRM.empty();
     CTRL_MODAL_FRM.data('ctrl-id', ctrlId);
     CTRL_MODAL_FRM.data('ctrl-type', ctrlType);
-    CTRL_MODAL_FRM.html(formEle(ctrlAttr));
+    CTRL_MODAL_FRM.html(getTemplate('ctrl/' + ctrlType + '/edit')(ctrlAttr));
 
     CTRL_MODAL.modal();
 
-    ctrlFunction('load', ctrlId, ctrlType, ctrlAttr);
+    invokeCtrlFunction('edit', ctrlId, ctrlType, ctrlAttr);
 
 }
 
@@ -95,7 +240,7 @@ function addCtrl() {
     //     delete ctrlAttr[key];
     // }
 
-    var added = ctrlFunction('append', ctrlId, ctrlType, ctrlAttr);
+    var added = invokeCtrlFunction('append', ctrlId, ctrlType, ctrlAttr);
     if (added == null)
         added = appendCtrl(ctrlId, ctrlType, ctrlAttr, APPEND_X_DEFAULT,
             APPEND_Y_DEFAULT, APPEND_W_DEFAULT, APPEND_H_DEFAULT);
@@ -107,7 +252,7 @@ function addCtrl() {
 
 /**
  * Appends the output of the {@code ctrl-CTRLTYPE-render} template into the layout CTRL_GRID and
- * sticks the ctrl definition into {@link #CTRLS}.
+ * sticks the ctrl definition into {@link #CTRL_INSTANCES}.
  */
 function appendCtrl(ctrlId, ctrlType, ctrlAttr, x, y, width, height) {
 
@@ -117,24 +262,21 @@ function appendCtrl(ctrlId, ctrlType, ctrlAttr, x, y, width, height) {
     });
 
     CTRL_GRID.addWidget(widget);
-    $(toId(ctrlId)).html(getTemplate('ctrl/' + ctrlType + '/render')(
+
+    let widgetContent = getCtrlContent(ctrlId);
+    widgetContent.html(getTemplate('ctrl/' + ctrlType + '/render')(
         $.extend(ctrlAttr, {
             id: ctrlId
         })
     ));
 
-    // Attach the delete handler
-    $(toId(ctrlId)).parent().find('.grid-stack-item-delete a').on('click', function() {
-        removeCtrl(ctrlId);
-    });
-
-    CTRLS[ctrlId] = {
+    CTRL_INSTANCES[ctrlId] = {
         id: ctrlId,
         type: ctrlType,
         attr: ctrlAttr
     };
 
-    ctrlFunction('render', ctrlId, ctrlType, ctrlAttr);
+    invokeCtrlFunction('render', ctrlId, ctrlType, ctrlAttr);
 
     return true;
 
@@ -142,7 +284,7 @@ function appendCtrl(ctrlId, ctrlType, ctrlAttr, x, y, width, height) {
 
 /**
  * Extracts the layout info from the CTRL_GRID and merges it with the ctrl definition from the
- * {@link #CTRLS} map.
+ * {@link #CTRL_INSTANCES} map.
  */
 function getCtrls() {
 
@@ -150,7 +292,7 @@ function getCtrls() {
         item = $(item);
         var node = item.data('_gridstack_node');
         var ctrlId = item.data('ctrl-id');
-        return jQuery.extend(CTRLS[ctrlId], {
+        return jQuery.extend(CTRL_INSTANCES[ctrlId], {
             layout: {
                 x: node.x,
                 y: node.y,
@@ -218,20 +360,27 @@ function loadCtrls() {
  */
 function removeCtrl(ctrlId) {
 
-    let ctrl = CTRLS[ctrlId];
-    let widget = $(toId(ctrlId)).parent();
+    let ctrl = CTRL_INSTANCES[ctrlId];
+    let widget = getCtrlContent(ctrlId).parent();
 
     CTRL_GRID.removeWidget(widget);
     widget.remove();
 
-    ctrlFunction('remove', ctrl.id, ctrl.type, ctrl.attr);
+    invokeCtrlFunction('remove', ctrl.id, ctrl.type, ctrl.attr);
 
-    delete CTRLS[ctrlId];
+    delete CTRL_INSTANCES[ctrlId];
+}
+
+/**
+ * Finds the {@code .grid-stack-item-content} for a control
+ */
+function getCtrlContent(ctrlId) {
+    return $('div[data-ctrl-id="' + ctrlId + '"] .grid-stack-item-content');
 }
 
 /**
  * Looks up a field by id within the {@code #ctrl-modal-frm}
- *
+ *            
  * @param ctrlId Identifier of control
  * @param fieldName Name of field within control edit form
  */
@@ -247,6 +396,22 @@ function getCtrlEditField(ctrlId, fieldName) {
  */
 function getCtrlRenderField(ctrlId, fieldName) {
     return $('#grid-stack-frm').find(toId(fieldName + '-' + ctrlId));
+}
+
+/**
+ * Returns all control instances
+ */
+function getCtrlInstances() {
+    return CTRL_INSTANCES;
+}
+
+/**
+ * Returns the specified ctrl definition from {@link #CTRL_INSTANCES}
+ */
+function getCtrlInstance(ctrlId) {
+    if (!CTRL_INSTANCES.hasOwnProperty(ctrlId))
+        throw new Error("Could not find control instance with id: " + ctrlId);
+    return CTRL_INSTANCES[ctrlId];
 }
 
 $(document).ready(function () {

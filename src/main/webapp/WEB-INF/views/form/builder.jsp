@@ -5,18 +5,18 @@
     <title>forms</title>
 
     <script type="text/javascript" src="<s:url value="/assets/form/builder.js"/>"></script>
-    <link href="<s:url value="/assets/formDefinition.css"/>" rel="stylesheet"/>
+    <link href="<s:url value="/assets/formDef.css"/>" rel="stylesheet"/>
 
 </head>
 <body>
 
 <div class="row">
 
-    <h2>${formDefinition.name} <small>${formDefinition.description}</small></h2>
+    <h2>${formDef.name} <small>${formDef.description}</small></h2>
     <ol class="breadcrumb">
         <li><a href="<s:url value="/"/>">Home</a></li>
-        <li><a href="<s:url value="/form/definition"/>">Form Definitions</a></li>
-        <li class="active">${formDefinition.name}</li>
+        <li><a href="<s:url value="/form/def"/>">Form Definitions</a></li>
+        <li class="active">${formDef.name}</li>
     </ol>
 
     <div class="col-lg-10">
@@ -25,7 +25,7 @@
             <hr>
             <div class="grid-stack"></div>
             <hr>
-            <a href="<s:url value="/form/definition"/>" type="button" role="button" class="btn btn-default">Cancel</a>
+            <a href="<s:url value="/form/def"/>" type="button" role="button" class="btn btn-default">Cancel</a>
             <button id="grid-stack-frm-submit" type="button" class="btn btn-primary">Save</button>
         </form>
 
