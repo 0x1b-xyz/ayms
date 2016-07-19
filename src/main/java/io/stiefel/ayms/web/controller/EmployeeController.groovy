@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.servlet.ModelAndView
 
 import javax.validation.Valid
 import java.beans.PropertyEditorSupport
@@ -38,8 +39,8 @@ class EmployeeController {
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = 'text/html')
-    String index() {
-        'employee'
+    ModelAndView index() {
+        new ModelAndView('employee')
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")

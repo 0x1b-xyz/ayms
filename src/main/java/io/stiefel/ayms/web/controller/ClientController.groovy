@@ -11,6 +11,7 @@ import org.springframework.beans.propertyeditors.CustomDateEditor
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.WebDataBinder
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.servlet.ModelAndView
 
 import javax.validation.Valid
 import java.text.SimpleDateFormat
@@ -32,8 +33,8 @@ class ClientController {
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = 'text/html')
-    String index() {
-        'client'
+    ModelAndView index() {
+        new ModelAndView('client')
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")

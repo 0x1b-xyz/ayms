@@ -14,8 +14,6 @@
     <h2>Clients</h2>
     <ol class="breadcrumb">
         <li><a href="<s:url value="/"/>">Home</a></li>
-        <li><a href="<s:url value="/company/${companyId}"/>">Company</a>
-        </li>
         <li class="active">Clients</li>
     </ol>
     <div class="table-responsive">
