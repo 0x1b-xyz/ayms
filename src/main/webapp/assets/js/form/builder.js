@@ -17,6 +17,16 @@ var APPEND_W_DEFAULT = 12;
 var APPEND_H_DEFAULT = 2;
 
 /**
+ * Map of controls that are present in the GRID
+ */
+var CTRL_INSTANCES = {};
+
+/**
+ * Name of topic where ctrl value changes are published
+ */
+var TOPIC_VALUE_CHANGE = 'ctrlValueChange';
+
+/**
  * These are effectively the control "classes", defining the behaviours of the controls we support
  */
 var CTRL_DEFS = {
@@ -64,6 +74,21 @@ var CTRL_DEFS = {
     },
 
     'EmployeeField': {
+
+        /**
+         * Observes {@link #TOPIC_VALUE_CHANGE} for updates to {@code CompanyField}s.
+         */
+        init: function() {
+            $.observer.subscribe(TOPIC_VALUE_CHANGE, getCtrlFunction('EmployeeField', 'update'));
+        },
+
+        /**
+         * Unsubscribes from {@link #TOPIC_VALUE_CHANGE}.
+         */
+        destroy: function(ctrlId, ctrlType, ctrlAttr) {
+            $.observer.unsubscribe(TOPIC_VALUE_CHANGE, getCtrlFunction('EmployeeField', 'update'))
+        },
+
         /**
          * Loads any existing CompanyField names into the companyField selection
          */
@@ -78,29 +103,47 @@ var CTRL_DEFS = {
             });
 
         },
+
         append: function(ctrlId, ctrlType, ctrlAttr) {
             let heights = {'vertical':3,'horizontal':2,'none':2};
             return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign])
         },
+
         update: function(evtCtrlId, evtCtrlType, evtCtrlAttr) {
-            console.log(arguments)
-            var self = getCtrlInstance(ctrlId);
-            if (self.attr.companyField == evtCtrlAttr.name) {
-                console.log('company field change we are watching on: ' + evtCtrlAttr.name);
-                $.ajax({
-                    url: URL_PREFIX + 'employee',
-                    dataType: 'json',
-                    success: function(response) {
-                        let field = getCtrlRenderField(self.id, self.attr.name);
-                        response.data.forEach(function(employee) {
-                            field.append('<option value="' + employee.id + '">' + employee.firstName + ' ' + employee.lastName + '</option>');
-                        });
-                    }
-                })
+
+            if (evtCtrlType == 'CompanyField') {
+                let companyId = getCtrlRenderField(evtCtrlId, evtCtrlAttr.name).find('option:selected').val();
+                console.log('got updated company id: ' + companyId);
+                if (companyId) {
+                    $.each(getCtrlInstances(), function(ctrlId) {
+                        let ctrl = CTRL_INSTANCES[ctrlId];
+                        if (ctrl.type == 'EmployeeField') {
+                            if (ctrl.attr.companyField == evtCtrlId) {
+                                getCtrlFunction('EmployeeField', 'updateForCompany')(ctrl.id, ctrl.type, ctrl.attr, companyId);
+                            }
+                        }
+                    })
+                }
             }
+
         },
-        render: function(ctrlId, ctrlType, ctrlAttr) {
-            $.observer.subscribe(TOPIC_VALUE_CHANGE, getCtrlFunction('EmployeeField', 'update'));
+
+        updateForCompany: function(ctrlId, ctrlType, ctrlAttr, companyId) {
+
+            console.log('@TODO NEED TO CONSTRAIN BY ID');
+            
+            $.ajax({
+                url: URL_PREFIX + 'employee',
+                dataType: 'json',
+                success: function(response) {
+                    let field = getCtrlRenderField(ctrlId, ctrlAttr.name);
+                    field.empty();
+                    response.data.forEach(function(employee) {
+                        field.append('<option value="' + employee.id + '">' + employee.firstName + ' ' + employee.lastName + '</option>');
+                    });
+                }
+            })
+
         }
     },
 
@@ -151,14 +194,15 @@ var CTRL_DEFS = {
 };
 
 /**
- * Map of controls that are present in the GRID 
+ * Call 'init' on each control def. Still need to figure out when/where to call ctrlDef#destroy?
  */
-var CTRL_INSTANCES = {};
-
-/**
- * Name of topic where ctrl value changes are published  
- */
-var TOPIC_VALUE_CHANGE = 'ctrlValueChange';
+$.each(CTRL_DEFS, function(ctrlDefName) {
+    try {
+        getCtrlFunction(ctrlDefName, 'init')();
+    } catch (e) {
+        console.log('No init function found for ' + ctrlDefName, e)
+    }
+});
 
 /**
  * Finds a function on a CTRL_DEF
@@ -168,7 +212,7 @@ var TOPIC_VALUE_CHANGE = 'ctrlValueChange';
  */
 function getCtrlFunction(ctrlType, functionName) {
     let func = CTRL_DEFS[ctrlType][functionName];
-    if (!func)
+    if (func == undefined)
         throw new Error("Could not find " + ctrlType + "#" + functionName);
     return func
 }
