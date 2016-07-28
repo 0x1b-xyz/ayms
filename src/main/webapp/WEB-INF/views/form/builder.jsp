@@ -5,7 +5,7 @@
     <title>forms</title>
 
     <script type="text/javascript" src="<s:url value="/assets/form/builder.js"/>"></script>
-    <link href="<s:url value="/assets/formDef.css"/>" rel="stylesheet"/>
+    <link href="<s:url value="/assets/form.css"/>" rel="stylesheet"/>
 
 </head>
 <body>
@@ -66,19 +66,20 @@
 
 <div id="ctrl-modal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Add a Ctrl</h4>
+        <form class="form-horizontal" id="ctrl-modal-frm" role="form">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Add a Ctrl</h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" role="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="ctrl-modal-add">Add</button>
+                </div>
             </div>
-            <div class="modal-body">
-                <form class="form-horizontal" id="ctrl-modal-frm"></form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" role="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" role="button" class="btn btn-primary" id="ctrl-modal-add">Add</button>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
 

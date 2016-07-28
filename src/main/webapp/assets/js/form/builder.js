@@ -1,4 +1,5 @@
 //= require app
+//= require validator
 //= require bootstrap-wysiwyg
 //= require jquery.blockUI
 //= require jquery.hotkeys
@@ -251,10 +252,16 @@ function newCtrl() {
 
     CTRL_MODAL.find('.modal-title').html(ctrlLabel);
 
-    CTRL_MODAL_FRM.empty();
     CTRL_MODAL_FRM.data('ctrl-id', ctrlId);
     CTRL_MODAL_FRM.data('ctrl-type', ctrlType);
-    CTRL_MODAL_FRM.html(getTemplate('ctrl/' + ctrlType + '/edit')(ctrlAttr));
+    CTRL_MODAL_FRM.find('.modal-body').html(getTemplate('ctrl/' + ctrlType + '/edit')(ctrlAttr));
+
+    $('#ctrl-modal-frm').validator().on('submit', function(e) {
+        if (!e.isDefaultPrevented()) {
+            e.preventDefault();
+            addCtrl();
+        }
+    });
 
     CTRL_MODAL.modal();
 
@@ -292,6 +299,14 @@ function addCtrl() {
     if (added)
         CTRL_MODAL.modal('hide');
 
+}
+
+/**
+ * Edits a control by pulling up 
+ * @param ctrlId
+ */
+function editCtrl(ctrlId) {
+    
 }
 
 /**
@@ -385,10 +400,12 @@ function loadCtrls() {
             $.blockUI();
         },
         success: function(response) {
-            response.data.forEach(function(ctrl) {
-                appendCtrl(ctrl.id, ctrl.type, ctrl.attr,
-                    ctrl.layout.x, ctrl.layout.y, ctrl.layout.width, ctrl.layout.height)
-            });
+            if (response.data) {
+                response.data.forEach(function(ctrl) {
+                    appendCtrl(ctrl.id, ctrl.type, ctrl.attr,
+                        ctrl.layout.x, ctrl.layout.y, ctrl.layout.width, ctrl.layout.height)
+                });
+            }
         },
         complete: function() {
             $.unblockUI();
@@ -472,9 +489,6 @@ $(document).ready(function () {
 
     // Bind the {@link #newCtrl} method to all our form control buttons
     $('.form-control-list').find('button').on('click', newCtrl);
-
-    // Call {@link #addCtrl} when the modal "Add" button is clicked
-    $('#ctrl-modal-add').on('click', addCtrl);
 
     $('#grid-stack-frm-submit').on('click', saveCtrls);
 

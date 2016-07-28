@@ -24,6 +24,42 @@
     margin-right: 12px;
 }
 
+.grid-stack-item-edit {
+    top: 40%;
+    left: 100%;
+    margin-left: -25px;
+    margin-right: 12px;
+}
+
+.edit {
+    float: right;
+    font-weight: bold;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    filter: alpha(opacity=20);
+    opacity: .2;
+}
+.edit:hover,
+.edit:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+    filter: alpha(opacity=50);
+    opacity: .5;
+}
+button.edit {
+    -webkit-appearance: none;
+    padding: 0;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+}
+
+.close {
+    font-size: inherit;
+}
+
 /* Override bootstrap fields to work inside the gridstack */
 
 .grid-stack-item-content .form-group {
