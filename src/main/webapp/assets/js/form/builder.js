@@ -33,6 +33,7 @@ var TOPIC_VALUE_CHANGE = 'ctrlValueChange';
 var CTRL_DEFS = {
 
     'TextField': {
+        label: 'Text Field',
         append: function(ctrlId, ctrlType, ctrlAttr) {
             let heights = {'vertical':3,'horizontal':2,'none':2};
             return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign])
@@ -40,6 +41,7 @@ var CTRL_DEFS = {
     },
 
     'TextBlock': {
+        label: 'Text Block',
         edit: function(ctrlId, ctrlType, ctrlAttr) {
             var editor = $(toId('text-editor-' + ctrlId));
             var editorField = $(toId('text-' + ctrlId));
@@ -50,22 +52,26 @@ var CTRL_DEFS = {
         }
     },
 
-    'TextAreaField': {},
+    'TextAreaField': {
+        label: 'Text Area Field'
+    },
 
     'PhoneNumberField': {
+        label: 'Phone Number Field',
         render: function(ctrlId, ctrlType, ctrlAttr) {
             getCtrlRenderField(ctrlId, ctrlAttr.name).mask('(000) 000-0000')
         }
     },
 
     'HeaderText': {
+        label: 'Header Text',
         edit: function(ctrlId, ctrlType, ctrlAttr) {
             // We could do this using a #cond on the input tag but this seemed like more fun
-            var sizeField = getCtrlEditField(ctrlId, 'size');
+            var sizeField = CTRL_MODAL_FRM.find('input[name="size"]');
             if (!ctrlAttr.size) {
-                sizeField.filter("[value='1']").prop('checked', true);
+                sizeField.filter('[value="1"]').prop('checked', true);
             } else {
-                sizeField.filter("[value='" + ctrlAttr.size + "']").prop('checked, true');
+                sizeField.filter('[value="' + ctrlAttr.size + '"]').prop('checked', true);
             }
         },
         append: function(ctrlId, ctrlType, ctrlAttr) {
@@ -75,6 +81,8 @@ var CTRL_DEFS = {
     },
 
     'EmployeeField': {
+
+        label: 'Employee Field',
 
         /**
          * Observes {@link #TOPIC_VALUE_CHANGE} for updates to {@code CompanyField}s.
@@ -95,7 +103,7 @@ var CTRL_DEFS = {
          */
         edit: function(ctrlId, ctrlType, ctrlAttr) {
 
-            let companyField = getCtrlEditField(ctrlId, 'companyField');
+            let companyField = CTRL_MODAL_FRM.find('input[name="companyField"]');
             $.each(CTRL_INSTANCES, function(ctrlId) {
                 let ctrlDef = CTRL_INSTANCES[ctrlId];
                 if (ctrlDef.type == 'CompanyField') {
@@ -149,6 +157,7 @@ var CTRL_DEFS = {
     },
 
     'EmailField': {
+        label: 'Email Field',
         append: function(ctrlId, ctrlType, ctrlAttr) {
             let heights = {'vertical':3,'horizontal':2,'none':2};
             return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign])
@@ -156,6 +165,7 @@ var CTRL_DEFS = {
     },
 
     'CurrencyField': {
+        label: 'Currency Field',
         append: function(ctrlId, ctrlType, ctrlAttr) {
             let heights = {'vertical':3,'horizontal':2,'none':2};
             return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign])
@@ -166,6 +176,7 @@ var CTRL_DEFS = {
     },
 
     'CompanyField': {
+        label: 'Company Field',
         append: function(ctrlId, ctrlType, ctrlAttr) {
             var heights = {'vertical':3,'horizontal':2,'none':2};
             return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign])
@@ -240,56 +251,95 @@ function invokeCtrlFunction(functionName, ctrlId, ctrlType, ctrlAttr) {
 /**
  * Renders the {@code ctrl-CTRLTYPE-edit} template into the edit modal. Once the initial rendering
  * is completed we look for a method called {@code load_CTRLID} that we'll pass whatever data we
- * have to. It's the responsibility of this method to push the {@code ctrlAttr} values into the
+ * have to. It's the responsibility of this method to push the {@code ctrl} values into the
  * rendered form.
  */
 function newCtrl() {
 
     let ctrlId = uniqueId();
     let ctrlType = $(this).data('ctrl-type');
-    let ctrlLabel = $(this).html();
-    let ctrlAttr = {id: ctrlId};
+    let ctrl = {
+        id: ctrlId,
+        type: ctrlType,
+        attr: {}
+    };
 
-    CTRL_MODAL.find('.modal-title').html(ctrlLabel);
-
-    CTRL_MODAL_FRM.data('ctrl-id', ctrlId);
-    CTRL_MODAL_FRM.data('ctrl-type', ctrlType);
-    CTRL_MODAL_FRM.find('.modal-body').html(getTemplate('ctrl/' + ctrlType + '/edit')(ctrlAttr));
-
-    $('#ctrl-modal-frm').validator().on('submit', function(e) {
-        if (!e.isDefaultPrevented()) {
-            e.preventDefault();
-            addCtrl();
-        }
-    });
-
-    CTRL_MODAL.modal();
-
-    invokeCtrlFunction('edit', ctrlId, ctrlType, ctrlAttr);
+    editModal(ctrl, false);
 
 }
 
 /**
- * Pulls the ctrlId, type and data from the edit form. Then we'll look for a function called
- * {@code edit_CTRLID} to call with the {@code ctrlId, ctrlType, ctrlAttr}. That function
- * should make a call back to {@link #appendCtrl} and then return {@code true}. If the function
- * is not found we'll simply call {@link #appendCtrl} with default settings.
+ * Edits a control by pulling up the edit form
+ */
+function editCtrl(ctrlId) {
+
+    let ctrl = getCtrlInstance(ctrlId);
+    editModal(ctrl, true);
+
+}
+
+/**
+ * Shows the edit modal with the ctrl editor. Works for adding a new ctrl.
+ *
+ * @param ctrl Instance to edit
+ * @param editing Indicates we're editing not adding.
+ */
+function editModal(ctrl, editing) {
+
+    CTRL_MODAL.find('.modal-title').html(CTRL_DEFS[ctrl.type].label);
+
+    CTRL_MODAL_FRM.data('ctrl-id', ctrl.id);
+    CTRL_MODAL_FRM.data('ctrl-type', ctrl.type);
+    CTRL_MODAL_FRM.find('.modal-body').html(getTemplate('ctrl/' + ctrl.type + '/edit')(ctrl.attr));
+
+    CTRL_MODAL_FRM.validator('destroy');
+    CTRL_MODAL_FRM.validator().off('submit');
+    CTRL_MODAL_FRM.validator().on('submit', function(e) {
+        if (!e.isDefaultPrevented()) {
+            e.preventDefault();
+            if (!editing) {
+                addCtrl();
+            } else {
+                updateCtrl();
+            }
+        }
+    });
+
+    invokeCtrlFunction('edit', ctrl.id, ctrl.type, ctrl.attr);
+
+    let deleteBtn = CTRL_MODAL_FRM.find('#ctrl-modal-del');
+    let addBtn = CTRL_MODAL_FRM.find('#ctrl-modal-add');
+
+    if (editing) {
+
+        deleteBtn.off('click');
+        deleteBtn.on('click', function() {
+            removeCtrl(ctrl.id);
+        });
+        deleteBtn.removeClass('hidden');
+
+        addBtn.html('Update');
+
+    } else {
+
+        deleteBtn.addClass('hidden');
+        addBtn.html('Add');
+
+    }
+
+    CTRL_MODAL.modal();
+
+}
+
+/**
+ * Pulls the ctrlId, type and data from the edit form. Calls the 'append' function on the ctrl
+ * definition when it exists. Append should call {@link #appendCtrl} or return null.
  */
 function addCtrl() {
 
     let ctrlId = CTRL_MODAL_FRM.data('ctrl-id');
     let ctrlType = CTRL_MODAL_FRM.data('ctrl-type');
     let ctrlAttr = $('#ctrl-modal-frm').serializeJSON();
-
-    // Strip the ctrlId off the field names
-    // note - no longer appending ctrlId to field names
-    // for (var key in ctrlAttr) {
-    //     if (!ctrlAttr.hasOwnProperty(key))
-    //         continue;
-    //     var newKey = key.replace(CTRL_ID_RE, '');
-    //     ctrlAttr[newKey] = ctrlAttr[key];
-    //     delete ctrlAttr[key];
-    // }
 
     var added = invokeCtrlFunction('append', ctrlId, ctrlType, ctrlAttr);
     if (added == null)
@@ -302,11 +352,27 @@ function addCtrl() {
 }
 
 /**
- * Edits a control by pulling up 
- * @param ctrlId
+ * Updates the ctrl by re-rendering it into an existing widget wrapper.
  */
-function editCtrl(ctrlId) {
-    
+function updateCtrl() {
+
+    let ctrlId = CTRL_MODAL_FRM.data('ctrl-id');
+    let ctrlType = CTRL_MODAL_FRM.data('ctrl-type');
+    let ctrlAttr = $('#ctrl-modal-frm').serializeJSON();
+
+    CTRL_INSTANCES[ctrlId] = {
+        id: ctrlId,
+        type: ctrlType,
+        attr: ctrlAttr
+    };
+
+    let widgetContent = getCtrlContent(ctrlId);
+    widgetContent.html(getTemplate('ctrl/' + ctrlType + '/render')(CTRL_INSTANCES[ctrlId].attr));
+
+    invokeCtrlFunction('render', ctrlId, ctrlType, ctrlAttr);
+
+    CTRL_MODAL.modal('hide');
+
 }
 
 /**
@@ -440,16 +506,6 @@ function getCtrlContent(ctrlId) {
 }
 
 /**
- * Looks up a field by id within the {@code #ctrl-modal-frm}
- *            
- * @param ctrlId Identifier of control
- * @param fieldName Name of field within control edit form
- */
-function getCtrlEditField(ctrlId, fieldName) {
-    return $('#ctrl-modal-frm').find(toId(fieldName + '-' + ctrlId));
-}
-
-/**
  * Looks up a field by id within the {@code #grid-stack-frm}
  *
  * @param ctrlId Identifier of control
@@ -493,34 +549,5 @@ $(document).ready(function () {
     $('#grid-stack-frm-submit').on('click', saveCtrls);
 
     loadCtrls();
-
-    // function fn1() { console.log('fn1 called', arguments); }
-    // function fn2() { console.log('fn2 called', arguments); }
-    // function fn3() { console.log('fn3 called', arguments); }
-    //
-    // function publish() {
-    //     var args = (1 <= arguments.length) ? Array.prototype.slice.call(arguments, 0) : [];
-    //
-    //     console.group('publish ' + args[0]);
-    //     $.observer.publish.apply($.observer, args);
-    //     console.groupEnd();
-    // }
-    //
-    // $.observer.subscribe('test1', fn1);
-    // $.observer.subscribe('test1', fn2);
-    // $.observer.subscribe('test2', fn3);
-    //
-    // publish('test1', 'strArg1', 'strArg2');
-    // publish('test2', 1, 2, '3');
-    //
-    // $.observer.unsubscribe('test1', fn2);
-    //
-    // publish('test1', {key1: 'val1', key2: 'val2'});
-    // publish('test2');
-    //
-    // $.observer.unsubscribe('test1', fn1);
-    //
-    // publish('test1');
-    // publish('test2');
 
 });

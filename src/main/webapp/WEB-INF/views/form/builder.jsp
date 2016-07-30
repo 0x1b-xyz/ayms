@@ -75,6 +75,7 @@
                 </div>
                 <div class="modal-body"></div>
                 <div class="modal-footer">
+                    <button type="button" role="button" class="hidden btn btn-warning" data-dismiss="modal" id="ctrl-modal-del">Delete</button>
                     <button type="button" role="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary" id="ctrl-modal-add">Add</button>
                 </div>
