@@ -507,16 +507,16 @@
         }
         // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
 
-        opts.itemClass = opts.itemClass || 'GRID-stack-item';
+        opts.itemClass = opts.itemClass || 'grid-stack-item';
         var isNested = this.container.closest('.' + opts.itemClass).size() > 0;
 
         this.opts = _.defaults(opts || {}, {
             width: parseInt(this.container.attr('data-gs-width')) || 12,
             height: parseInt(this.container.attr('data-gs-height')) || 0,
-            itemClass: 'GRID-stack-item',
-            placeholderClass: 'GRID-stack-placeholder',
+            itemClass: 'grid-stack-item',
+            placeholderClass: 'grid-stack-placeholder',
             placeholderText: '',
-            handle: '.GRID-stack-item-content',
+            handle: '.grid-stack-item-content',
             handleClass: null,
             cellHeight: 60,
             verticalMargin: 20,
@@ -524,7 +524,7 @@
             minWidth: 768,
             float: false,
             staticGrid: false,
-            _class: 'GRID-stack-instance-' + (Math.random() * 10000).toFixed(0),
+            _class: 'grid-stack-instance-' + (Math.random() * 10000).toFixed(0),
             animate: Boolean(this.container.attr('data-gs-animate')) || false,
             alwaysShowResizeHandle: opts.alwaysShowResizeHandle || false,
             resizable: _.defaults(opts.resizable || {}, {
@@ -533,7 +533,7 @@
             }),
             draggable: _.defaults(opts.draggable || {}, {
                 handle: (opts.handleClass ? '.' + opts.handleClass : (opts.handle ? opts.handle : '')) ||
-                    '.GRID-stack-item-content',
+                    '.grid-stack-item-content',
                 scroll: false,
                 appendTo: 'body'
             }),
@@ -551,7 +551,7 @@
         }
 
         if (this.opts.rtl) {
-            this.container.addClass('GRID-stack-rtl');
+            this.container.addClass('grid-stack-rtl');
         }
 
         this.opts.isNested = isNested;
@@ -569,7 +569,7 @@
         this._setStaticClass();
 
         if (isNested) {
-            this.container.addClass('GRID-stack-nested');
+            this.container.addClass('grid-stack-nested');
         }
 
         this._initStyles();
@@ -749,7 +749,7 @@
                     if (node && node._grid === self) {
                         return false;
                     }
-                    return el.is(self.opts.acceptWidgets === true ? '.GRID-stack-item' : self.opts.acceptWidgets);
+                    return el.is(self.opts.acceptWidgets === true ? '.grid-stack-item' : self.opts.acceptWidgets);
                 },
                 over: function(event, ui) {
                     var offset = self.container.offset();
@@ -952,7 +952,7 @@
             return;
         }
         node._removeTimeout = setTimeout(function() {
-            el.addClass('GRID-stack-item-removing');
+            el.addClass('grid-stack-item-removing');
             node._isAboutToRemove = true;
         }, self.opts.removeTimeout);
     };
@@ -965,7 +965,7 @@
         }
         clearTimeout(node._removeTimeout);
         node._removeTimeout = null;
-        el.removeClass('GRID-stack-item-removing');
+        el.removeClass('grid-stack-item-removing');
         node._isAboutToRemove = false;
     };
 
@@ -1052,7 +1052,7 @@
             el.resizable('option', 'minHeight', strictCellHeight * (node.minHeight || 1));
 
             if (event.type == 'resizestart') {
-                o.find('.GRID-stack-item').trigger('resizestart');
+                o.find('.grid-stack-item').trigger('resizestart');
             }
         };
 
@@ -1097,12 +1097,12 @@
 
             self.grid.endUpdate();
 
-            var nestedGrids = o.find('.GRID-stack');
+            var nestedGrids = o.find('.grid-stack');
             if (nestedGrids.length && event.type == 'resizestop') {
                 nestedGrids.each(function(index, el) {
                     $(el).data('gridstack').onResizeHandler();
                 });
-                o.find('.GRID-stack-item').trigger('resizestop');
+                o.find('.grid-stack-item').trigger('resizestop');
             }
         };
 
@@ -1162,9 +1162,9 @@
 
     GridStack.prototype.setAnimation = function(enable) {
         if (enable) {
-            this.container.addClass('GRID-stack-animate');
+            this.container.addClass('grid-stack-animate');
         } else {
-            this.container.removeClass('GRID-stack-animate');
+            this.container.removeClass('grid-stack-animate');
         }
     };
 
@@ -1525,7 +1525,7 @@
     };
 
     GridStack.prototype._setStaticClass = function() {
-        var staticClassName = 'GRID-stack-static';
+        var staticClassName = 'grid-stack-static';
 
         if (this.opts.staticGrid === true) {
             this.container.addClass(staticClassName);
@@ -1547,13 +1547,13 @@
     };
 
     GridStack.prototype.setGridWidth = function(gridWidth,doNotPropagate) {
-        this.container.removeClass('GRID-stack-' + this.opts.width);
+        this.container.removeClass('grid-stack-' + this.opts.width);
         if (doNotPropagate !== true) {
             this._updateNodeWidths(this.opts.width, gridWidth);
         }
         this.opts.width = gridWidth;
         this.grid.width = gridWidth;
-        this.container.addClass('GRID-stack-' + gridWidth);
+        this.container.addClass('grid-stack-' + gridWidth);
     };
 
     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
