@@ -107,11 +107,11 @@ var CTRL_DEFS = {
          */
         edit: function(ctrlId, ctrlType, ctrlAttr) {
 
-            let companyField = CTRL_MODAL_FRM.find('input[name="companyField"]');
+            let companyField = CTRL_MODAL_FRM.find('select[name="companyField"]');
             $.each(CTRL_INSTANCES, function(ctrlId) {
                 let ctrlDef = CTRL_INSTANCES[ctrlId];
                 if (ctrlDef.type == 'CompanyField') {
-                    companyField.append('<option value="' + ctrlDef.id + '">' + ctrlDef.attr.name + '</option>')
+                    $(companyField).append('<option value="' + ctrlDef.id + '">' + ctrlDef.attr.name + '</option>')
                 }
             });
 
