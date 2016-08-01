@@ -44,6 +44,14 @@
 
     <form class="form-horizontal" id="employee-frm" method="post">
         <div class="form-group">
+            <label for="company-sel" class="col-sm-2 control-label">Company</label>
+            <div class="col-sm-8">
+                <select name="company" id="company-sel" class="form-control">
+                    <option value="" disabled>Make a selection ...</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
             <label for="name" class="col-sm-2 control-label">Employee</label>
             <div class="col-sm-8">
                 <input name="name" id="name" type="text" class="form-control" placeholder="Name">
@@ -84,6 +92,14 @@
 
 <script type="text/javascript">
     jQuery(document).ready(function () {
+
+        $.get('<s:url value="/company"/>', {}, function(response) {
+            let companyField = $('#company-sel');
+            response.data.forEach(function(company) {
+                companyField.append('<option value="' + company.id + '">' + company.name + '</option>')
+            })
+        });
+
         rows('', 'employee/row', '#employee-tbl');
         form('#employee-frm', 'employee/row', '#employee-tbl');
     })

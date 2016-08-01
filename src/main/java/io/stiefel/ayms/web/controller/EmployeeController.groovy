@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView
 import io.stiefel.ayms.domain.Company
 import io.stiefel.ayms.domain.Employee
 import io.stiefel.ayms.domain.View
+import io.stiefel.ayms.repo.CompanyRepo
 import io.stiefel.ayms.repo.EmployeeRepo
 import io.stiefel.ayms.web.Result
 import org.springframework.beans.factory.annotation.Autowired
@@ -26,6 +27,7 @@ import java.beans.PropertyEditorSupport
 @RequestMapping(value = '/employee')
 class EmployeeController {
 
+    @Autowired CompanyRepo companyRepo
     @Autowired EmployeeRepo repo
 
     @InitBinder
@@ -33,7 +35,7 @@ class EmployeeController {
         binder.registerCustomEditor(Company, new PropertyEditorSupport() {
             @Override
             void setAsText(String text) throws IllegalArgumentException {
-                setValue(repo.findOne(Long.parseLong(text)))
+                setValue(companyRepo.findOne(Long.parseLong(text)))
             }
         })
     }
