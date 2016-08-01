@@ -294,7 +294,7 @@ function editModal(ctrl, editing) {
 
     CTRL_MODAL_FRM.data('ctrl-id', ctrl.id);
     CTRL_MODAL_FRM.data('ctrl-type', ctrl.type);
-    CTRL_MODAL_FRM.find('.modal-body').html(getTemplate('ctrl/' + ctrl.type + '/edit')(ctrl.attr));
+    CTRL_MODAL_FRM.find('.modal-body').html(getTemplate('ctrl/' + ctrl.type + '/edit')(ctrl));
 
     CTRL_MODAL_FRM.validator('destroy');
     CTRL_MODAL_FRM.validator().off('submit');
@@ -371,7 +371,7 @@ function updateCtrl() {
     };
 
     let widgetContent = getCtrlContent(ctrlId);
-    widgetContent.html(getTemplate('ctrl/' + ctrlType + '/render')(CTRL_INSTANCES[ctrlId].attr));
+    widgetContent.html(getTemplate('ctrl/' + ctrlType + '/render')(CTRL_INSTANCES[ctrlId]));
 
     invokeCtrlFunction('render', ctrlId, ctrlType, ctrlAttr);
 
@@ -385,25 +385,20 @@ function updateCtrl() {
  */
 function appendCtrl(ctrlId, ctrlType, ctrlAttr, x, y, width, height) {
 
-    let widget = getTemplate('ctrl/wrapper')({
-        id: ctrlId,
-        x: x, y: y, width: width, height: height
-    });
-
-    CTRL_GRID.addWidget(widget);
-
-    let widgetContent = getCtrlContent(ctrlId);
-    widgetContent.html(getTemplate('ctrl/' + ctrlType + '/render')(
-        $.extend(ctrlAttr, {
-            id: ctrlId
-        })
-    ));
-
     CTRL_INSTANCES[ctrlId] = {
         id: ctrlId,
         type: ctrlType,
         attr: ctrlAttr
     };
+
+    let widget = getTemplate('ctrl/wrapper')({
+        id: ctrlId,
+        x: x, y: y, width: width, height: height
+    });
+    CTRL_GRID.addWidget(widget);
+
+    let widgetContent = getCtrlContent(ctrlId);
+    widgetContent.html(getTemplate('ctrl/' + ctrlType + '/render')(CTRL_INSTANCES[ctrlId]));
 
     invokeCtrlFunction('render', ctrlId, ctrlType, ctrlAttr);
 
@@ -536,6 +531,10 @@ function getCtrlInstance(ctrlId) {
 }
 
 $(document).ready(function () {
+
+    Handlebars.registerHelper('default-edit-fields', function() {
+        return getTemplate('ctrl/default-edit-fields')(this)
+    });
 
     var gridStack = jQuery('.grid-stack');
     gridStack.gridstack({

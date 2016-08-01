@@ -1,20 +1,26 @@
-{{#compare labelAlign "horizontal"}}
+{{#compare attr.labelAlign "horizontal"}}
 <div class="form-group">
-    <label for="{{name}}-{{id}}" class="col-sm-2 control-label">{{label}}</label>
+    <label for="{{attr.name}}-{{id}}" class="col-sm-2 control-label">{{attr.label}}</label>
     <div class="col-sm-10">
         <div class="input-group">
             <span class="input-group-addon">@</span>
-            <input name="{{name}}" id="{{name}}-{{id}}" type="email" class="form-control" placeholder="{{placeholder}}">
+            <input name="{{attr.name}}" id="{{attr.name}}-{{id}}" type="email" class="form-control" placeholder="{{attr.placeholder}}">
         </div>
     </div>
 </div>
 {{/compare}}
-{{#compare labelAlign "vertical"}}
+{{#compare attr.labelAlign "vertical"}}
 <div class="form-vertical">
-    <label for="{{name}}-{{id}}">{{label}}</label>
+    <label for="{{attr.name}}-{{id}}">{{attr.label}}</label>
     <div class="input-group">
         <span class="input-group-addon">@</span>
-        <input name="{{name}}" id="{{name}}-{{id}}" type="email" class="form-control" placeholder="{{placeholder}}">
+        <input name="{{attr.name}}" id="{{attr.name}}-{{id}}" type="email" class="form-control" placeholder="{{attr.placeholder}}">
     </div>
+</div>
+{{/compare}}
+{{#compare attr.labelAlign "none"}}
+<div class="input-group">
+    <span class="input-group-addon">@</span>
+    <input name="{{attr.name}}" id="{{attr.name}}-{{id}}" type="email" class="form-control" placeholder="{{attr.placeholder}}">
 </div>
 {{/compare}}

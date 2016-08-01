@@ -1,23 +1,23 @@
-{{#compare labelAlign "horizontal"}}
+{{#compare attr.labelAlign "horizontal"}}
 <div class="form-group">
-    <label for="{{name}}" class="col-sm-2 control-label">{{label}}</label>
+    <label for="{{attr.name}}-{{id}}" class="col-sm-2 control-label">{{attr.label}}</label>
     <div class="col-sm-10">
-        <select name="{{name}}" id="{{name}}-{{id}}" class="form-control">
-            {{#if placeholder}}<option value="" disabled selected>{{placeholder}}</option>{{/if}}
+        <select name="{{attr.name}}" id="{{attr.name}}-{{id}}" class="form-control">
+            {{#if attr.placeholder}}<option value="" disabled selected>{{attr.placeholder}}</option>{{/if}}
         </select>
     </div>
 </div>
 {{/compare}}
-{{#compare labelAlign "vertical"}}
+{{#compare attr.labelAlign "vertical"}}
 <div class="form-vertical">
-    <label for="{{name}}">{{label}}</label>
-    <select name="{{name}}" id="{{name}}-{{id}}" class="form-control">
-        {{#if placeholder}}<option value="" disabled selected>{{placeholder}}</option>{{/if}}
+    <label for="{{attr.name}}-{{id}}">{{attr.label}}</label>
+    <select name="{{attr.name}}" id="{{attr.name}}-{{id}}" class="form-control">
+        {{#if attr.placeholder}}<option value="" disabled selected>{{attr.placeholder}}</option>{{/if}}
     </select>
 </div>
 {{/compare}}
-{{#compare labelAlign "none"}}
-<select name="{{name}}" id="{{name}}-{{id}}" class="form-control">
-    {{#if placeholder}}<option value="" disabled selected>{{placeholder}}</option>{{/if}}
+{{#compare attr.labelAlign "none"}}
+<select name="{{attr.name}}" id="{{attr.name}}-{{id}}" class="form-control">
+    {{#if attr.placeholder}}<option value="" disabled selected>{{attr.placeholder}}</option>{{/if}}
 </select>
 {{/compare}}

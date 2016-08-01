@@ -34,7 +34,7 @@
                 <button class="btn btn-sm" type="button" data-edit="justifyfull" title="" data-original-title="Justify (Ctrl/Cmd+J)"><i class="fa fa-align-justify"></i></button>
             </div>
         </div>
-        <div class="text-editor" id="text-editor" contenteditable="true"></div>
-        <input class="hidden" id="text" name="text" required/>
+        <div class="text-editor" id="text-editor" contenteditable="true">{{attr.text}}</div>
+        <input class="hidden" id="text" name="text" value="{{attr.text}}" required/>
     </div>
 </div>

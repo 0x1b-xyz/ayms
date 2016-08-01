@@ -1,14 +1,14 @@
-{{#compare labelAlign "horizontal"}}
+{{#compare attr.labelAlign "horizontal"}}
 <div class="form-group">
-    <label for="{{name}}" class="col-sm-2 control-label">{{label}}</label>
+    <label for="{{attr.name}}" class="col-sm-2 control-label">{{attr.label}}</label>
     <div class="col-sm-10">
-        <input name="{{name}}" id="{{name}}-{{id}}" type="text" class="form-control" placeholder="(000) 000-0000">
+        <input name="{{attr.name}}" id="{{attr.name}}-{{id}}" type="text" class="form-control" placeholder="(000) 000-0000">
     </div>
 </div>
 {{/compare}}
 {{#compare labelAlign "vertical"}}
 <div class="form-vertical">
-    <label for="{{name}}">{{label}}</label>
-    <input name="{{name}}" id="{{name}}-{{id}}" type="text" class="form-control" placeholder="(000) 000-0000">
+    <label for="{{attr.name}}">{{attr.label}}</label>
+    <input name="{{attr.name}}" id="{{attr.name}}-{{id}}" type="text" class="form-control" placeholder="(000) 000-0000">
 </div>
 {{/compare}}

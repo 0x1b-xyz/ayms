@@ -1,50 +1,21 @@
+{{{default-edit-fields}}}
 <div class="form-group">
-    <label for="name-{{id}}" class="col-sm-2 control-label">Name</label>
+    <label for="type-{{id}}" class="col-sm-2 control-label">Type</label>
     <div class="col-sm-9">
-        <div class="form-group inner-form-group">
-            <div class="col-sm-7">
-                <input name="name" id="name-{{id}}" type="text" class="form-control" placeholder="Field Name" value="{{name}}" required>
-            </div>
-            <div class="col-sm-5">
-                <select name="type" id="type-{{id}}" class="form-control">
-                    <option value="text">Text</option>
-                    <option value="date">Date</option>
-                    <option value="datetime-local">Date/Time</option>
-                    <option value="time">Time</option>
-                    <option value="password">Password</option>
-                    <option value="number">Number</option>
-                    <option value="color">Color</option>
-                </select>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="form-group">
-    <label for="label-{{id}}" class="col-sm-2 control-label">Label</label>
-    <div class="col-sm-9">
-        <div class="form-group inner-form-group">
-            <div class="col-sm-7">
-                <input name="label" id="label-{{id}}" type="text" class="form-control" placeholder="Label Text" value="{{label}}">
-            </div>
-            <div class="col-sm-5">
-                <select name="labelAlign" id="labelAlign-{{id}}" class="form-control">
-                    <option value="horizontal">Horizontal</option>
-                    <option value="vertical">Vertical</option>
-                    <option value="none">None</option>
-                </select>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="form-group">
-    <label for="placeholder-{{id}}" class="col-sm-2 control-label">Placeholder</label>
-    <div class="col-sm-9">
-        <input name="placeholder" id="placeholder-{{id}}" type="text" class="form-control" placeholder="Placeholder Text" value="{{placeholder}}">
+        <select name="type" id="type-{{id}}" class="form-control">
+            <option value="text" {{#compare attr.type "text"}}selected{{/compare}}>Text</option>
+            <option value="date" {{#compare attr.type "date"}}selected{{/compare}}>Date</option>
+            <option value="datetime-local" {{#compare attr.type "datetime-local"}}selected{{/compare}}>Date/Time</option>
+            <option value="time" {{#compare attr.type "time"}}selected{{/compare}}>Time</option>
+            <option value="password" {{#compare attr.type "password"}}selected{{/compare}}>Password</option>
+            <option value="number" {{#compare attr.type "number"}}selected{{/compare}}>Number</option>
+            <option value="color" {{#compare attr.type "color"}}selected{{/compare}}>Color</option>
+        </select>
     </div>
 </div>
 <div class="form-group">
     <label for="maxlength-{{id}}" class="col-sm-2 control-label">Max Length</label>
     <div class="col-sm-2">
-        <input name="maxlength" id="maxlength-{{id}}" type="number" class="form-control" placeholder="" size="5" value="{{maxlength}}">
+        <input name="maxlength" id="maxlength-{{id}}" type="number" class="form-control" placeholder="" size="5" value="{{attr.maxlength}}">
     </div>
 </div>

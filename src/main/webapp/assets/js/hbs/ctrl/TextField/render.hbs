@@ -1,17 +1,17 @@
-{{#compare labelAlign "horizontal"}}
+{{#compare attr.labelAlign "horizontal"}}
 <div class="form-group">
-    <label for="{{name}}" class="col-sm-2 control-label">{{label}}</label>
+    <label for="{{attr.name}}-{{id}}" class="col-sm-2 control-label">{{attr.label}}</label>
     <div class="col-sm-10">
-        <input name="{{name}}" id="{{name}}" type="{{type}}" class="form-control" placeholder="{{placeholder}}" maxlength="{{maxlength}}">
+        <input name="{{attr.name}}" id="{{attr.name}}-{{id}}" type="{{attr.type}}" class="form-control" placeholder="{{attr.placeholder}}" maxlength="{{attr.maxlength}}">
     </div>
 </div>
 {{/compare}}
-{{#compare labelAlign "vertical"}}
+{{#compare attr.labelAlign "vertical"}}
 <div class="form-vertical">
-    <label for="{{name}}">{{label}}</label>
-    <input name="{{name}}" id="{{name}}" type="{{type}}" class="form-control" placeholder="{{placeholder}}" maxlength="{{maxlength}}">
+    <label for="{{attr.name}}-{{id}}">{{attr.label}}</label>
+    <input name="{{attr.name}}" id="{{attr.name}}-{{id}}" type="{{attr.type}}" class="form-control" placeholder="{{attr.placeholder}}" maxlength="{{attr.maxlength}}">
 </div>
 {{/compare}}
-{{#compare labelAlign "none"}}
-<input name="{{name}}" id="{{name}}" type="{{type}}" class="form-control" placeholder="{{placeholder}}" maxlength="{{maxlength}}">
+{{#compare attr.labelAlign "none"}}
+<input name="{{attr.name}}" id="{{attr.name}}-{{id}}" type="{{attr.type}}" class="form-control" placeholder="{{attr.placeholder}}" maxlength="{{attr.maxlength}}">
 {{/compare}}
