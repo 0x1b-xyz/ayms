@@ -43,8 +43,12 @@ var CTRL_DEFS = {
     'TextBlock': {
         label: 'Text Block',
         edit: function(ctrlId, ctrlType, ctrlAttr) {
-            var editor = $(toId('text-editor-' + ctrlId));
-            var editorField = $(toId('text-' + ctrlId));
+
+            // We don't use a validator on this one.
+            CTRL_MODAL_FRM.validator('destroy');
+
+            var editor = CTRL_MODAL_FRM.find('#text-editor');
+            var editorField = CTRL_MODAL_FRM.find('input[name="text"]');
             editor.wysiwyg();
             editor.bind("DOMSubtreeModified",function(){
                 editorField.val(editor.html());

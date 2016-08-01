@@ -1,7 +1,7 @@
 <div class="form-group">
-    <label for="text-{{id}}" class="col-sm-2 control-label">Text</label>
+    <label for="text" class="col-sm-2 control-label">Text</label>
     <div class="col-sm-9">
-        <div class="btn-toolbar" data-role="editor-toolbar" data-target="#text-editor-{{id}}">
+        <div class="btn-toolbar" data-role="editor-toolbar" data-target="#text-editor">
             <div class="btn-group">
                 <button class="btn btn-sm dropdown-toggle" type="button" data-toggle="dropdown" title="" data-original-title="Font"><i class="fa fa-font"></i><b class="caret"></b></button>
                 <ul class="dropdown-menu">
@@ -34,7 +34,7 @@
                 <button class="btn btn-sm" type="button" data-edit="justifyfull" title="" data-original-title="Justify (Ctrl/Cmd+J)"><i class="fa fa-align-justify"></i></button>
             </div>
         </div>
-        <div class="text-editor" id="text-editor-{{id}}" contenteditable="true"></div>
-        <input class="hidden" id="text-{{id}}" name="text" required/>
+        <div class="text-editor" id="text-editor" contenteditable="true"></div>
+        <input class="hidden" id="text" name="text" required/>
     </div>
 </div>
