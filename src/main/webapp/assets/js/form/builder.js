@@ -436,7 +436,7 @@ function saveCtrls() {
     let ctrls = getCtrls();
     jQuery.ajax({
         type: 'post',
-        url: window.location.href + "/ctrl/replace",
+        url: window.location.href + "/ctrl",
         contentType: 'application/json',
         data: JSON.stringify(ctrls),
         beforeSend: function() {
