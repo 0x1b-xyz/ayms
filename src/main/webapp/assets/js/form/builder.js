@@ -140,8 +140,8 @@ function getCtrls() {
 
     return jQuery.map($('.grid-stack .grid-stack-item:visible'), function(item) {
         item = $(item);
-        var node = item.data('_gridstack_node');
-        var ctrlId = item.data('ctrl-id');
+        let node = item.data('_gridstack_node');
+        let ctrlId = item.data('ctrl-id');
         return jQuery.extend(CTRL_INSTANCES[ctrlId], {
             layout: {
                 x: node.x,

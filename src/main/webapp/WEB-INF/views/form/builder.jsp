@@ -15,7 +15,7 @@
     <h2>${formDef.name} <small>${formDef.description}</small></h2>
     <ol class="breadcrumb">
         <li><a href="<s:url value="/"/>">Home</a></li>
-        <li><a href="<s:url value="/form/def"/>">Form Definitions</a></li>
+        <li><a href="<s:url value="/formDef"/>">Form Definitions</a></li>
         <li class="active">${formDef.name}</li>
     </ol>
 
