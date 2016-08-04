@@ -220,7 +220,7 @@ $.each(CTRL_DEFS, function(ctrlDefName) {
     try {
         getCtrlFunction(ctrlDefName, 'init')();
     } catch (e) {
-        console.log('No init function found for ' + ctrlDefName, e)
+        //console.log('No init function found for ' + ctrlDefName, e)
     }
 });
 
