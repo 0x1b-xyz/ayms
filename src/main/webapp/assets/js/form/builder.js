@@ -62,7 +62,7 @@ function editModal(ctrl, editing) {
         }
     });
 
-    invokeCtrlFunction('edit', ctrl.id, ctrl.type, ctrl.attr);
+    invokeCtrlFunction('edit', ctrl);
 
     let deleteBtn = CTRL_MODAL_FRM.find('#ctrl-modal-del');
     let addBtn = CTRL_MODAL_FRM.find('#ctrl-modal-add');
@@ -94,13 +94,15 @@ function editModal(ctrl, editing) {
  */
 function addCtrl() {
 
-    let ctrlId = CTRL_MODAL_FRM.data('ctrl-id');
-    let ctrlType = CTRL_MODAL_FRM.data('ctrl-type');
-    let ctrlAttr = $('#ctrl-modal-frm').serializeJSON();
+    let ctrl = {
+        id: CTRL_MODAL_FRM.data('ctrl-id'),
+        type: CTRL_MODAL_FRM.data('ctrl-type'),
+        attr: $('#ctrl-modal-frm').serializeJSON() 
+    };
 
-    var added = invokeCtrlFunction('append', ctrlId, ctrlType, ctrlAttr);
+    var added = invokeCtrlFunction('append', ctrl);
     if (added == null)
-        added = appendCtrl(ctrlId, ctrlType, ctrlAttr, APPEND_X_DEFAULT,
+        added = appendCtrl(ctrl, APPEND_X_DEFAULT,
             APPEND_Y_DEFAULT, APPEND_W_DEFAULT, APPEND_H_DEFAULT, true);
 
     if (added)
@@ -113,20 +115,18 @@ function addCtrl() {
  */
 function updateCtrl() {
 
-    let ctrlId = CTRL_MODAL_FRM.data('ctrl-id');
-    let ctrlType = CTRL_MODAL_FRM.data('ctrl-type');
-    let ctrlAttr = $('#ctrl-modal-frm').serializeJSON();
-
-    CTRL_INSTANCES[ctrlId] = {
-        id: ctrlId,
-        type: ctrlType,
-        attr: ctrlAttr
+    let ctrl = {
+        id: CTRL_MODAL_FRM.data('ctrl-id'),
+        type: CTRL_MODAL_FRM.data('ctrl-type'),
+        attr: $('#ctrl-modal-frm').serializeJSON()
     };
 
-    let widgetContent = getCtrlContent(ctrlId);
-    widgetContent.html(getTemplate('ctrl/' + ctrlType + '/render')(CTRL_INSTANCES[ctrlId]));
+    CTRL_INSTANCES[ctrl.id] = ctrl;
 
-    invokeCtrlFunction('render', ctrlId, ctrlType, ctrlAttr);
+    let widgetContent = getCtrlContent(ctrl.id);
+    widgetContent.html(getTemplate('ctrl/' + ctrl.type + '/render')(ctrl));
+
+    invokeCtrlFunction('render', ctrl);
 
     CTRL_MODAL.modal('hide');
 
@@ -191,7 +191,7 @@ function removeCtrl(ctrlId) {
     CTRL_GRID.removeWidget(widget);
     widget.remove();
 
-    invokeCtrlFunction('remove', ctrl.id, ctrl.type, ctrl.attr);
+    invokeCtrlFunction('remove', ctrl);
 
     delete CTRL_INSTANCES[ctrlId];
 }
