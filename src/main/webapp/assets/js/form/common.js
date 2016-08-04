@@ -31,7 +31,7 @@ var CTRL_DEFS = {
         label: 'Text Field',
         append: function(ctrlId, ctrlType, ctrlAttr) {
             let heights = {'vertical':3,'horizontal':2,'none':2};
-            return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign])
+            return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign], true)
         }
     },
 
@@ -75,7 +75,7 @@ var CTRL_DEFS = {
         },
         append: function(ctrlId, ctrlType, ctrlAttr) {
             let heights = {'1': 3, '2': 3, '3': 3, '4': 2, '5': 2};
-            return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.size])
+            return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.size], true)
         }
     },
 
@@ -87,14 +87,14 @@ var CTRL_DEFS = {
          * Observes {@link #TOPIC_VALUE_CHANGE} for updates to {@code CompanyField}s.
          */
         init: function() {
-            $.observer.subscribe(TOPIC_VALUE_CHANGE, getCtrlFunction('EmployeeField', 'update'));
+            $.observer.subscribe(TOPIC_VALUE_CHANGE, getCtrlFunction('EmployeeField', 'valueChange'));
         },
 
         /**
          * Unsubscribes from {@link #TOPIC_VALUE_CHANGE}.
          */
         destroy: function(ctrlId, ctrlType, ctrlAttr) {
-            $.observer.unsubscribe(TOPIC_VALUE_CHANGE, getCtrlFunction('EmployeeField', 'update'))
+            $.observer.unsubscribe(TOPIC_VALUE_CHANGE, getCtrlFunction('EmployeeField', 'valueChange'))
         },
 
         /**
@@ -114,10 +114,18 @@ var CTRL_DEFS = {
 
         append: function(ctrlId, ctrlType, ctrlAttr) {
             let heights = {'vertical':3,'horizontal':2,'none':2};
-            return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign])
+            return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign], true)
         },
 
-        update: function(evtCtrlId, evtCtrlType, evtCtrlAttr) {
+        render: function(ctrlId, ctrlType, ctrlAttr) {
+            console.log("Rendering", ctrlType, ctrlAttr);
+        },
+
+        /**
+         * Called when a value changes on the form. We're listening for company fields here and when the
+         * field name matches one we expect we'll load the employees into this field.
+         */
+        valueChange: function(evtCtrlId, evtCtrlType, evtCtrlAttr) {
 
             if (evtCtrlType == 'CompanyField') {
                 let companyId = getCtrlRenderField(evtCtrlId, evtCtrlAttr.name).find('option:selected').val();
@@ -142,10 +150,11 @@ var CTRL_DEFS = {
 
             $.ajax({
                 url: URL_PREFIX + 'employee',
+                data: {companyId: companyId},
                 dataType: 'json',
                 success: function(response) {
                     let field = getCtrlRenderField(ctrlId, ctrlAttr.name);
-                    field.empty();
+                    field.find('option').remove();
                     response.data.forEach(function(employee) {
                         field.append('<option value="' + employee.id + '">' + employee.firstName + ' ' + employee.lastName + '</option>');
                     });
@@ -159,7 +168,7 @@ var CTRL_DEFS = {
         label: 'Email Field',
         append: function(ctrlId, ctrlType, ctrlAttr) {
             let heights = {'vertical':3,'horizontal':2,'none':2};
-            return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign])
+            return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign], true)
         }
     },
 
@@ -167,7 +176,7 @@ var CTRL_DEFS = {
         label: 'Currency Field',
         append: function(ctrlId, ctrlType, ctrlAttr) {
             let heights = {'vertical':3,'horizontal':2,'none':2};
-            return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign])
+            return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign], true)
         },
         render: function(ctrlId, ctrlType, ctrlAttr) {
             getCtrlRenderField(ctrlId, ctrlAttr.name).mask("#,##0.00", {reverse: true})
@@ -178,7 +187,7 @@ var CTRL_DEFS = {
         label: 'Company Field',
         append: function(ctrlId, ctrlType, ctrlAttr) {
             var heights = {'vertical':3,'horizontal':2,'none':2};
-            return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign])
+            return appendCtrl(ctrlId, ctrlType, ctrlAttr, 0, 50, 20, heights[ctrlAttr.labelAlign], true)
         },
         render: function(ctrlId, ctrlType, ctrlAttr) {
 
@@ -251,7 +260,7 @@ function invokeCtrlFunction(functionName, ctrlId, ctrlType, ctrlAttr) {
  * Appends the output of the {@code ctrl-CTRLTYPE-render} template into the layout CTRL_GRID and
  * sticks the ctrl definition into {@link #CTRL_INSTANCES}.
  */
-function appendCtrl(ctrlId, ctrlType, ctrlAttr, x, y, width, height) {
+function appendCtrl(ctrlId, ctrlType, ctrlAttr, x, y, width, height, editable) {
 
     CTRL_INSTANCES[ctrlId] = {
         id: ctrlId,
@@ -261,7 +270,8 @@ function appendCtrl(ctrlId, ctrlType, ctrlAttr, x, y, width, height) {
 
     let widget = getTemplate('ctrl/wrapper')({
         id: ctrlId,
-        x: x, y: y, width: width, height: height
+        x: x, y: y, width: width, height: height,
+        editable: editable 
     });
     CTRL_GRID.addWidget(widget);
 
@@ -276,9 +286,13 @@ function appendCtrl(ctrlId, ctrlType, ctrlAttr, x, y, width, height) {
 
 /**
  * Loads all controls for the form definition
+ * 
+ * @param editable When true the grid will not be locked after controls are appended.
  */
-function loadCtrls() {
+function loadCtrls(editable) {
 
+    console.log("Loading controls ...");
+    
     jQuery.ajax({
         type: 'get',
         url: window.location.href + '/ctrl',
@@ -290,9 +304,11 @@ function loadCtrls() {
             if (response.data) {
                 response.data.forEach(function(ctrl) {
                     appendCtrl(ctrl.id, ctrl.type, ctrl.attr,
-                        ctrl.layout.x, ctrl.layout.y, ctrl.layout.width, ctrl.layout.height)
+                        ctrl.layout.x, ctrl.layout.y, ctrl.layout.width, ctrl.layout.height, editable)
                 });
             }
+            if (!editable)
+                CTRL_GRID.disable();
         },
         complete: function() {
             $.unblockUI();
@@ -345,7 +361,5 @@ $(document).ready(function () {
     CTRL_GRID = gridStack.data('gridstack');
     CTRL_MODAL = $('#ctrl-modal');
     CTRL_MODAL_FRM = CTRL_MODAL.find('#ctrl-modal-frm');
-
-    loadCtrls();
 
 });

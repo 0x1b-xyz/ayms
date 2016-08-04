@@ -2,7 +2,6 @@
 
 $(document).ready(function () {
 
-    // Disable moving / resizing
-    CTRL_GRID.disable();
+    loadCtrls(false);
 
 });

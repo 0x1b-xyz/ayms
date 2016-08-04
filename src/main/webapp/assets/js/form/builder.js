@@ -101,7 +101,7 @@ function addCtrl() {
     var added = invokeCtrlFunction('append', ctrlId, ctrlType, ctrlAttr);
     if (added == null)
         added = appendCtrl(ctrlId, ctrlType, ctrlAttr, APPEND_X_DEFAULT,
-            APPEND_Y_DEFAULT, APPEND_W_DEFAULT, APPEND_H_DEFAULT);
+            APPEND_Y_DEFAULT, APPEND_W_DEFAULT, APPEND_H_DEFAULT, true);
 
     if (added)
         CTRL_MODAL.modal('hide');
@@ -207,4 +207,6 @@ $(document).ready(function () {
 
     $('#grid-stack-frm-submit').on('click', saveCtrls);
 
+    loadCtrls(true);
+    
 });
