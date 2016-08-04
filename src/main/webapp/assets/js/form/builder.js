@@ -133,12 +133,12 @@ function updateCtrl() {
 }
 
 /**
- * Extracts the layout info from the CTRL_GRID and merges it with the ctrl definition from the
- * {@link #CTRL_INSTANCES} map.
+ * Merges the ctrl instances with their current layout information and posts them back to the
+ * server for create or update.
  */
-function getCtrls() {
+function saveCtrls() {
 
-    return jQuery.map($('.grid-stack .grid-stack-item:visible'), function(item) {
+    let ctrls = jQuery.map($('.grid-stack .grid-stack-item:visible'), function(item) {
         item = $(item);
         let node = item.data('_gridstack_node');
         let ctrlId = item.data('ctrl-id');
@@ -152,14 +152,6 @@ function getCtrls() {
         });
     });
 
-}
-
-/**
- * Replaces all controls all the form definition with what we get from {@link #getCtrls}
- */
-function saveCtrls() {
-
-    let ctrls = getCtrls();
     jQuery.ajax({
         type: 'post',
         url: window.location.href + "/ctrl",
