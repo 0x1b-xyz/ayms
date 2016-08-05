@@ -4,7 +4,7 @@
 <head>
     <title>forms</title>
 
-    <script type="text/javascript" src="<s:url value="/assets/form/instance.js"/>"></script>
+    <script type="text/javascript" src="<s:url value="/assets/form/result.js"/>"></script>
     <link href="<s:url value="/assets/form.css"/>" rel="stylesheet"/>
 
 </head>
@@ -12,12 +12,12 @@
 
 <div class="row">
 
-    <%--<h2>${formDef.name} <small>${formDef.description}</small></h2>--%>
-    <%--<ol class="breadcrumb">--%>
-        <%--<li><a href="<s:url value="/"/>">Home</a></li>--%>
-        <%--<li><a href="<s:url value="/form/def"/>">Form Definitions</a></li>--%>
-        <%--<li class="active">${formDef.name}</li>--%>
-    <%--</ol>--%>
+    <h2>${formDef.name} <small>${formDef.description}</small></h2>
+    <ol class="breadcrumb">
+        <li><a href="<s:url value="/"/>">Home</a></li>
+        <%--<li><a href="<s:url value="/formDef"/>">Form Definitions</a></li>--%>
+        <li class="active">${formDef.name}</li>
+    </ol>
 
     <div class="col-lg-12">
 

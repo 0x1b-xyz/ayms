@@ -2,5 +2,8 @@
     <td><a href="{{#url}}/formDef/{{id}}{{/url}}">{{id}}</a></td>
     <td>{{name}}</td>
     <td>{{description}}</td>
-    <td><a href="{{#url}}/form/create/{{id}}{{/url}}" class="btn btn-info btn-sm" role="button">Create</a></td>
+    <td>
+        <a href="{{#url}}/form/{{id}}/create{{/url}}" class="btn btn-success btn-sm" role="button">Create</a>
+        <a href="{{#url}}/form/{{id}}{{/url}}" class="btn btn-default btn-sm" role="button">Results</a>
+    </td>
 </tr>
