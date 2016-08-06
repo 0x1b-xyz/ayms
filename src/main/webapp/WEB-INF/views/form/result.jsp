@@ -19,10 +19,7 @@
         <li class="active">${formDef.name}</li>
     </ol>
 
-    <div class="col-lg-12">
-
         <form id="grid-stack-frm" method="post" class="form-horizontal">
-            <hr>
             <div class="grid-stack"></div>
             <hr>
             <a href="<s:url value="/formDef"/>" type="button" role="button" class="btn btn-default">Cancel</a>

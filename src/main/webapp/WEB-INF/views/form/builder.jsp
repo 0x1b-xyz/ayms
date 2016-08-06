@@ -59,6 +59,7 @@
         <div class="list-group">
             <button type="button" class="list-group-item btn-sm" data-ctrl-type="CompanyField"><i class="fa fa-building fa-sm" aria-hidden="true"></i>&nbsp; Company</button>
             <button type="button" class="list-group-item btn-sm" data-ctrl-type="EmployeeField"><i class="fa fa-building fa-sm" aria-hidden="true"></i>&nbsp; Employee</button>
+            <button type="button" class="list-group-item btn-sm" data-ctrl-type="ClientField"><i class="fa fa-clipboard fa-sm" aria-hidden="true"></i>&nbsp; Client</button>
         </div>
     </div>
 

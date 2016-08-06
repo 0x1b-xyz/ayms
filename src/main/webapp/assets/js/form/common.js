@@ -58,7 +58,7 @@ var CTRL_DEFS = {
     'PhoneNumberField': {
         label: 'Phone Number Field',
         render: function(ctrl) {
-            getCtrlRenderField(ctrl.id, ctrl.attr.name).mask('(000) 000-0000')
+            getCtrlField(ctrl.id, ctrl.attr.name).mask('(000) 000-0000')
         }
     },
 
@@ -128,10 +128,10 @@ var CTRL_DEFS = {
         valueChange: function(evtCtrl) {
 
             if (evtCtrl.type == 'CompanyField') {
-                let companyId = getCtrlRenderField(evtCtrl.id, evtCtrl.attr.name).find('option:selected').val();
+                let companyId = getCtrlField(evtCtrl.id, evtCtrl.attr.name).find('option:selected').val();
                 console.log('got updated company id: ' + companyId);
                 if (companyId) {
-                    $.each(getCtrlInstances(), function(ctrlId) {
+                    $.each(CTRL_INSTANCES, function(ctrlId) {
                         let ctrl = CTRL_INSTANCES[ctrlId];
                         if (ctrl.type == 'EmployeeField') {
                             if (ctrl.attr.companyField == evtCtrl.id) {
@@ -154,7 +154,7 @@ var CTRL_DEFS = {
                 data: {companyId: companyId},
                 dataType: 'json',
                 success: function(response) {
-                    let field = getCtrlRenderField(ctrl.id, ctrl.attr.name);
+                    let field = getCtrlField(ctrl.id, ctrl.attr.name);
                     field.find('option').remove();
                     response.data.forEach(function(employee) {
                         field.append('<option value="' + employee.id + '">' + employee.firstName + ' ' + employee.lastName + '</option>');
@@ -180,7 +180,7 @@ var CTRL_DEFS = {
             return appendCtrl(ctrl, 0, 50, 20, heights[ctrl.attr.labelAlign], true)
         },
         render: function(ctrl) {
-            getCtrlRenderField(ctrl.id, ctrl.attr.name).mask("#,##0.00", {reverse: true})
+            getCtrlField(ctrl.id, ctrl.attr.name).mask("#,##0.00", {reverse: true})
         }
     },
 
@@ -193,7 +193,7 @@ var CTRL_DEFS = {
         render: function(ctrl) {
 
             // Publish value changes
-            getCtrlRenderField(ctrl.id, ctrl.attr.name).change(function() {
+            getCtrlField(ctrl.id, ctrl.attr.name).change(function() {
                 let companyId = $(this).find('option:selected').val();
                 $.observer.publish(TOPIC_VALUE_CHANGE, ctrl, companyId);
             });
@@ -203,13 +203,20 @@ var CTRL_DEFS = {
                 url: URL_PREFIX + 'company',
                 dataType: 'json',
                 success: function(response) {
-                    let field = getCtrlRenderField(ctrl.id, ctrl.attr.name);
+                    let field = getCtrlField(ctrl.id, ctrl.attr.name);
                     response.data.forEach(function(company) {
                         field.append('<option value="' + company.id + '">' + company.name + '</option>');
                     });
                 }
             })
 
+        }
+    },
+
+    'ClientField': {
+        label: "Client Field",
+        append: function(ctrl) {
+            return appendCtrl(ctrl, 0, 99, 12, 9, true)
         }
     }
 };
@@ -329,15 +336,8 @@ function getCtrlContent(ctrlId) {
  * @param ctrlId Identifier of control
  * @param fieldName Name of rendered field in form
  */
-function getCtrlRenderField(ctrlId, fieldName) {
-    return $('#grid-stack-frm').find(toId(fieldName + '-' + ctrlId));
-}
-
-/**
- * Returns all control instances
- */
-function getCtrlInstances() {
-    return CTRL_INSTANCES;
+function getCtrlField(ctrlId, fieldName) {
+    return $('#grid-stack-frm').find(toId(ctrlId + '-' + fieldName));
 }
 
 /**

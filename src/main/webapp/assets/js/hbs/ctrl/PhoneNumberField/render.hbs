@@ -2,13 +2,13 @@
 <div class="form-group">
     <label for="{{attr.name}}" class="col-sm-2 control-label">{{attr.label}}</label>
     <div class="col-sm-10">
-        <input name="{{attr.name}}" id="{{attr.name}}-{{id}}" type="text" class="form-control" placeholder="(000) 000-0000">
+        <input name="{{id}}-{{attr.name}}" id="{{id}}-{{attr.name}}" type="text" class="form-control" placeholder="(000) 000-0000">
     </div>
 </div>
 {{/compare}}
 {{#compare labelAlign "vertical"}}
 <div class="form-vertical">
     <label for="{{attr.name}}">{{attr.label}}</label>
-    <input name="{{attr.name}}" id="{{attr.name}}-{{id}}" type="text" class="form-control" placeholder="(000) 000-0000">
+    <input name="{{id}}-{{attr.name}}" id="{{id}}-{{attr.name}}" type="text" class="form-control" placeholder="(000) 000-0000">
 </div>
 {{/compare}}

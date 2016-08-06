@@ -14,7 +14,19 @@
 
 .grid-stack-item-content {
     background-color: whitesmoke;
-    padding: 3px 3px 0 3px;
+    padding: 3px 3px 3px 3px;
+}
+
+.grid-stack-item-content .form-group {
+    height: inherit;
+}
+
+.ctrl-group {
+    padding-top: 5px;
+}
+
+.ctrl-group .form-group {
+    padding-bottom: 5px;
 }
 
 .grid-stack-item-delete {
