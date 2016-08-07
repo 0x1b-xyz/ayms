@@ -12,6 +12,10 @@
     padding: 5px 10px;
 }
 
+.grid-stack-item {
+    overflow-y: hidden;
+}
+
 .grid-stack-item-content {
     background-color: whitesmoke;
     padding: 3px 3px 3px 3px;
@@ -19,6 +23,11 @@
 
 .grid-stack-item-content .form-group {
     height: inherit;
+}
+
+.grid-stack-item-content .page-header {
+    padding-bottom: 0;
+    margin: 10px 0 10px;
 }
 
 .ctrl-group {
