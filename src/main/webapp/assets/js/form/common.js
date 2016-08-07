@@ -284,7 +284,7 @@ var CTRL_DEFS = {
                 $(targetField).autocomplete({
                     hint: false,
                     highlight: true,
-                    minLength: 3,
+                    minLength: 1,
                     source: function(request, cb) {
                         $.get('/client/search',
                             $.extend(request, {
