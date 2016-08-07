@@ -118,7 +118,40 @@ var CTRL_DEFS = {
         },
 
         render: function(ctrl) {
-            console.log("Rendering", ctrl);
+
+            // Publish value changes
+            let employeeField = getCtrlField(ctrl.id, ctrl.attr.name);
+
+            employeeField.autocomplete({
+                hint: true,
+                highlight: true,
+                minLength: 1,
+                source: function(request, cb) {
+                    $.get('/employee/search',
+                        $.extend(request, {
+                            field: 'lastName'
+                        }),
+                        function(response) {
+                            cb($.map(response.data, function(employee) {
+                                return $.extend(employee, {
+                                    label: employee.lastName + ', ' + employee.firstName,
+                                    value: employee.id
+                                })
+                            }))
+                        }
+                    )
+                },
+                select: function(event, ui) {
+                    employeeField.val(ui.item.lastName + ', ' + ui.item.firstName);
+                    return false
+                }
+            });
+
+            // employeeField.change(function() {
+            //     let companyId = $(this).find('option:selected').val();
+            //     $.observer.publish(TOPIC_VALUE_CHANGE, ctrl, companyId);
+            // });
+
         },
 
         /**
@@ -185,30 +218,48 @@ var CTRL_DEFS = {
     },
 
     'CompanyField': {
+
         label: 'Company Field',
+
         append: function(ctrl) {
             var heights = {'vertical':3,'horizontal':2,'none':2};
             return appendCtrl(ctrl, 0, 50, 20, heights[ctrl.attr.labelAlign], true)
         },
+
         render: function(ctrl) {
 
             // Publish value changes
-            getCtrlField(ctrl.id, ctrl.attr.name).change(function() {
-                let companyId = $(this).find('option:selected').val();
-                $.observer.publish(TOPIC_VALUE_CHANGE, ctrl, companyId);
-            });
+            let companyField = getCtrlField(ctrl.id, ctrl.attr.name);
 
-            // Load companies in
-            $.ajax({
-                url: URL_PREFIX + 'company',
-                dataType: 'json',
-                success: function(response) {
-                    let field = getCtrlField(ctrl.id, ctrl.attr.name);
-                    response.data.forEach(function(company) {
-                        field.append('<option value="' + company.id + '">' + company.name + '</option>');
-                    });
+            // companyField.change(function() {
+            //     let companyId = $(this).find('option:selected').val();
+            //     $.observer.publish(TOPIC_VALUE_CHANGE, ctrl, companyId);
+            // });
+
+            companyField.autocomplete({
+                hint: true,
+                highlight: true,
+                minLength: 1,
+                source: function(request, cb) {
+                    $.get('/company/search',
+                        $.extend(request, {
+                            field: 'name'
+                        }),
+                        function(response) {
+                            cb($.map(response.data, function(company) {
+                                return $.extend(company, {
+                                    label: company.name,
+                                    value: company.id
+                                })
+                            }))
+                        }
+                    )
+                },
+                select: function(event, ui) {
+                    companyField.val(ui.item.name);
+                    return false
                 }
-            })
+            });
 
         }
     },
@@ -217,6 +268,64 @@ var CTRL_DEFS = {
         label: "Client Field",
         append: function(ctrl) {
             return appendCtrl(ctrl, 0, 99, 12, 9, true)
+        },
+
+        /**
+         * Sets up the auto-completes to load client data into the client form fields
+         */
+        render: function(ctrl) {
+
+            let fields = ['lastName','firstName','ssn'];
+
+            fields.forEach(function(field) {
+
+                let targetField = getCtrlField(ctrl.id, field);
+
+                $(targetField).autocomplete({
+                    hint: false,
+                    highlight: true,
+                    minLength: 3,
+                    source: function(request, cb) {
+                        $.get('/client/search',
+                            $.extend(request, {
+                                field: field
+                            }),
+                            function(response) {
+                                let options = $.map(response.data, function(client) {
+                                    return $.extend(client, {
+                                        label: '(' + client[field] + '): ' + client.lastName + ', ' + client.firstName,
+                                        value: client.id
+                                    });
+                                });
+                                cb(options);
+                            })
+                    },
+                    select: function(event, ui) {
+                        getCtrlFunction('ClientField', 'bind')(ctrl, ui.item);
+                        return false
+                    }
+                })
+
+
+            });
+
+        },
+
+        /**
+         * Binds a client structure into the rendered form
+         */
+        bind: function(ctrl, client) {
+
+            getCtrlField(ctrl.id, 'lastName').val(client.lastName);
+            getCtrlField(ctrl.id, 'firstName').val(client.firstName);
+            getCtrlField(ctrl.id, 'dateOfBirth').val(client.dateOfBirth);
+            getCtrlField(ctrl.id, 'ssn').val(client.ssn);
+            getCtrlField(ctrl.id, 'address.line1').val(client.address.line1);
+            getCtrlField(ctrl.id, 'address.line2').val(client.address.line2);
+            getCtrlField(ctrl.id, 'address.city').val(client.address.city);
+            getCtrlField(ctrl.id, 'address.state').val(client.address.state);
+            getCtrlField(ctrl.id, 'address.zipcode').val(client.address.zipcode);
+
         }
     }
 };

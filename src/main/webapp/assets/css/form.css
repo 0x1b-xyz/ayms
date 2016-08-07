@@ -2,6 +2,9 @@
  *= require app
  *= require gridstack
  *= require gridstack-extra
+ *= require jquery-ui
+ *= require jquery-ui.structure
+ *= require jquery-ui.theme
  */
 
 /*.container-fluid {*/
@@ -138,4 +141,8 @@ button.edit {
     border-bottom-left-radius: 3px; border-top-left-radius: 3px;
     overflow: scroll;
     outline: none;
+}
+
+.twitter-typeahead {
+    width: 100%;
 }

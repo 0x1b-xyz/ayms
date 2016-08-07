@@ -22,8 +22,8 @@
             <thead>
             <tr>
                 <th>#</th>
-                <th>First Name</th>
                 <th>Last Name</th>
+                <th>First Name</th>
                 <th>DOB</th>
                 <th>SSN</th>
                 <th></th>
@@ -46,14 +46,23 @@
     <form class="form-horizontal" id="client-frm" method="post">
 
         <div class="form-group">
+            <label for="company-sel" class="col-sm-2 control-label">Company</label>
+            <div class="col-sm-8">
+                <select name="company" id="company-sel" class="form-control">
+                    <option value="" disabled>Make a selection ...</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
             <label for="firstName" class="col-sm-2 control-label">Name</label>
             <div class="col-sm-8">
                 <div class="form-group row">
                     <div class="col-sm-6">
-                        <input name="firstName" type="text" class="form-control" id="firstName" placeholder="First"/>
+                        <input name="lastName" type="text" class="form-control" id="lastName" placeholder="Last"/>
                     </div>
                     <div class="col-sm-6">
-                        <input name="lastName" type="text" class="form-control" id="lastName" placeholder="Last"/>
+                        <input name="firstName" type="text" class="form-control" id="firstName" placeholder="First"/>
                     </div>
                 </div>
             </div>
@@ -169,6 +178,13 @@
 
 <script type="text/javascript">
     jQuery(document).ready(function () {
+
+        $.get('<s:url value="/company"/>', {}, function(response) {
+            let companyField = $('#company-sel');
+            response.data.forEach(function(company) {
+                companyField.append('<option value="' + company.id + '">' + company.name + '</option>')
+            })
+        });
 
         jQuery('#ssn').mask('000-00-0000');
         jQuery('#address\\.zipcode').mask('00000');
