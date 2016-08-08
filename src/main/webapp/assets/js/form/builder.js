@@ -190,10 +190,11 @@ function removeCtrl(ctrlId) {
 
 $(document).ready(function () {
 
-    Handlebars.registerHelper('default-edit-fields', function() {
+    Handlebars.registerHelper('default-edit-fields', function(options) {
+        console.log(options);
         return getTemplate('ctrl/default-edit-fields')(this)
     });
-
+    
     // Bind the {@link #newCtrl} method to all our form control buttons
     $('.form-control-list').find('button').on('click', newCtrl);
 

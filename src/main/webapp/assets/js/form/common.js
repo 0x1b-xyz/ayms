@@ -460,6 +460,10 @@ function getCtrlInstance(ctrlId) {
 
 $(document).ready(function () {
 
+    Handlebars.registerHelper('ctrl-hbs', function(type, hbs) {
+        return getTemplate('ctrl/' + type + '/' + hbs)(this)
+    });
+
     var gridStack = jQuery('.grid-stack');
     gridStack.gridstack({
         cellHeight: 15,
