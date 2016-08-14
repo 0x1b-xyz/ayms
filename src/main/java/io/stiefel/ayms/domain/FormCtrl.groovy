@@ -32,6 +32,7 @@ class FormCtrl {
     @JsonIdentityReference(alwaysAsId=true)
     FormDef definition
 
+    // @todo Bring name back into the formctrl? Or just get rid of it since its not needed?
 //    @Column(nullable = false, length = 50)
 //    @JsonView(View.Summary)
 //    @NotEmpty
