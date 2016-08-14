@@ -25,6 +25,7 @@
             <hr>
             <div class="grid-stack"></div>
             <hr>
+            <a href="<s:url value="/formDef/${formDef.id}/delete"/>" type="button" role="button" class="btn btn-danger">Delete</a>
             <a href="<s:url value="/formDef"/>" type="button" role="button" class="btn btn-default">Cancel</a>
             <button id="grid-stack-frm-submit" type="button" class="btn btn-primary">Save</button>
         </form>

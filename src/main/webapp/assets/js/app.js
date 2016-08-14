@@ -21,7 +21,7 @@ var TPL_PREFIX = URL_PREFIX + 'static/hbs/';
  * @param tbl Table we'll append rows into
  * @param clear Whether we should clear existing rows
  */
-function rows(url, tpl, tbl, clear) {
+function rows(url, tpl, tbl, clear, callback) {
 
     if (clear == undefined)
         clear = true;
@@ -41,6 +41,10 @@ function rows(url, tpl, tbl, clear) {
             result.data.forEach(function(row) {
                 tbody.append(getTemplate(tpl)(row));
             })
+            
+            if (typeof callback == 'function')
+                callback(this);
+            
         }
     })
 
@@ -106,7 +110,7 @@ function uniqueId() {
     var result, i, j;
     result = '';
     for(j=0; j<32; j++) {
-        i = Math.floor(Math.random()*16).toString(16).toUpperCase();
+        i = Math.floor(Math.random()*16).toString(16).toLowerCase();
         result = result + i;
     }
     return result;

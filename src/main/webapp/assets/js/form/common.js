@@ -10,7 +10,7 @@
 var CTRL_MODAL;
 var CTRL_MODAL_FRM;
 var CTRL_GRID;
-var CTRL_ID_RE = /\-[0-9A-F]{8}[0-9A-F]{4}[0-9A-F]{4}[0-9A-F]{4}[0-9A-F]{12}/g;
+var CTRL_ID_RE = /([0-9A-Fa-f]{8}[0-9A-Fa-f]{4}[0-9A-Fa-f]{4}[0-9A-Fa-f]{4}[0-9A-Fa-f]{12})-([A-Za-z0-9\.]*)/;
 
 /**
  * Map of controls that are present in the GRID
@@ -26,6 +26,26 @@ var TOPIC_VALUE_CHANGE = 'ctrlValueChange';
  * These are effectively the control "classes", defining the behaviours of the controls we support
  */
 var CTRL_DEFS = {
+
+    /**
+     * This is just evil - but this represents the base "class" for ctrl defs. {@link #getCtrlFunction}
+     * will look here if no method is found in the target def.
+     */
+    'Common': {
+
+        /**
+         * Generic "bind" function will quietly attempt to set a value into a single field with a name
+         * matching {@code ctrl.attr.name}.
+         */
+        bind: function(ctrl, data) {
+            try {
+                getCtrlField(ctrl.id, ctrl.attr.name).val(data[ctrl.attr.name]);
+            } catch (e) {
+                // oh well, we tried!
+            }
+        }
+
+    },
 
     'TextField': {
         label: 'Text Field',
@@ -301,7 +321,14 @@ var CTRL_DEFS = {
                             })
                     },
                     select: function(event, ui) {
-                        getCtrlFunction('ClientField', 'bind')(ctrl, ui.item);
+                        let client = $.extend(ui.item, {
+                            'address.line1': ui.item.address.line1,
+                            'address.line2': ui.item.address.line2,
+                            'address.city': ui.item.address.city,
+                            'address.state': ui.item.address.state,
+                            'address.zipcode': ui.item.address.zipcode
+                        });
+                        getCtrlFunction('ClientField', 'bind')(ctrl, client);
                         return false
                     }
                 })
@@ -316,15 +343,15 @@ var CTRL_DEFS = {
          */
         bind: function(ctrl, client) {
 
-            getCtrlField(ctrl.id, 'lastName').val(client.lastName);
-            getCtrlField(ctrl.id, 'firstName').val(client.firstName);
-            getCtrlField(ctrl.id, 'dateOfBirth').val(client.dateOfBirth);
-            getCtrlField(ctrl.id, 'ssn').val(client.ssn);
-            getCtrlField(ctrl.id, 'address.line1').val(client.address.line1);
-            getCtrlField(ctrl.id, 'address.line2').val(client.address.line2);
-            getCtrlField(ctrl.id, 'address.city').val(client.address.city);
-            getCtrlField(ctrl.id, 'address.state').val(client.address.state);
-            getCtrlField(ctrl.id, 'address.zipcode').val(client.address.zipcode);
+            getCtrlField(ctrl.id, 'lastName').val(client['lastName']);
+            getCtrlField(ctrl.id, 'firstName').val(client['firstName']);
+            getCtrlField(ctrl.id, 'dateOfBirth').val(client['dateOfBirth']);
+            getCtrlField(ctrl.id, 'ssn').val(client['ssn']);
+            getCtrlField(ctrl.id, 'address.line1').val(client['address.line1']);
+            getCtrlField(ctrl.id, 'address.line2').val(client['address.line2']);
+            getCtrlField(ctrl.id, 'address.city').val(client['address.city']);
+            getCtrlField(ctrl.id, 'address.state').val(client['address.state']);
+            getCtrlField(ctrl.id, 'address.zipcode').val(client['address.zipcode']);
 
         }
     }
@@ -349,8 +376,11 @@ $.each(CTRL_DEFS, function(ctrlDefName) {
  */
 function getCtrlFunction(ctrlType, functionName) {
     let func = CTRL_DEFS[ctrlType][functionName];
-    if (func == undefined)
-        throw new Error("Could not find " + ctrlType + "#" + functionName);
+    if (func == undefined) {
+        func = CTRL_DEFS['Common'][functionName];
+        if (func == undefined)
+            throw new Error("Could not find " + ctrlType + "#" + functionName);
+    }
     return func
 }
 
@@ -403,8 +433,9 @@ function appendCtrl(ctrl, x, y, width, height, editable) {
  * Loads all controls for the form definition
  * 
  * @param editable When true the grid will not be locked after controls are appended.
+ * @param callback Called before the UI is unblocked in the success hook
  */
-function loadCtrls(editable) {
+function loadCtrls(editable, callback) {
 
     console.log("Loading controls ...");
     
@@ -426,6 +457,8 @@ function loadCtrls(editable) {
                 CTRL_GRID.disable();
         },
         complete: function() {
+            if (typeof callback == 'function')
+                callback(this);
             $.unblockUI();
         }
     });

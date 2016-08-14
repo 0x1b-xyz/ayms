@@ -32,6 +32,11 @@ class FormCtrl {
     @JsonIdentityReference(alwaysAsId=true)
     FormDef definition
 
+//    @Column(nullable = false, length = 50)
+//    @JsonView(View.Summary)
+//    @NotEmpty
+//    String name;
+
     @Column(nullable = false, length = 50)
     @JsonView(View.Summary)
     @NotEmpty

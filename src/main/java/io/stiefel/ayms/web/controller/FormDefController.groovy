@@ -10,6 +10,7 @@ import io.stiefel.ayms.repo.FormDefRepo
 import io.stiefel.ayms.service.FormDefService
 import io.stiefel.ayms.web.Result
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.WebDataBinder
 import org.springframework.web.bind.annotation.InitBinder
@@ -71,6 +72,13 @@ class FormDefController {
                  @RequestBody List<FormCtrl> ctrls, HttpServletResponse response) {
         service.update(formDefId, ctrls)
         response.status = 200
+    }
+
+    @Transactional(readOnly = false)
+    @RequestMapping(path = '/{definitionId}/delete', method = RequestMethod.GET, produces = 'text/html')
+    ModelAndView delete(@PathVariable Long definitionId) {
+        repo.delete(definitionId)
+        new ModelAndView("redirect:/formDef");
     }
 
 

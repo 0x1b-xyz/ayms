@@ -161,7 +161,7 @@ function saveCtrls() {
             $.blockUI()
         },
         success: function() {
-            console.log('good to go!')
+            console.log('Saved definition')
         },
         complete: function() {
             $.unblockUI();

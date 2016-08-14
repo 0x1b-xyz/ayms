@@ -4,10 +4,12 @@ import com.fasterxml.jackson.annotation.JsonView
 import groovy.transform.Canonical
 import org.hibernate.validator.constraints.NotEmpty
 
+import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
+import javax.persistence.OneToMany
 import javax.persistence.Table
 
 /**
@@ -27,5 +29,8 @@ class FormDef extends AbstractEntity<Long> {
     @JsonView(View.Summary)
     @NotEmpty
     String description;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = 'definition')
+    List<FormCtrl> ctrls;
 
 }
