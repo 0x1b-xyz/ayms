@@ -29,4 +29,21 @@
         <!--</createTable>-->
     <!--</changeSet>-->
 
+    <changeSet id="1471214727" author="jstiefel">
+        <sql endDelimiter=";">
+            delete from aym_form_data_field;
+            delete from aym_form_data;
+            delete from aym_form_result;
+            delete from aym_form_ctrl_attr;
+            delete from aym_form_ctrl;
+            delete from aym_form_definition;
+        </sql>
+        <dropTable tableName="aym_form_data_field" cascadeConstraints="true"/>
+        <dropTable tableName="aym_form_data" cascadeConstraints="true"/>
+        <dropTable tableName="aym_form_result" cascadeConstraints="true"/>
+        <dropTable tableName="aym_form_ctrl_attr" cascadeConstraints="true"/>
+        <dropTable tableName="aym_form_ctrl" cascadeConstraints="true"/>
+        <dropTable tableName="aym_form_definition" cascadeConstraints="true"/>
+    </changeSet>
+    
 </databaseChangeLog>
