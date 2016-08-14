@@ -15,7 +15,7 @@
     <h2>${result.definition.name} <small>${result.definition.description}</small></h2>
     <ol class="breadcrumb">
         <li><a href="<s:url value="/"/>">Home</a></li>
-        <li class="active"><a href="<s:url value="/form/${result.definition.id}/result"/>">${result.definition.name}</a></li>
+        <li class="active"><a href="<s:url value="/form/${result.definition.id}/result"/>">${result.definition.description}</a></li>
     </ol>
 
     <div id="result-dtl"></div>

@@ -72,7 +72,11 @@ var CTRL_DEFS = {
     },
 
     'TextAreaField': {
-        label: 'Text Area Field'
+        label: 'Text Area Field',
+        append: function(ctrl) {
+            let heights = {'vertical':4,'horizontal':3,'none':2};
+            return appendCtrl(ctrl, 0, 50, 20, heights[ctrl.attr.labelAlign], true)
+        }
     },
 
     'PhoneNumberField': {
