@@ -1,6 +1,7 @@
 package io.stiefel.ayms.web.controller
 
 import com.fasterxml.jackson.annotation.JsonView
+import groovy.util.logging.Log4j
 import io.stiefel.ayms.domain.Company
 import io.stiefel.ayms.domain.FormCtrl
 import io.stiefel.ayms.domain.FormDef
@@ -30,9 +31,9 @@ import java.beans.PropertyEditorSupport
  */
 @RestController
 @RequestMapping(value = '/formDef')
+@Log4j
 class FormDefController {
 
-    @Autowired FormDefService service
     @Autowired FormCtrlRepo ctrlRepo
     @Autowired FormDefRepo repo
 
@@ -67,10 +68,33 @@ class FormDefController {
         new Result(ctrlRepo.findByDefinitionId(formDefId))
     }
 
-    @RequestMapping(path = '/{formDefId}/ctrl', method = RequestMethod.POST)
-    void replace(@PathVariable Long formDefId,
+    @RequestMapping(path = '/{definitionId}/ctrl', method = RequestMethod.POST)
+    void replace(@PathVariable Long definitionId,
                  @RequestBody List<FormCtrl> ctrls, HttpServletResponse response) {
-        service.update(formDefId, ctrls)
+
+        FormDef formDef = repo.findOne(definitionId)
+
+        List<String> existingCtrls = ctrlRepo.findIdByDefinitionId(definitionId)
+        List<String> deletedCtrls = existingCtrls.findAll { String existingId ->
+            !ctrls.find { it.id == existingId }
+        }
+
+        if (log.debugEnabled) {
+            deletedCtrls.each {
+                log.debug("Removing control: ${it} ...")
+            }
+        }
+        deletedCtrls.each { ctrlRepo.delete(it) }
+
+        ctrls.each { ctrl ->
+
+            log.debug("Saving control: ${ctrl} ...")
+
+            ctrl.definition = formDef
+            ctrlRepo.save(ctrl);
+
+        }
+
         response.status = 200
     }
 
