@@ -15,7 +15,7 @@ import javax.persistence.*
  */
 @Entity
 @Table(name = "aym_form_ctrl", uniqueConstraints = [
-//        @UniqueConstraint(columnNames = ["form_definition_id", "name"])
+        @UniqueConstraint(columnNames = ["definition_id", "name"])
 ])
 @Canonical
 @EqualsAndHashCode
@@ -26,17 +26,16 @@ class FormCtrl {
     String id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = 'form_definition_id')
+    @JoinColumn(name = 'definition_id')
     @JsonView(View.Summary)
     @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
     @JsonIdentityReference(alwaysAsId=true)
     FormDef definition
 
-    // @todo Bring name back into the formctrl? Or just get rid of it since its not needed?
-//    @Column(nullable = false, length = 50)
-//    @JsonView(View.Summary)
-//    @NotEmpty
-//    String name;
+    @Column(nullable = false, length = 50)
+    @JsonView(View.Summary)
+    @NotEmpty
+    String name;
 
     @Column(nullable = false, length = 50)
     @JsonView(View.Summary)

@@ -1,18 +1,19 @@
 package io.stiefel.ayms
 
+import groovy.util.logging.Log4j
 import liquibase.integration.spring.SpringLiquibase
 import org.apache.commons.dbcp2.BasicDataSource
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.*
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer
-import org.springframework.core.env.Environment
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.orm.jpa.JpaTransactionManager
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter
 import org.springframework.transaction.PlatformTransactionManager
 import org.springframework.transaction.annotation.EnableTransactionManagement
+import org.springframework.transaction.support.TransactionTemplate
 
 import javax.persistence.EntityManagerFactory
 import javax.sql.DataSource
@@ -29,11 +30,16 @@ import javax.sql.DataSource
         @PropertySource(value = 'file://#{systemProperties["ayms.properties"]}', ignoreResourceNotFound = true)
 ])
 @EnableTransactionManagement
-@ComponentScan(['io.stiefel.ayms.dao', 'io.stiefel.ayms.service'])
+@ComponentScan(['io.stiefel.ayms.dao', 'io.stiefel.ayms.service', 'io.stiefel.ayms.domain'])
 @EnableJpaRepositories(basePackages = 'io.stiefel.ayms.repo', entityManagerFactoryRef = 'emf')
+@Log4j
 class Context {
 
-    @Autowired Environment env
+    public static enum Environment {
+        dev
+    }
+
+    @Autowired org.springframework.core.env.Environment env
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
@@ -79,6 +85,16 @@ class Context {
         new JpaTransactionManager(
                 entityManagerFactory: emf
         )
+    }
+
+    @Bean
+    NamedParameterJdbcTemplate jdbcTemplate(DataSource dataSource) {
+        new NamedParameterJdbcTemplate(dataSource)
+    }
+
+    @Bean
+    TransactionTemplate tx(PlatformTransactionManager transactionManager) {
+        new TransactionTemplate(transactionManager)
     }
 
 }

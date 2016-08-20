@@ -35,11 +35,11 @@ var CTRL_DEFS = {
 
         /**
          * Generic "bind" function will quietly attempt to set a value into a single field with a name
-         * matching {@code ctrl.attr.name}.
+         * matching {@code ctrl.name}.
          */
         bind: function(ctrl, data) {
             try {
-                getCtrlField(ctrl.id, ctrl.attr.name).val(data[ctrl.attr.name]);
+                getCtrlField(ctrl.id, ctrl.name).val(data[ctrl.name]);
             } catch (e) {
                 // oh well, we tried!
             }
@@ -82,7 +82,7 @@ var CTRL_DEFS = {
     'PhoneNumberField': {
         label: 'Phone Number Field',
         render: function(ctrl) {
-            getCtrlField(ctrl.id, ctrl.attr.name).mask('(000) 000-0000')
+            getCtrlField(ctrl.id, ctrl.name).mask('(000) 000-0000')
         }
     },
 
@@ -130,7 +130,7 @@ var CTRL_DEFS = {
             $.each(CTRL_INSTANCES, function(ctrlId) {
                 let ctrlDef = CTRL_INSTANCES[ctrlId];
                 if (ctrlDef.type == 'CompanyField') {
-                    $(companyField).append('<option value="' + ctrlDef.id + '">' + ctrlDef.attr.name + '</option>')
+                    $(companyField).append('<option value="' + ctrlDef.id + '">' + ctrlDef.name + '</option>')
                 }
             });
 
@@ -144,7 +144,7 @@ var CTRL_DEFS = {
         render: function(ctrl) {
 
             // Publish value changes
-            let employeeField = getCtrlField(ctrl.id, ctrl.attr.name);
+            let employeeField = getCtrlField(ctrl.id, ctrl.name);
 
             employeeField.autocomplete({
                 hint: true,
@@ -185,7 +185,7 @@ var CTRL_DEFS = {
         valueChange: function(evtCtrl) {
 
             if (evtCtrl.type == 'CompanyField') {
-                let companyId = getCtrlField(evtCtrl.id, evtCtrl.attr.name).find('option:selected').val();
+                let companyId = getCtrlField(evtCtrl.id, evtCtrl.name).find('option:selected').val();
                 console.log('got updated company id: ' + companyId);
                 if (companyId) {
                     $.each(CTRL_INSTANCES, function(ctrlId) {
@@ -211,7 +211,7 @@ var CTRL_DEFS = {
                 data: {companyId: companyId},
                 dataType: 'json',
                 success: function(response) {
-                    let field = getCtrlField(ctrl.id, ctrl.attr.name);
+                    let field = getCtrlField(ctrl.id, ctrl.name);
                     field.find('option').remove();
                     response.data.forEach(function(employee) {
                         field.append('<option value="' + employee.id + '">' + employee.firstName + ' ' + employee.lastName + '</option>');
@@ -237,7 +237,7 @@ var CTRL_DEFS = {
             return appendCtrl(ctrl, 0, 50, 20, heights[ctrl.attr.labelAlign], true)
         },
         render: function(ctrl) {
-            getCtrlField(ctrl.id, ctrl.attr.name).mask("#,##0.00", {reverse: true})
+            getCtrlField(ctrl.id, ctrl.name).mask("#,##0.00", {reverse: true})
         }
     },
 
@@ -253,7 +253,7 @@ var CTRL_DEFS = {
         render: function(ctrl) {
 
             // Publish value changes
-            let companyField = getCtrlField(ctrl.id, ctrl.attr.name);
+            let companyField = getCtrlField(ctrl.id, ctrl.name);
 
             // companyField.change(function() {
             //     let companyId = $(this).find('option:selected').val();
@@ -411,11 +411,7 @@ function invokeCtrlFunction(functionName, ctrl) {
  */
 function appendCtrl(ctrl, x, y, width, height, editable) {
 
-    CTRL_INSTANCES[ctrl.id] = {
-        id: ctrl.id,
-        type: ctrl.type,
-        attr: ctrl.attr
-    };
+    CTRL_INSTANCES[ctrl.id] = ctrl
 
     let widget = getTemplate('ctrl/wrapper')({
         id: ctrl.id,

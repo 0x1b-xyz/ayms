@@ -167,6 +167,13 @@ Handlebars.registerHelper('compare', function (lvalue, operator, rvalue, options
 });
 
 /**
+ * Shortcut for "including" another hbs into the current template
+ */
+Handlebars.registerHelper('hbs', function(hbs) {
+    return getTemplate(hbs)(this)
+});
+
+/**
  * Prepends the {@link #URL_PREFIX} onto the path given. Will strip a leading slash if
  * it finds one.
  */

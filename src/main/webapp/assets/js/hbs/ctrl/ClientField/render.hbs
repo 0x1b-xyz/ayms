@@ -1,6 +1,6 @@
 {{#compare attr.labelAlign "horizontal"}}
     <div class="ctrl-group row">
-        <label for="{{id}}-{{attr.name}}" class="col-sm-2 control-label">{{attr.label}}</label>
+        <label for="{{id}}-{{name}}" class="col-sm-2 control-label">{{attr.label}}</label>
         <div class="col-sm-10">
             {{{ctrl-hbs 'ClientField' 'render-fields'}}}
         </div>
@@ -9,7 +9,7 @@
 {{#compare attr.labelAlign "vertical"}}
     <div class="ctrl-group row">
         <div class="form-vertical">
-            <label for="{{id}}-{{attr.name}}">{{attr.label}}</label>
+            <label for="{{id}}-{{name}}">{{attr.label}}</label>
             {{{ctrl-hbs 'ClientField' 'render-fields'}}}
         </div>
     </div>

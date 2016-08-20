@@ -89,16 +89,39 @@ function editModal(ctrl, editing) {
 }
 
 /**
+ * Collects the id, type, name and attributes of a control from the {@link #CTRL_MODAL_FRM}
+ */
+function getCtrlFromEdit() {
+
+    let attr = $('#ctrl-modal-frm').serializeJSON();
+    let name = attr.name;
+    if (!name)
+        throw new Error("Name is required to add a ctrl", attr);
+    delete attr.name;
+    let id = CTRL_MODAL_FRM.data('ctrl-id');
+    if (!id)
+        throw new Error("Id is required to add a ctrl", attr);
+    let type = CTRL_MODAL_FRM.data('ctrl-type');
+    if (!type)
+        throw new Error("Type is required to add a ctrl", attr);
+
+    return {
+        id: id,
+        type: type,
+        name: name,
+        attr: attr
+    };
+
+
+}
+
+/**
  * Pulls the ctrlId, type and data from the edit form. Calls the 'append' function on the ctrl
  * definition when it exists. Append should call {@link #appendCtrl} or return null.
  */
 function addCtrl() {
 
-    let ctrl = {
-        id: CTRL_MODAL_FRM.data('ctrl-id'),
-        type: CTRL_MODAL_FRM.data('ctrl-type'),
-        attr: $('#ctrl-modal-frm').serializeJSON() 
-    };
+    let ctrl = getCtrlFromEdit()
 
     var added = invokeCtrlFunction('append', ctrl);
     if (added == null)
@@ -115,11 +138,7 @@ function addCtrl() {
  */
 function updateCtrl() {
 
-    let ctrl = {
-        id: CTRL_MODAL_FRM.data('ctrl-id'),
-        type: CTRL_MODAL_FRM.data('ctrl-type'),
-        attr: $('#ctrl-modal-frm').serializeJSON()
-    };
+    let ctrl = getCtrlFromEdit();
 
     CTRL_INSTANCES[ctrl.id] = ctrl;
 

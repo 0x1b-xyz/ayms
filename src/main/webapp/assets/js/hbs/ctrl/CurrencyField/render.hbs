@@ -1,10 +1,10 @@
 {{#compare attr.labelAlign "horizontal"}}
 <div class="form-group">
-    <label for="{{attr.name}}-{{id}}" class="col-sm-2 control-label">{{attr.label}}</label>
+    <label for="{{name}}-{{id}}" class="col-sm-2 control-label">{{attr.label}}</label>
     <div class="col-sm-10">
         <div class="input-group">
             <span class="input-group-addon">$</span>
-            <input name="{{id}}-{{attr.name}}" id="{{id}}-{{attr.name}}" type="text" class="form-control" placeholder="{{attr.placeholder}}">
+            <input name="{{id}}-{{name}}" id="{{id}}-{{name}}" type="text" class="form-control" placeholder="{{attr.placeholder}}">
         </div>
     </div>
 </div>
@@ -14,13 +14,13 @@
     <label for="{{name}}-{{id}}">{{attr.label}}</label>
     <div class="input-group">
         <span class="input-group-addon">$</span>
-        <input name="{{id}}-{{attr.name}}" id="{{id}}-{{attr.name}}" type="text" class="form-control" placeholder="{{attr.placeholder}}">
+        <input name="{{id}}-{{name}}" id="{{id}}-{{name}}" type="text" class="form-control" placeholder="{{attr.placeholder}}">
     </div>
 </div>
 {{/compare}}
 {{#compare attr.labelAlign "none"}}
 <div class="input-group">
     <span class="input-group-addon">$</span>
-    <input name="{{id}}-{{attr.name}}" id="{{id}}-{{attr.name}}" type="text" class="form-control" placeholder="{{attr.placeholder}}">
+    <input name="{{id}}-{{name}}" id="{{id}}-{{name}}" type="text" class="form-control" placeholder="{{attr.placeholder}}">
 </div>
 {{/compare}}

@@ -20,7 +20,6 @@
         <table id="formDefinition-tbl" class="table table-hover">
             <thead>
             <tr>
-                <th>#</th>
                 <th>Name</th>
                 <th>Description</th>
                 <th></th>
