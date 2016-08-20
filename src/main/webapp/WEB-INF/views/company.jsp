@@ -20,9 +20,10 @@
         <table id="company-tbl" class="table table-hover">
             <thead>
             <tr>
-                <th>#</th>
                 <th>Name</th>
-                <th>Address</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Zipcode</th>
                 <th></th>
             </tr>
             </thead>

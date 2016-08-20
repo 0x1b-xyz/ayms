@@ -5,6 +5,7 @@
 //= require bootstrap
 //= require handlebars
 //= require handlebars-intl
+//= require jsog
 
 //= require_tree hbs
 
@@ -16,6 +17,9 @@ var URL_PREFIX = '/';
 var TPL_PREFIX = URL_PREFIX + 'static/hbs/';
 
 /**
+ * Pulls the data from the server and handles a Result<T> outcome. Runs the resultSet coming back
+ * through the {@link JSOG#decode} method to handle JSOG references.
+ *
  * @param url Endpoint url, expects a Result<T> outcome
  * @param tpl Template used to append rows
  * @param tbl Table we'll append rows into
@@ -38,9 +42,11 @@ function rows(url, tpl, tbl, clear, callback) {
                 tbody.empty()
             }
 
-            result.data.forEach(function(row) {
+            let data = JSOG.decode(result.data);
+
+            data.forEach(function(row) {
                 tbody.append(getTemplate(tpl)(row));
-            })
+            });
             
             if (typeof callback == 'function')
                 callback(this);

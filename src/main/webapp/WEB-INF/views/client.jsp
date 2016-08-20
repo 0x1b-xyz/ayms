@@ -22,6 +22,7 @@
             <thead>
             <tr>
                 <th>#</th>
+                <th>Company</th>
                 <th>Last Name</th>
                 <th>First Name</th>
                 <th>DOB</th>

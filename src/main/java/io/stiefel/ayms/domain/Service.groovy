@@ -28,13 +28,11 @@ class Service extends AbstractEntity<Long> {
     @ManyToOne(optional = false)
     @JsonView(View.Summary)
     @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-    @JsonIdentityReference(alwaysAsId=false)
     Client client
 
     @ManyToOne(optional = false)
     @JsonView(View.Summary)
     @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-    @JsonIdentityReference(alwaysAsId=false)
     Employee employee
 
     @Column

@@ -29,7 +29,6 @@ class FormCtrl {
     @JoinColumn(name = 'definition_id')
     @JsonView(View.Summary)
     @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-    @JsonIdentityReference(alwaysAsId=true)
     FormDef definition
 
     @Column(nullable = false, length = 50)

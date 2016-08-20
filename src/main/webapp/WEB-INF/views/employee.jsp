@@ -20,8 +20,7 @@
         <table id="employee-tbl" class="table table-hover">
             <thead>
             <tr>
-                <th>#</th>
-                <td>Company</td>
+                <th>Company</th>
                 <th>Name</th>
                 <th>First Name</th>
                 <th>Last Name</th>

@@ -1,7 +1,8 @@
 <tr>
-    <td><a href="{{#url}}/company/{{id}}{{/url}}">{{id}}</a></td>
-    <td>{{name}}</td>
-    <td>{{#if address.line1}}{{address.line1}} {{address.city}}, {{address.state}} {{address.zipCode}}{{/if}}</td>
+    <td><a href="{{#url}}/company/{{id}}{{/url}}">{{name}}</a></td>
+    <td>{{address.city}}</td>
+    <td>{{address.state}}</td>
+    <td>{{address.zipcode}}</td>
     <td>
         <a href="{{#url}}/company/{{id}}/employee{{/url}}" class="btn btn-info" role="button">Employees</a>
         <a href="{{#url}}/company/{{id}}/client{{/url}}" class="btn btn-default" role="button">Clients</a>

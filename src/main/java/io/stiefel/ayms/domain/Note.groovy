@@ -28,13 +28,11 @@ class Note extends AbstractEntity<Long> {
     @ManyToOne(optional = false)
     @JsonView(View.Summary)
     @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-    @JsonIdentityReference(alwaysAsId=true)
     Service service
 
     @ManyToOne(optional = false)
     @JsonView(View.Summary)
     @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-    @JsonIdentityReference(alwaysAsId=true)
     Employee employee
 
     @Column

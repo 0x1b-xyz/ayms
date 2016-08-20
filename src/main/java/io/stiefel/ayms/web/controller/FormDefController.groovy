@@ -23,6 +23,7 @@ import javax.validation.Valid
 @RestController
 @RequestMapping(value = '/formDef')
 @Log4j
+@Transactional(readOnly = true)
 class FormDefController {
 
     @Autowired FormCtrlRepo ctrlRepo

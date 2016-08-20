@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo
 import com.fasterxml.jackson.annotation.JsonIdentityReference
 import com.fasterxml.jackson.annotation.JsonView
 import com.fasterxml.jackson.annotation.ObjectIdGenerators
+import com.voodoodyne.jackson.jsog.JSOGGenerator
 import groovy.transform.Canonical
 import org.hibernate.validator.constraints.NotEmpty
 
@@ -23,8 +24,7 @@ class Client extends AbstractEntity<Long> {
     @ManyToOne(optional = false)
     @JoinColumn(name = 'company_id')
     @JsonView(View.Summary)
-    @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-    @JsonIdentityReference(alwaysAsId=true)
+    @JsonIdentityInfo(generator=JSOGGenerator)
     Company company
 
     @Column(nullable = false, length = 75)
