@@ -18,6 +18,7 @@ function newCtrl() {
     let ctrl = {
         id: ctrlId,
         type: ctrlType,
+        name: ctrlType.toLowerCase() + '-' + uniqueId(),
         attr: {}
     };
 
@@ -48,6 +49,10 @@ function editModal(ctrl, editing) {
     CTRL_MODAL_FRM.data('ctrl-id', ctrl.id);
     CTRL_MODAL_FRM.data('ctrl-type', ctrl.type);
     CTRL_MODAL_FRM.find('.modal-body').html(getTemplate('ctrl/' + ctrl.type + '/edit')(ctrl));
+
+    CTRL_MODAL_FRM.find("input[type='text']").on("click", function () {
+        $(this).select();
+    });
 
     CTRL_MODAL_FRM.validator('destroy');
     CTRL_MODAL_FRM.validator().off('submit');
