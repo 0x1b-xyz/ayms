@@ -30,11 +30,12 @@ function saveResult() {
         beforeSend: function() {
             $.blockUI()
         },
-        success: function() {
-            console.log('Saved results.')
+        success: function(response) {
+            console.log('Saved results, rebinding data ...');
+            bindData(response.data.data)
         },
         complete: function() {
-            loadResult();
+            $.unblockUI()
         }
     })
 

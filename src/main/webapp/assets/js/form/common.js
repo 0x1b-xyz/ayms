@@ -34,14 +34,29 @@ var CTRL_DEFS = {
     'Common': {
 
         /**
-         * Generic "bind" function will quietly attempt to set a value into a single field with a name
-         * matching {@code ctrl.name}.
+         * Generic "bind" function will quietly attempt to map a structure into the fields of a ctrl. Once
+         * values are bound we attempt to call a {@code bound} function on the control.
          */
         bind: function (ctrl, data) {
             try {
-                getCtrlField(ctrl.id, ctrl.name).val(data[ctrl.name]);
+
+                $.each(data, function(field, value) {
+                    var ctrlField = getCtrlField(ctrl.id, field);
+                    if (!ctrlField.length) {
+                        console.log("Could not find ctrl field", ctrl, field);
+                        return;
+                    }
+                    ctrlField.val(value);
+                });
+
+                try {
+                    getCtrlFunction(ctrl.type, 'bound')(ctrl);
+                } catch (e) {
+                    // We'll eat this
+                }
+
             } catch (e) {
-                // oh well, we tried!
+                console.log("Failed to bind data into ctrl", e, ctrl, data)
             }
         }
 
@@ -332,6 +347,12 @@ var CTRL_DEFS = {
                             'address.state': ui.item.address.state,
                             'address.zipcode': ui.item.address.zipcode
                         });
+
+                        // We don't bind these fields into the form so this saves on error messages
+                        $.each(['address','company','label','value'], function(i,key) {
+                            delete client[key];
+                        });
+
                         getCtrlFunction('ClientField', 'bind')(ctrl, client);
                         return false
                     }
@@ -343,21 +364,17 @@ var CTRL_DEFS = {
         },
 
         /**
-         * Binds a client structure into the rendered form
+         * Called after data is bound. We use this opportunity to lock the fields for read-only
+         * when a client-id is selected.
          */
-        bind: function (ctrl, client) {
+        bound: function(ctrl) {
 
-            getCtrlField(ctrl.id, 'lastName').val(client['lastName']);
-            getCtrlField(ctrl.id, 'firstName').val(client['firstName']);
-            getCtrlField(ctrl.id, 'dateOfBirth').val(client['dateOfBirth']);
-            getCtrlField(ctrl.id, 'ssn').val(client['ssn']);
-            getCtrlField(ctrl.id, 'address.line1').val(client['address.line1']);
-            getCtrlField(ctrl.id, 'address.line2').val(client['address.line2']);
-            getCtrlField(ctrl.id, 'address.city').val(client['address.city']);
-            getCtrlField(ctrl.id, 'address.state').val(client['address.state']);
-            getCtrlField(ctrl.id, 'address.zipcode').val(client['address.zipcode']);
+            let clientId = getCtrlField(ctrl.id, 'id');
+
+
 
         }
+
     }
 };
 
@@ -411,7 +428,7 @@ function invokeCtrlFunction(functionName, ctrl) {
  */
 function appendCtrl(ctrl, x, y, width, height, editable) {
 
-    CTRL_INSTANCES[ctrl.id] = ctrl
+    CTRL_INSTANCES[ctrl.id] = ctrl;
 
     let widget = getTemplate('ctrl/wrapper')({
         id: ctrl.id,
@@ -519,10 +536,12 @@ function getCtrlContent(ctrlId) {
  * Looks up a field by id within the {@code #grid-stack-frm}
  *
  * @param ctrlId Identifier of control
- * @param fieldName Name of rendered field in form
+ * @param fieldName Name of rendered field in form. If not specified returns all fields
  */
 function getCtrlField(ctrlId, fieldName) {
-    return $('#grid-stack-frm').find(toId(ctrlId + '-' + fieldName));
+    if (fieldName != undefined)
+        return $('#grid-stack-frm').find(toId(ctrlId + '-' + fieldName));
+    return $('#grid-stack-frm').find('[id^=' + ctrlId + '-]');
 }
 
 /**
