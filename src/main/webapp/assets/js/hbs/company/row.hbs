@@ -4,7 +4,7 @@
     <td>{{address.state}}</td>
     <td>{{address.zipcode}}</td>
     <td>
-        <a href="{{#url}}/company/{{id}}/employee{{/url}}" class="btn btn-info" role="button">Employees</a>
-        <a href="{{#url}}/company/{{id}}/client{{/url}}" class="btn btn-default" role="button">Clients</a>
+        <a href="{{#url}}/employee?company.id={{id}}{{/url}}" class="btn btn-info" role="button">Employees</a>
+        <a href="{{#url}}/client?company.id={{id}}{{/url}}" class="btn btn-default" role="button">Clients</a>
     </td>
 </tr>
