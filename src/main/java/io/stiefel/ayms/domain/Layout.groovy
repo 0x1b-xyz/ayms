@@ -14,19 +14,19 @@ import javax.persistence.Embeddable
 class Layout {
 
     @Column(name = 'layout_x')
-    @JsonView(View.Summary)
+    @JsonView(View.Detail)
     int x;
 
     @Column(name = 'layout_y')
-    @JsonView(View.Summary)
+    @JsonView(View.Detail)
     int y;
 
     @Column(name = 'layout_width')
-    @JsonView(View.Summary)
+    @JsonView(View.Detail)
     int width;
 
     @Column(name = 'layout_height')
-    @JsonView(View.Summary)
+    @JsonView(View.Detail)
     int height;
 
 }

@@ -22,6 +22,8 @@
             <tr>
                 <th>Name</th>
                 <th>Description</th>
+                <th>Created</th>
+                <th>Updated</th>
                 <th></th>
             </tr>
             </thead>

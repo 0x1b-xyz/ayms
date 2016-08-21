@@ -75,25 +75,22 @@ class FormController {
         new ModelAndView("redirect:${resultId}")
     }
 
-    @RequestMapping(path = '/{definitionId}/result/{resultId}/ctrl', method = RequestMethod.GET, produces = 'application/json')
-    @JsonView(View.Summary)
-    Result<List<FormCtrl>> getCtrls(@PathVariable Long definitionId) {
-        new Result(ctrlRepo.findByDefinitionId(definitionId))
-    }
-
     @RequestMapping(path = '/{definitionId}/result/{resultId}', method = RequestMethod.GET, produces = 'text/html')
     ModelAndView getResultHtml(@PathVariable Long definitionId, @PathVariable String resultId) {
         new ModelAndView("form/result", [result: resultRepo.findOneByIdAndDefinitionId(resultId, definitionId)]);
     }
 
     @RequestMapping(path = '/{definitionId}/result/{resultId}', method = RequestMethod.GET, produces = 'application/json')
+    @JsonView(View.Detail)
     Result<FormResult> getResult(@PathVariable Long definitionId, @PathVariable String resultId,
                                  HttpServletResponse response) {
+
         def result = resultRepo.findOneByIdAndDefinitionId(resultId, definitionId)
         if (!result) {
             response.setStatus(404)
             return new Result(false)
         }
+
         new Result(result);
     }
 
@@ -109,21 +106,32 @@ class FormController {
             return new Result(false)
         }
 
-        data.each { ctrlData ->
+        // Collect the detail of what was submitted as a list of tuples
+        List<Map<String,String>> submitted = data.collect { String ctrlId, Map<String,String> ctrlData ->
+            ctrlData.collect { String field, String value ->
+                [ctrlId: ctrlId, name: field, value: value]
+            }
+        }.flatten()
 
-            FormData existing = result.data.find { it.ctrl.id == ctrlData.key }
+        // Attempt to update each data submitted and update any existing values
+        submitted.each { submittedData ->
+            FormData existing = result.data.find { it.ctrl.id == submittedData.ctrlId && it.name == submittedData.name }
             if (existing) {
-                existing.fields.putAll(ctrlData.value)
+                existing.value = submittedData.value
             } else {
-                println "new ${ctrlData.key}"
-                FormData fd = new FormData(result, ctrlRepo.findOne(ctrlData.key))
-                fd.fields = ctrlData.value
+                FormCtrl ctrl = result.definition.ctrls.find { it.id == submittedData.ctrlId }
+                FormData fd = new FormData(result, ctrl,
+                        submittedData.name, submittedData.value)
                 result.data << fd
             }
-
         }
-        result.data.removeAll { !data.find { ctrlData -> ctrlData.key == it.ctrl.id } }
-        result.update()
+
+        // Remove anything we didn't see in the submitted data
+        result.data.removeAll { FormData formData ->
+            !submitted.find { it.ctrlId == formData.ctrl.id && it.name == formData.name }
+        }
+
+        //result.update()
         resultRepo.save(result)
 
         new Result(result)

@@ -1,24 +1,9 @@
 package io.stiefel.ayms.domain
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo
-import com.fasterxml.jackson.annotation.JsonIdentityReference
 import com.fasterxml.jackson.annotation.JsonView
-import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import groovy.transform.Canonical
 
-import javax.persistence.CascadeType
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.OneToMany
-import javax.persistence.PrePersist
-import javax.persistence.PreUpdate
-import javax.persistence.Table
-import javax.persistence.Temporal
-import javax.persistence.TemporalType
+import javax.persistence.*
 
 /**
  * Represents an instance of a completed form
@@ -31,32 +16,32 @@ import javax.persistence.TemporalType
 class FormResult {
 
     @Id
-    @JsonView(View.Summary)
+    @JsonView([View.Summary, View.Detail])
     String id;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = 'definition_id')
-    @JsonView(View.Summary)
-    @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-    @JsonIdentityReference(alwaysAsId=true)
+    @JsonView([View.Summary, View.Detail])
     FormDef definition
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonView(View.Summary)
+    @JsonView([View.Summary, View.Detail])
     Date created = new Date()
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonView(View.Summary)
+    @JsonView([View.Summary, View.Detail])
     Date updated
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = 'result', cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = 'result', cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonView([View.Detail])
     List<FormData> data
 
     @PreUpdate
     @PrePersist
     void update() {
+        10.times { println "!!!! UPDATING FORM RESULT"}
         updated = new Date()
     }
 

@@ -1,13 +1,14 @@
 //= require form/common
 
-var GRID_FRM;
+var AYM_FORM;
 
 /**
- * Collects the results of the form and saves them
+ * Collects the results of the form and saves them. Each field in the form must be named {@code ctrl-name}
+ * as they will be pushed into a map of structs keyed by ctrl
  */
 function saveResult() {
 
-    let result = $(GRID_FRM).serializeJSON();
+    let result = $(AYM_FORM).serializeJSON();
     console.log(result);
 
     let ctrls = {};
@@ -56,22 +57,14 @@ function loadResult(callback) {
 
             $('#result-dtl').html(getTemplate('form/result-dtl')(response.data));
 
-            response.data.data.forEach(function (ctrlData) {
-                try {
-                    let ctrl = getCtrlInstance(ctrlData.ctrl);
-                    console.log('binding into', ctrl);
-                    try {
-                        getCtrlFunction(ctrl.type, 'bind')(ctrl, ctrlData.fields)
-                    } catch (e) {
-                        console.log(e, "Could not bind data into ctrl", ctrlData, ctrl)
-                    }
-                } catch (e) {
-                    console.log(e, "Could not find ctrl", ctrlData)
-                }
+            renderDefinition(response.data.definition, false);
 
-            });
+            // May not have results yet
+            if (response.data.data)
+                bindData(response.data.data);
 
             console.log('Loaded results.')
+
         },
         complete: function() {
             if (typeof callback == 'function')
@@ -84,12 +77,10 @@ function loadResult(callback) {
 
 $(document).ready(function () {
 
-    GRID_FRM = $('#grid-stack-frm');
+    AYM_FORM = $('#grid-stack-frm');
 
     $('#grid-stack-frm-submit').on('click', saveResult);
 
-    loadCtrls(false, function() {
-        loadResult()
-    });
+    loadResult();
 
 });

@@ -7,10 +7,15 @@ import org.hibernate.validator.constraints.NotEmpty
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.OneToMany
+import javax.persistence.PrePersist
+import javax.persistence.PreUpdate
 import javax.persistence.Table
+import javax.persistence.Temporal
+import javax.persistence.TemporalType
 
 /**
  * @author jason@stiefel.io
@@ -21,16 +26,33 @@ import javax.persistence.Table
 class FormDef extends AbstractEntity<Long> {
 
     @Column(unique = true, nullable = false, length = 100)
-    @JsonView(View.Summary)
+    @JsonView([View.Summary, View.Detail])
     @NotEmpty
     String name;
 
     @Column
-    @JsonView(View.Summary)
+    @JsonView([View.Summary, View.Detail])
     @NotEmpty
     String description;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = 'definition')
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonView([View.Summary, View.Detail])
+    Date created = new Date()
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonView([View.Summary, View.Detail])
+    Date updated
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = 'definition', fetch = FetchType.EAGER)
+    @JsonView([View.Detail])
     List<FormCtrl> ctrls;
+
+    @PreUpdate
+    @PrePersist
+    void update() {
+        updated = new Date()
+    }
 
 }

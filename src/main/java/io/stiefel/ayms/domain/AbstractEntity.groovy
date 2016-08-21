@@ -13,12 +13,17 @@ import javax.persistence.MappedSuperclass
  */
 @MappedSuperclass
 @EqualsAndHashCode
-@ToString
 abstract class AbstractEntity<K> implements Serializable {
 
     @Id
     @GeneratedValue
-    @JsonView(View.Summary)
+    @JsonView([View.Summary, View.Detail])
     K id;
+
+
+    @Override
+    public String toString() {
+        "${getClass().simpleName}{id=${id}}"
+    }
 
 }

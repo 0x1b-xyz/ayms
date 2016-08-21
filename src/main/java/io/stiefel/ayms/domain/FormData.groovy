@@ -2,10 +2,12 @@ package io.stiefel.ayms.domain
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo
 import com.fasterxml.jackson.annotation.JsonIdentityReference
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonView
 import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import groovy.transform.Canonical
 import groovy.transform.EqualsAndHashCode
+import groovy.transform.TupleConstructor
 import org.hibernate.validator.constraints.NotEmpty
 
 import javax.persistence.CollectionTable
@@ -24,40 +26,30 @@ import javax.persistence.UniqueConstraint
  */
 @Entity
 @Table(name = 'aym_form_data', uniqueConstraints = [
-        @UniqueConstraint(columnNames = ["result_id", "ctrl_id"])
+        @UniqueConstraint(columnNames = ["result_id", "ctrl_id", "name"])
 ])
-@Canonical
+@TupleConstructor
 class FormData extends AbstractEntity<Long> {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = 'result_id')
-    @JsonView(View.Summary)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator, property = 'id')
-    @JsonIdentityReference(alwaysAsId = true)
+    @JsonIgnore
     FormResult result
 
     @ManyToOne(optional = false)
     @JoinColumn(name = 'ctrl_id')
-    @JsonView(View.Summary)
     @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-    @JsonIdentityReference(alwaysAsId=true)
+    @JsonIdentityReference(alwaysAsId = true)
+    @JsonView([View.Summary,View.Detail])
     FormCtrl ctrl
 
-    @Column(name = 'value', nullable = true)
-    @ElementCollection(fetch = FetchType.EAGER)
-    @MapKeyColumn(name = "key")
-    @CollectionTable(name = "aym_form_data_field",
-            joinColumns = @JoinColumn(name = "data_id"))
-    @JsonView(View.Summary)
+    @Column(nullable = false)
     @NotEmpty
-    Map<String,String> fields;
+    @JsonView([View.Summary,View.Detail])
+    String name
 
-    @Override
-    public String toString() {
-        return "FormData{" +
-                "ctrl=" + ctrl +
-                ", fields=" + fields +
-                '}';
-    }
+    @Column(nullable = true)
+    @JsonView([View.Summary,View.Detail])
+    String value
 
 }

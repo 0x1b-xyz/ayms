@@ -8,4 +8,5 @@ package io.stiefel.ayms.domain
  */
 class View {
     interface Summary {}
+    interface Detail {}
 }

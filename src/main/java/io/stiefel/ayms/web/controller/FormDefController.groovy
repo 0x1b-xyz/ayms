@@ -47,6 +47,7 @@ class FormDefController {
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = 'application/json')
+    @Transactional(readOnly = false)
     Result<Long> save(@Valid FormDef formDefinition, BindingResult binding) {
         if (binding.hasErrors())
             return new Result(false, null).binding(binding)
@@ -54,13 +55,15 @@ class FormDefController {
         new Result(formDefinition.id)
     }
 
-    @RequestMapping(path = '/{formDefId}/ctrl', method = RequestMethod.GET, produces = "application/json")
-    @JsonView(View.Summary)
-    Result<List<FormCtrl>> findAll(@PathVariable Long formDefId) {
-        new Result(ctrlRepo.findByDefinitionId(formDefId))
+    @RequestMapping(path = '/{definitionId}', method = RequestMethod.GET, produces = "application/json")
+    @JsonView(View.Detail)
+    Result<FormDef> get(@PathVariable Long definitionId) {
+        def formDef = repo.findOne(definitionId)
+        new Result(formDef)
     }
 
     @RequestMapping(path = '/{definitionId}/ctrl', method = RequestMethod.POST)
+    @Transactional(readOnly = false)
     void replace(@PathVariable Long definitionId,
                  @RequestBody List<FormCtrl> ctrls, HttpServletResponse response) {
 
@@ -80,9 +83,10 @@ class FormDefController {
 
         ctrls.each { ctrl ->
 
+            ctrl.definition = formDef
+
             log.debug("Saving control: ${ctrl} ...")
 
-            ctrl.definition = formDef
             ctrlRepo.save(ctrl);
 
         }

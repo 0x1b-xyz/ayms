@@ -21,7 +21,8 @@
         <table id="formResult-tbl" class="table table-hover">
             <thead>
             <tr>
-                <th>#</th>
+                <th>Definition</th>
+                <th>Form</th>
                 <th>Created</th>
                 <th>Updated</th>
                 <th></th>

@@ -126,7 +126,7 @@ function getCtrlFromEdit() {
  */
 function addCtrl() {
 
-    let ctrl = getCtrlFromEdit()
+    let ctrl = getCtrlFromEdit();
 
     var added = invokeCtrlFunction('append', ctrl);
     if (added == null)
@@ -215,7 +215,6 @@ function removeCtrl(ctrlId) {
 $(document).ready(function () {
 
     Handlebars.registerHelper('default-edit-fields', function(options) {
-        console.log(options);
         return getTemplate('ctrl/default-edit-fields')(this)
     });
     

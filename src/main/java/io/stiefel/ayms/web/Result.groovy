@@ -16,16 +16,16 @@ import org.springframework.validation.FieldError
 @EqualsAndHashCode
 class Result<T> implements Serializable {
 
-    @JsonView(View.Summary)
+    @JsonView([View.Summary, View.Detail])
     boolean success = true
 
-    @JsonView(View.Summary)
+    @JsonView([View.Summary, View.Detail])
     List<Field> fields
 
-    @JsonView(View.Summary)
+    @JsonView([View.Summary, View.Detail])
     T data
 
-    @JsonView(View.Summary)
+    @JsonView([View.Summary, View.Detail])
     String message
 
 
