@@ -16,7 +16,7 @@
         <li class="active">Companies</li>
     </ol>
     <div class="table-responsive">
-        <caption>table caption</caption>
+        <%--<caption>table caption</caption>--%>
         <table id="company-tbl" class="table table-hover">
             <thead>
             <tr>

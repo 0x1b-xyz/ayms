@@ -36,7 +36,7 @@
             <li><a href="<s:url value="/company"/>">Companies</a></li>
             <li><a href="<s:url value="/employee"/>">Employees</a></li>
             <li><a href="<s:url value="/client"/>">Clients</a></li>
-            <li><a href="<s:url value="/formDef"/>">Forms</a></li>
+            <li><a href="<s:url value="/form"/>">Forms</a></li>
         </ul>
     </div>
 

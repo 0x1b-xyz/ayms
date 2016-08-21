@@ -31,6 +31,9 @@ function rows(url, tpl, tbl, clear, callback) {
         clear = true;
     var tbody = jQuery(tbl + ' > tbody');
 
+    if (!tbody.length)
+        throw new Error("Could not find tbody to render rows into", tbody);
+
     jQuery.ajax(url, {
         accepts: {
             json: 'application/json'
@@ -66,6 +69,9 @@ function rows(url, tpl, tbl, clear, callback) {
 function form(frm, tpl, tbl) {
 
     var form = jQuery(frm);
+
+    if (!form.length)
+        throw new Error("Could not find form to bind", frm);
 
     form.submit(function (e) {
 

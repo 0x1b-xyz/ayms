@@ -12,11 +12,11 @@
 
 <div class="row">
 
-    <h2>${formDef.name} <small>${formDef.description}</small></h2>
+    <h2>${definition.name} <small>${definition.description}</small></h2>
     <ol class="breadcrumb">
         <li><a href="<s:url value="/"/>">Home</a></li>
-        <li><a href="<s:url value="/formDef"/>">Form Definitions</a></li>
-        <li class="active">${formDef.name}</li>
+        <li><a href="<s:url value="/form"/>">Form Definitions</a></li>
+        <li class="active">${definition.name}</li>
     </ol>
 
     <div class="col-lg-10">
@@ -25,8 +25,8 @@
             <hr>
             <div class="grid-stack"></div>
             <hr>
-            <a href="<s:url value="/formDef/${formDef.id}/delete"/>" type="button" role="button" class="btn btn-danger">Delete</a>
-            <a href="<s:url value="/formDef"/>" type="button" role="button" class="btn btn-default">Cancel</a>
+            <a href="<s:url value="/form/${definition.id}/delete"/>" type="button" role="button" class="btn btn-danger">Delete</a>
+            <a href="<s:url value="/form"/>" type="button" role="button" class="btn btn-default">Cancel</a>
             <button id="grid-stack-frm-submit" type="button" class="btn btn-primary">Save</button>
         </form>
 

@@ -16,8 +16,8 @@
         <li class="active">Form Definitions</li>
     </ol>
     <div class="table-responsive">
-        <caption>table caption</caption>
-        <table id="formDefinition-tbl" class="table table-hover">
+        <%--<caption>table caption</caption>--%>
+        <table id="definition-tbl" class="table table-hover">
             <thead>
             <tr>
                 <th>Name</th>
@@ -41,7 +41,7 @@
         submitting again.
     </div>
 
-    <form class="form-horizontal" id="formDefinition-frm" method="post">
+    <form class="form-horizontal" id="definition-frm" method="post">
         <div class="form-group">
             <label for="name" class="col-sm-2 control-label">Name</label>
             <div class="col-sm-8">
@@ -67,8 +67,8 @@
 <script type="text/javascript">
     jQuery(document).ready(function () {
 
-        rows('', 'form/definition-row', '#formDefinition-tbl');
-        form('#formDefinition-frm', 'form/definition-row', '#formDefinition-tbl')
+        rows('', 'form/definition-row', '#definition-tbl');
+        form('#definition-frm', 'form/definition-row', '#definition-tbl')
 
     })
 </script>

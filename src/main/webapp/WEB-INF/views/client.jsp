@@ -17,7 +17,7 @@
         <li class="active">Clients</li>
     </ol>
     <div class="table-responsive">
-        <caption>table caption</caption>
+        <%--<caption>table caption</caption>--%>
         <table id="client-tbl" class="table table-hover">
             <thead>
             <tr>

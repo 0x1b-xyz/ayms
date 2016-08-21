@@ -13,12 +13,12 @@
     <h2>${definition.description} Results</h2>
     <ol class="breadcrumb">
         <li><a href="<s:url value="/"/>">Home</a></li>
-        <li><a href="<s:url value="/formDef"/>">Form Definitions</a></li>
+        <li><a href="<s:url value="/form"/>">Form Definitions</a></li>
         <li class="active">${definition.name}</li>
     </ol>
     <div class="table-responsive">
-        <caption>table caption</caption>
-        <table id="formResult-tbl" class="table table-hover">
+        <%--<caption>table caption</caption>--%>
+        <table id="result-tbl" class="table table-hover">
             <thead>
             <tr>
                 <th>Definition</th>
@@ -39,7 +39,7 @@
 <script type="text/javascript">
     jQuery(document).ready(function () {
 
-        rows('', 'form/result-row', '#formResult-tbl', function() {
+        rows('', 'form/result-row', '#result-tbl', function() {
 
         });
 
