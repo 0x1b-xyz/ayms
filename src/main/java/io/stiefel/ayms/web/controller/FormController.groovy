@@ -150,6 +150,7 @@ class FormController {
     }
 
     @RequestMapping(path = '/{definitionId}/result', method = RequestMethod.GET, produces = 'application/json')
+    @JsonView(View.Summary)
     Result<List<FormResult>> listResult(@PathVariable Long definitionId) {
         new Result(resultRepo.findAllByDefinitionId(definitionId));
     }
