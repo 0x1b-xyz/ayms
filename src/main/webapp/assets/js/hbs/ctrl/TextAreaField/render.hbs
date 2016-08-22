@@ -1,17 +1,17 @@
 {{#compare attr.labelAlign "horizontal"}}
 <div class="form-group">
-    <label for="{{name}}-{{id}}" class="col-sm-2 control-label">{{attr.label}}</label>
+    <label for="{{name}}-{{name}}" class="col-sm-2 control-label">{{attr.label}}</label>
     <div class="col-sm-10 form-control-wrapper">
-        <textarea class="form-control" name="{{id}}-{{name}}" id="{{id}}-{{name}}" placeholder="{{attr.placeholder}}"></textarea>
+        <textarea class="form-control" name="{{name}}-{{name}}" id="{{name}}-{{name}}" placeholder="{{attr.placeholder}}"></textarea>
     </div>
 </div>
 {{/compare}}
 {{#compare attr.labelAlign "vertical"}}
 <div class="form-vertical">
     <label for="{{name}}">{{attr.label}}</label>
-    <textarea class="form-control" name="{{id}}-{{name}}" id="{{id}}-{{name}}" placeholder="{{attr.placeholder}}"></textarea>
+    <textarea class="form-control" name="{{name}}-{{name}}" id="{{name}}-{{name}}" placeholder="{{attr.placeholder}}"></textarea>
 </div>
 {{/compare}}
 {{#compare attr.labelAlign "none"}}
-<textarea class="form-control" name="{{id}}-{{name}}" id="{{id}}-{{name}}" placeholder="{{attr.placeholder}}"></textarea>
+<textarea class="form-control" name="{{name}}-{{name}}" id="{{name}}-{{name}}" placeholder="{{attr.placeholder}}"></textarea>
 {{/compare}}

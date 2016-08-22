@@ -1,13 +1,13 @@
 {{{hbs 'ctrl/name-edit-field'}}}
 <div class="form-group">
-    <label for="label-{{id}}" class="col-sm-2 control-label">Label</label>
+    <label for="label-{{name}}" class="col-sm-2 control-label">Label</label>
     <div class="col-sm-9">
         <div class="form-group inner-form-group">
             <div class="col-sm-7">
-                <input name="label" id="label-{{id}}" type="text" class="form-control" placeholder="Label Text" value="{{attr.label}}">
+                <input name="label" id="label-{{name}}" type="text" class="form-control" placeholder="Label Text" value="{{attr.label}}">
             </div>
             <div class="col-sm-5">
-                <select name="labelAlign" id="labelAlign-{{id}}" class="form-control">
+                <select name="labelAlign" id="labelAlign-{{name}}" class="form-control">
                     <option value="horizontal" {{#compare attr.labelAlign "horizontal"}}selected{{/compare}}>Horizontal</option>
                     <option value="vertical" {{#compare attr.labelAlign "vertical"}}selected{{/compare}}>Vertical</option>
                     <option value="none" {{#compare attr.labelAlign "none"}}selected{{/compare}}>None</option>
@@ -17,8 +17,8 @@
     </div>
 </div>
 <div class="form-group">
-    <label for="placeholder-{{id}}" class="col-sm-2 control-label">Placeholder</label>
+    <label for="placeholder-{{name}}" class="col-sm-2 control-label">Placeholder</label>
     <div class="col-sm-9">
-        <input name="placeholder" id="placeholder-{{id}}" type="text" class="form-control" placeholder="Placeholder Text" value="{{attr.placeholder}}">
+        <input name="placeholder" id="placeholder-{{name}}" type="text" class="form-control" placeholder="Placeholder Text" value="{{attr.placeholder}}">
     </div>
 </div>

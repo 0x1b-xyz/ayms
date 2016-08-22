@@ -12,25 +12,15 @@
 
 <div class="row">
 
-    <h2>${result.definition.name} <small>${result.definition.description}</small></h2>
-    <ol class="breadcrumb">
-        <li><a href="<s:url value="/"/>">Home</a></li>
-        <li class="active"><a href="<s:url value="/form/${result.definition.id}/result"/>">${result.definition.description}</a></li>
-    </ol>
-
     <div id="result-dtl"></div>
 
-        <form id="grid-stack-frm" method="post" class="form-horizontal">
-            <div class="grid-stack"></div>
-            <hr>
-            <a href="<s:url value="/form/${result.definition.id}/result/${result.id}/delete"/>" type="button" role="button" class="btn btn-danger">Delete</a>
-            <a href="<s:url value="/form/${result.definition.id}/result"/>" type="button" role="button" class="btn btn-default">Cancel</a>
-            <button id="grid-stack-frm-submit" type="button" class="btn btn-primary">Save</button>
-        </form>
-
-    </div>
-
-</div>
+    <form id="grid-stack-frm" method="post" class="form-horizontal">
+        <div class="grid-stack"></div>
+        <hr>
+        <a href="<s:url value="/form/${definitionId}/result/${resultId}/delete"/>" type="button" role="button" class="btn btn-danger">Delete</a>
+        <a href="<s:url value="/form/${definitionId}/result"/>" type="button" role="button" class="btn btn-default">Cancel</a>
+        <button id="grid-stack-frm-submit" type="button" class="btn btn-primary">Save</button>
+    </form>
 
 </body>
 </html>

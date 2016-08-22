@@ -2,6 +2,10 @@ package io.stiefel.ayms.domain
 
 import com.fasterxml.jackson.annotation.JsonView
 import groovy.transform.Canonical
+import org.hibernate.annotations.Fetch
+import org.hibernate.annotations.FetchMode
+import org.hibernate.annotations.Type
+import org.hibernate.annotations.TypeDef
 
 import javax.persistence.*
 
@@ -34,14 +38,14 @@ class FormResult {
     @JsonView([View.Summary, View.Detail])
     Date updated
 
-    @OneToMany(mappedBy = 'result', cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = 'id.result', cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonView([View.Detail])
+    @Fetch(FetchMode.SELECT)
     List<FormData> data
 
     @PreUpdate
     @PrePersist
     void update() {
-        10.times { println "!!!! UPDATING FORM RESULT"}
         updated = new Date()
     }
 

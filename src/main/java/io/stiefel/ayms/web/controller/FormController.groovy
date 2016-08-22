@@ -1,9 +1,12 @@
 package io.stiefel.ayms.web.controller
 
 import com.fasterxml.jackson.annotation.JsonView
+import groovy.json.JsonOutput
 import groovy.util.logging.Log4j
 import io.stiefel.ayms.domain.FormCtrl
+import io.stiefel.ayms.domain.FormCtrlId
 import io.stiefel.ayms.domain.FormData
+import io.stiefel.ayms.domain.FormDataId
 import io.stiefel.ayms.domain.FormDef
 import io.stiefel.ayms.domain.FormResult
 import io.stiefel.ayms.domain.View
@@ -90,34 +93,47 @@ class FormController {
         new Result(defRepo.findOne(definitionId))
     }
 
-    @RequestMapping(path = '/{definitionId}/ctrl', method = RequestMethod.POST)
+    @RequestMapping(path = '/{definitionId}/ctrl', method = RequestMethod.POST, produces = 'application/json')
     @Transactional(readOnly = false)
-    void saveCtrls(@PathVariable Long definitionId,
-                   @RequestBody List<FormCtrl> ctrls, HttpServletResponse response) {
+    Result<FormDef> saveCtrls(@PathVariable Long definitionId,
+                                @RequestBody List<FormCtrl> ctrls,
+                              HttpServletResponse response) {
 
-        FormDef formDef = defRepo.findOne(definitionId)
+        FormDef definition = defRepo.findOne(definitionId)
+        if (!definition)
+            response.sendError(404)
 
-        List<String> existingCtrls = ctrlRepo.findIdByDefinitionId(definitionId)
-        List<String> deletedCtrls = existingCtrls.findAll { String existingId ->
-            !ctrls.find { it.id == existingId }
+        List<String> submitted = ctrls.collect { it.name }
+        List<String> deleted = definition.ctrls.findAll { !submitted.contains(it.name) }.collect { it.name }
+        deleted.each { deletedCtrl ->
+            if (definition.ctrls.removeAll { it.name == deletedCtrl }) {
+                dataRepo.deleteForDefinitionIdAndCtrl(definition.id, deletedCtrl)
+                ctrlRepo.delete(new FormCtrlId(definition, deletedCtrl))
+            }
         }
 
-        deletedCtrls.each {
-            log.debug("Removing control: ${it} ...")
+        ctrls.each { submittedCtrl ->
+
+            FormCtrl ctrl = definition.ctrls.find { submittedCtrl.id.name == it.id.name }
+            if (!ctrl) {
+                submittedCtrl.id.definition = definition
+                definition.ctrls << submittedCtrl
+                return;
+            }
+
+            // This is kind of lame for updating attributes on an existing control, right?
+            ctrl.attr = submittedCtrl.attr
+            ctrl.id.definition = definition
+            ctrl.layout = submittedCtrl.layout
+            ctrl.name = submittedCtrl.name
+            ctrl.type = submittedCtrl.type
+
         }
-        deletedCtrls.each { ctrlRepo.delete(it) }
 
-        ctrls.each { ctrl ->
+        defRepo.save(definition)
 
-            ctrl.definition = formDef
+        new Result(definition);
 
-            log.debug("Saving control: ${ctrl} ...")
-
-            ctrlRepo.save(ctrl);
-
-        }
-
-        response.status = 200
     }
 
     @Transactional(readOnly = false)
@@ -149,8 +165,11 @@ class FormController {
     }
 
     @RequestMapping(path = '/{definitionId}/result/{resultId}', method = RequestMethod.GET, produces = 'text/html')
-    ModelAndView getResultHtml(@PathVariable Long definitionId, @PathVariable String resultId) {
-        new ModelAndView("form/result", [result: resultRepo.findOneByIdAndDefinitionId(resultId, definitionId)]);
+    ModelAndView getResultHtml(@PathVariable Long definitionId, @PathVariable String resultId,
+                               HttpServletResponse response) {
+        if (!resultRepo.exists(resultId))
+            return response.sendError(404)
+        new ModelAndView("form/result", [definitionId: definitionId, resultId: resultId]);
     }
 
     @RequestMapping(path = '/{definitionId}/result/{resultId}', method = RequestMethod.GET, produces = 'application/json')
@@ -180,20 +199,20 @@ class FormController {
         }
 
         // Collect the detail of what was submitted as a list of tuples
-        List<Map<String,String>> submitted = data.collect { String ctrlId, Map<String,String> ctrlData ->
+        List<Map<String,String>> submitted = data.collect { String ctrl, Map<String,String> ctrlData ->
             ctrlData.collect { String field, String value ->
-                [ctrlId: ctrlId, name: field, value: value]
+                [ctrl: ctrl, name: field, value: value]
             }
         }.flatten()
 
         // Attempt to update each data submitted and update any existing values
         submitted.each { submittedData ->
-            FormData existing = result.data.find { it.ctrl.id == submittedData.ctrlId && it.name == submittedData.name }
+            FormData existing = result.data.find { it.id.ctrl.name == submittedData.ctrl }
             if (existing) {
                 existing.value = submittedData.value
             } else {
-                FormCtrl ctrl = result.definition.ctrls.find { it.id == submittedData.ctrlId }
-                FormData fd = new FormData(result, ctrl,
+                FormCtrl ctrl = result.definition.ctrls.find { it.name == submittedData.ctrl }
+                FormData fd = new FormData(new FormDataId(result, ctrl),
                         submittedData.name, submittedData.value)
                 result.data << fd
             }
@@ -201,10 +220,10 @@ class FormController {
 
         // Remove anything we didn't see in the submitted data
         result.data.removeAll { FormData formData ->
-            !submitted.find { it.ctrlId == formData.ctrl.id && it.name == formData.name }
+            !submitted.find { it.ctrl == formData.id.ctrl.name }
         }
 
-        //result.update()
+        result.update()
         resultRepo.save(result)
 
         new Result(result)

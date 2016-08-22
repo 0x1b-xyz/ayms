@@ -99,6 +99,10 @@ body {
     background: none;
 }
 
+.nav {
+    margin-bottom: 20px;
+}
+
 @media(min-width:768px) {
     #wrapper {
         padding-left: 150px;

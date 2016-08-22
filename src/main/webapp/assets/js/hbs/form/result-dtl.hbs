@@ -1,8 +1,14 @@
+<h2>{{definition.name}} <small>{{definition.description}}</small></h2>
+<ol class="breadcrumb">
+    <li><a href="{{#url}}{{/url}}">Home</a></li>
+    <li class="active"><a href="{{#url}}/form/{{definition.id}}/result{{/url}}">{{definition.description}}</a></li>
+</ol>
+
 <dl class="dl-horizontal">
     <dt>Created</dt>
-    <dd id="result-dtl-created">{{formatTime created}}</dd>
+    <dd id="result-dtl-created">{{formatTime definition.created}}</dd>
     <dt>Updated</dt>
-    <dd id="result-dtl-updated">{{formatRelative updated}}</dd>
+    <dd id="result-dtl-updated">{{formatRelative definition.updated}}</dd>
     <dt>Author</dt>
     <dd id="result-dtl-author"></dd>
 </dl>

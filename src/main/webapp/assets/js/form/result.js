@@ -9,13 +9,12 @@ var AYM_FORM;
 function saveResult() {
 
     let result = $(AYM_FORM).serializeJSON();
-    console.log(result);
 
     let ctrls = {};
     for (var field in result) {
         if (!result.hasOwnProperty(field))
             continue;
-        let matcher = field.match(CTRL_ID_RE);
+        let matcher = field.match(CTRL_FIELD_NAME_RE);
         let ctrlId = matcher[1];
         let fieldName = matcher[2];
         let fieldData = []; fieldData[fieldName] = result[field];
@@ -32,6 +31,7 @@ function saveResult() {
         },
         success: function(response) {
             console.log('Saved results, rebinding data ...');
+            renderDefinition(response.data.definition);
             bindData(response.data.data)
         },
         complete: function() {

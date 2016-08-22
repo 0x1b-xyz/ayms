@@ -1,21 +1,64 @@
-{{{default-edit-fields}}}
-<div class="form-group">
-    <label for="type-{{id}}" class="col-sm-2 control-label">Type</label>
-    <div class="col-sm-9">
-        <select name="type" id="type-{{id}}" class="form-control">
-            <option value="text" {{#compare attr.type "text"}}selected{{/compare}}>Text</option>
-            <option value="date" {{#compare attr.type "date"}}selected{{/compare}}>Date</option>
-            <option value="datetime-local" {{#compare attr.type "datetime-local"}}selected{{/compare}}>Date/Time</option>
-            <option value="time" {{#compare attr.type "time"}}selected{{/compare}}>Time</option>
-            <option value="password" {{#compare attr.type "password"}}selected{{/compare}}>Password</option>
-            <option value="number" {{#compare attr.type "number"}}selected{{/compare}}>Number</option>
-            <option value="color" {{#compare attr.type "color"}}selected{{/compare}}>Color</option>
-        </select>
+
+<div>
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#fields-pnl" aria-controls="fields" role="tab" data-toggle="tab">Field</a></li>
+    <li role="presentation"><a href="#meta-pnl" aria-controls="meta" role="tab" data-toggle="tab">Meta</a></li>
+</ul>
+
+<div class="tab-content">
+
+    <div role="tabpanel" class="tab-pane active" id="fields-pnl">
+
+        {{{default-edit-fields}}}
+        <div class="form-group">
+            <label for="type-{{name}}" class="col-sm-2 control-label">Type</label>
+            <div class="col-sm-9">
+                <select name="type" id="type-{{name}}" class="form-control">
+                    <option value="text" {{#compare attr.type "text"}}selected{{/compare}}>Text</option>
+                    <option value="date" {{#compare attr.type "date"}}selected{{/compare}}>Date</option>
+                    <option value="datetime-local" {{#compare attr.type "datetime-local"}}selected{{/compare}}>Date/Time</option>
+                    <option value="time" {{#compare attr.type "time"}}selected{{/compare}}>Time</option>
+                    <option value="password" {{#compare attr.type "password"}}selected{{/compare}}>Password</option>
+                    <option value="number" {{#compare attr.type "number"}}selected{{/compare}}>Number</option>
+                    <option value="color" {{#compare attr.type "color"}}selected{{/compare}}>Color</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="maxlength-{{name}}" class="col-sm-2 control-label">Max Length</label>
+            <div class="col-sm-2">
+                <input name="maxlength" id="maxlength-{{name}}" type="number" class="form-control" placeholder="" size="5" value="{{attr.maxlength}}">
+            </div>
+        </div>
+
     </div>
+
+    <div role="tabpanel" class="tab-pane" id="meta-pnl">
+
+        <div class="checkbox">
+            <label>
+                <input name="required" type="checkbox" value="true" {{#compare attr.required "true"}}checked{{/compare}}>
+                Field is required to submit the form.
+            </label>
+        </div>
+
+        <div class="checkbox">
+            <label>
+                <input name="summary" type="checkbox" value="true" {{#compare attr.summaey "true"}}checked{{/compare}}>
+                Field appears in form result summaries.
+            </label>
+        </div>
+
+        <div class="checkbox">
+            <label>
+                <input name="searchable" type="checkbox" value="true" {{#compare attr.searchable "true"}}checked{{/compare}}>
+                Field is searchable.
+            </label>
+        </div>
+
+    </div>
+
 </div>
-<div class="form-group">
-    <label for="maxlength-{{id}}" class="col-sm-2 control-label">Max Length</label>
-    <div class="col-sm-2">
-        <input name="maxlength" id="maxlength-{{id}}" type="number" class="form-control" placeholder="" size="5" value="{{attr.maxlength}}">
-    </div>
+
+
 </div>

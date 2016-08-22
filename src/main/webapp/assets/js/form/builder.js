@@ -6,19 +6,20 @@ var APPEND_W_DEFAULT = 12;
 var APPEND_H_DEFAULT = 2;
 
 /**
- * Renders the {@code ctrl-CTRLTYPE-edit} template into the edit modal. Once the initial rendering
- * is completed we look for a method called {@code load_CTRLID} that we'll pass whatever data we
- * have to. It's the responsibility of this method to push the {@code ctrl} values into the
- * rendered form.
+ * Builds a new ctrl and passes it to {@link #editModal}
  */
 function newCtrl() {
 
-    let ctrlId = uniqueId();
     let ctrlType = $(this).data('ctrl-type');
+    let ctrlIdx = $.map(CTRL_INSTANCES, function(name, ctrl) {
+        if (ctrl.type != ctrlType)
+            return null;
+        return ctrl.name
+    }).length;
+
     let ctrl = {
-        id: ctrlId,
         type: ctrlType,
-        name: ctrlType.toLowerCase() + '-' + uniqueId(),
+        name: ctrlType.toLowerCase() + ctrlIdx,
         attr: {}
     };
 
@@ -28,12 +29,11 @@ function newCtrl() {
 
 /**
  * Edits a control by pulling up the edit form
+ * 
+ * @param name Name of control to edit
  */
-function editCtrl(ctrlId) {
-
-    let ctrl = getCtrlInstance(ctrlId);
-    editModal(ctrl, true);
-
+function editCtrl(name) {
+    editModal(getCtrlInstance(name), true);
 }
 
 /**
@@ -46,7 +46,6 @@ function editModal(ctrl, editing) {
 
     CTRL_MODAL.find('.modal-title').html(CTRL_DEFS[ctrl.type].label);
 
-    CTRL_MODAL_FRM.data('ctrl-id', ctrl.id);
     CTRL_MODAL_FRM.data('ctrl-type', ctrl.type);
     CTRL_MODAL_FRM.find('.modal-body').html(getTemplate('ctrl/' + ctrl.type + '/edit')(ctrl));
 
@@ -76,7 +75,7 @@ function editModal(ctrl, editing) {
 
         deleteBtn.off('click');
         deleteBtn.on('click', function() {
-            removeCtrl(ctrl.id);
+            removeCtrl(ctrl);
         });
         deleteBtn.removeClass('hidden');
 
@@ -94,7 +93,7 @@ function editModal(ctrl, editing) {
 }
 
 /**
- * Collects the id, type, name and attributes of a control from the {@link #CTRL_MODAL_FRM}
+ * Collects the type, name and attributes of a control from the {@link #CTRL_MODAL_FRM}
  */
 function getCtrlFromEdit() {
 
@@ -103,15 +102,11 @@ function getCtrlFromEdit() {
     if (!name)
         throw new Error("Name is required to add a ctrl", attr);
     delete attr.name;
-    let id = CTRL_MODAL_FRM.data('ctrl-id');
-    if (!id)
-        throw new Error("Id is required to add a ctrl", attr);
     let type = CTRL_MODAL_FRM.data('ctrl-type');
     if (!type)
         throw new Error("Type is required to add a ctrl", attr);
 
     return {
-        id: id,
         type: type,
         name: name,
         attr: attr
@@ -121,7 +116,7 @@ function getCtrlFromEdit() {
 }
 
 /**
- * Pulls the ctrlId, type and data from the edit form. Calls the 'append' function on the ctrl
+ * Pulls the ctrl, type and data from the edit form. Calls the 'append' function on the ctrl
  * definition when it exists. Append should call {@link #appendCtrl} or return null.
  */
 function addCtrl() {
@@ -145,9 +140,9 @@ function updateCtrl() {
 
     let ctrl = getCtrlFromEdit();
 
-    CTRL_INSTANCES[ctrl.id] = ctrl;
+    CTRL_INSTANCES[ctrl.name] = ctrl;
 
-    let widgetContent = getCtrlContent(ctrl.id);
+    let widgetContent = getCtrlContent(ctrl);
     widgetContent.html(getTemplate('ctrl/' + ctrl.type + '/render')(ctrl));
 
     invokeCtrlFunction('render', ctrl);
@@ -165,8 +160,8 @@ function saveCtrls() {
     let ctrls = jQuery.map($('.grid-stack .grid-stack-item:visible'), function(item) {
         item = $(item);
         let node = item.data('_gridstack_node');
-        let ctrlId = item.data('ctrl-id');
-        return jQuery.extend(CTRL_INSTANCES[ctrlId], {
+        let ctrlName = item.data('ctrl-name');
+        return jQuery.extend(CTRL_INSTANCES[ctrlName], {
             layout: {
                 x: node.x,
                 y: node.y,
@@ -184,32 +179,15 @@ function saveCtrls() {
         beforeSend: function() {
             $.blockUI()
         },
-        success: function() {
-            console.log('Saved definition')
+        success: function(response) {
+            console.log('Saved definition, reloading now ...');
+            renderDefinition(response.data, true);
         },
         complete: function() {
             $.unblockUI();
         }
     })
 
-}
-
-/**
- * Removes a control from the GRID_CTRL
- *
- * @param ctrlId Identifier of control
- */
-function removeCtrl(ctrlId) {
-
-    let ctrl = CTRL_INSTANCES[ctrlId];
-    let widget = getCtrlContent(ctrlId).parent();
-
-    CTRL_GRID.removeWidget(widget);
-    widget.remove();
-
-    invokeCtrlFunction('remove', ctrl);
-
-    delete CTRL_INSTANCES[ctrlId];
 }
 
 $(document).ready(function () {

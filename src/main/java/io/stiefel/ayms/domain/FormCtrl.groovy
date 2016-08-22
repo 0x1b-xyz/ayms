@@ -20,22 +20,12 @@ import javax.persistence.*
 ])
 @Canonical
 @EqualsAndHashCode(includes = 'id')
-@ToString(includes = ['id','name','type'])
+@ToString(includes = ['id', 'type'])
 class FormCtrl {
 
-    @Id
-    @JsonView([View.Summary,View.Detail])
-    String id;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name = 'definition_id')
+    @EmbeddedId
     @JsonIgnore
-    FormDef definition
-
-    @Column(nullable = false, length = 50)
-    @JsonView([View.Summary,View.Detail])
-    @NotEmpty
-    String name;
+    FormCtrlId id
 
     @Column(nullable = false, length = 50)
     @JsonView([View.Summary,View.Detail])
@@ -47,7 +37,7 @@ class FormCtrl {
     @Fetch(FetchMode.SELECT)
     @MapKeyColumn(name = "key")
     @CollectionTable(name = "aym_form_ctrl_attr",
-            joinColumns = @JoinColumn(name = "ctrl_id"))
+            joinColumns = [@JoinColumn(name = "ctrl"), @JoinColumn(name = "definition_id")])
     @JsonView(View.Detail)
     @NotEmpty
     Map<String,String> attr;
@@ -55,5 +45,24 @@ class FormCtrl {
     @Embedded
     @JsonView(View.Detail)
     Layout layout;
+
+    /**
+     * Synonym for {@code getId().getName()}
+     */
+    @Transient
+    @JsonView([View.Summary, View.Detail])
+    String getName() {
+        id?.name
+    }
+
+    /**
+     * Stuffs the {@param name} into the {@link #getId()}. Will create a new instance
+     * if one is not present.
+     */
+    void setName(String name) {
+        if (!id)
+            id = new FormCtrlId()
+        id.name = name
+    }
 
 }

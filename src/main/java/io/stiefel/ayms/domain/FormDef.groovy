@@ -2,14 +2,14 @@ package io.stiefel.ayms.domain
 
 import com.fasterxml.jackson.annotation.JsonView
 import groovy.transform.Canonical
+import org.hibernate.annotations.Fetch
+import org.hibernate.annotations.FetchMode
 import org.hibernate.validator.constraints.NotEmpty
 
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.FetchType
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
 import javax.persistence.OneToMany
 import javax.persistence.PrePersist
 import javax.persistence.PreUpdate
@@ -45,7 +45,8 @@ class FormDef extends AbstractEntity<Long> {
     @JsonView([View.Summary, View.Detail])
     Date updated
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = 'definition', fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = 'id.definition', cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SELECT)
     @JsonView([View.Detail])
     List<FormCtrl> ctrls;
 

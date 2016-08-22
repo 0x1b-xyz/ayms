@@ -10,7 +10,7 @@
 var CTRL_MODAL;
 var CTRL_MODAL_FRM;
 var CTRL_GRID;
-var CTRL_ID_RE = /([0-9A-Fa-f]{8}[0-9A-Fa-f]{4}[0-9A-Fa-f]{4}[0-9A-Fa-f]{4}[0-9A-Fa-f]{12})-([A-Za-z0-9\.]*)/;
+var CTRL_FIELD_NAME_RE = /([A-Za-z0-9]*)-([A-Za-z0-9\.]*)/;
 
 /**
  * Map of controls that are present in the GRID
@@ -41,7 +41,7 @@ var CTRL_DEFS = {
             try {
 
                 $.each(data, function(field, value) {
-                    var ctrlField = getCtrlField(ctrl.id, field);
+                    var ctrlField = getCtrlField(ctrl, field);
                     if (!ctrlField.length) {
                         console.log("Could not find ctrl field", ctrl, field);
                         return;
@@ -142,10 +142,9 @@ var CTRL_DEFS = {
         edit: function (ctrl) {
 
             let companyField = CTRL_MODAL_FRM.find('select[name="companyField"]');
-            $.each(CTRL_INSTANCES, function (ctrlId) {
-                let ctrlDef = CTRL_INSTANCES[ctrlId];
-                if (ctrlDef.type == 'CompanyField') {
-                    $(companyField).append('<option value="' + ctrlDef.id + '">' + ctrlDef.name + '</option>')
+            $.each(CTRL_INSTANCES, function (name, ctrl) {
+                if (ctrl.type == 'CompanyField') {
+                    $(companyField).append('<option value="' + ctrl.id + '">' + ctrl.name + '</option>')
                 }
             });
 
@@ -159,7 +158,7 @@ var CTRL_DEFS = {
         render: function (ctrl) {
 
             // Publish value changes
-            let employeeField = getCtrlField(ctrl.id, ctrl.name);
+            let employeeField = getCtrlField(ctrl.name, ctrl.name);
 
             employeeField.autocomplete({
                 hint: true,
@@ -200,13 +199,12 @@ var CTRL_DEFS = {
         valueChange: function (evtCtrl) {
 
             if (evtCtrl.type == 'CompanyField') {
-                let companyId = getCtrlField(evtCtrl.id, evtCtrl.name).find('option:selected').val();
+                let companyId = getCtrlField(evtCtrl.name, evtCtrl.name).find('option:selected').val();
                 console.log('got updated company id: ' + companyId);
                 if (companyId) {
-                    $.each(CTRL_INSTANCES, function (ctrlId) {
-                        let ctrl = CTRL_INSTANCES[ctrlId];
+                    $.each(CTRL_INSTANCES, function (name, ctrl) {
                         if (ctrl.type == 'EmployeeField') {
-                            if (ctrl.attr.companyField == evtCtrl.id) {
+                            if (ctrl.attr.companyField == evtCtrl.name) {
                                 getCtrlFunction('EmployeeField', 'updateForCompany')(ctrl, companyId);
                             }
                         }
@@ -226,7 +224,7 @@ var CTRL_DEFS = {
                 data: {companyId: companyId},
                 dataType: 'json',
                 success: function (response) {
-                    let field = getCtrlField(ctrl.id, ctrl.name);
+                    let field = getCtrlField(ctrl.name, ctrl.name);
                     field.find('option').remove();
                     response.data.forEach(function (employee) {
                         field.append('<option value="' + employee.id + '">' + employee.firstName + ' ' + employee.lastName + '</option>');
@@ -252,7 +250,7 @@ var CTRL_DEFS = {
             return appendCtrl(ctrl, 0, 50, 20, heights[ctrl.attr.labelAlign], true)
         },
         render: function (ctrl) {
-            getCtrlField(ctrl.id, ctrl.name).mask("#,##0.00", {reverse: true})
+            getCtrlField(ctrl.name, ctrl.name).mask("#,##0.00", {reverse: true})
         }
     },
 
@@ -268,7 +266,7 @@ var CTRL_DEFS = {
         render: function (ctrl) {
 
             // Publish value changes
-            let companyField = getCtrlField(ctrl.id, ctrl.name);
+            let companyField = getCtrlField(ctrl.name, ctrl.name);
 
             // companyField.change(function() {
             //     let companyId = $(this).find('option:selected').val();
@@ -318,7 +316,7 @@ var CTRL_DEFS = {
 
             fields.forEach(function (field) {
 
-                let targetField = getCtrlField(ctrl.id, field);
+                let targetField = getCtrlField(ctrl.name, field);
 
                 $(targetField).autocomplete({
                     hint: false,
@@ -369,7 +367,7 @@ var CTRL_DEFS = {
          */
         bound: function(ctrl) {
 
-            let clientId = getCtrlField(ctrl.id, 'id');
+            let clientId = getCtrlField(ctrl.name, 'id');
 
 
 
@@ -428,22 +426,57 @@ function invokeCtrlFunction(functionName, ctrl) {
  */
 function appendCtrl(ctrl, x, y, width, height, editable) {
 
-    CTRL_INSTANCES[ctrl.id] = ctrl;
+    CTRL_INSTANCES[ctrl.name] = ctrl;
 
     let widget = getTemplate('ctrl/wrapper')({
-        id: ctrl.id,
+        name: ctrl.name,
         x: x, y: y, width: width, height: height,
         editable: editable
     });
     CTRL_GRID.addWidget(widget);
 
-    let widgetContent = getCtrlContent(ctrl.id);
-    widgetContent.html(getTemplate('ctrl/' + ctrl.type + '/render')(CTRL_INSTANCES[ctrl.id]));
+    if (editable) {
+        getCtrlContent(ctrl).siblings('.grid-stack-item-edit').find('a.edit').on('click', function() {
+            editCtrl(ctrl.name)
+        })
+    }
 
-    invokeCtrlFunction('render', CTRL_INSTANCES[ctrl.id]);
+    let widgetContent = getCtrlContent(ctrl);
+    widgetContent.html(getTemplate('ctrl/' + ctrl.type + '/render')(ctrl));
+
+    invokeCtrlFunction('render', ctrl);
 
     return true;
 
+}
+
+/**
+ * Clears all control data from the grid by calling {@link #removeCtrl}
+ */
+function clearCtrls() {
+
+    console.log("Clearing all controls ...");
+    $.each(CTRL_INSTANCES, function(name, ctrl) {
+        removeCtrl(ctrl)
+    });
+
+}
+
+/**
+ * Removes a control from the GRID_CTRL and {@link #CTRL_INSTANCES}
+ *
+ * @param ctrl Instance to remove
+ */
+function removeCtrl(ctrl) {
+
+    let widget = getCtrlContent(ctrl).parent();
+
+    CTRL_GRID.removeWidget(widget);
+    widget.remove();
+
+    invokeCtrlFunction('remove', ctrl);
+
+    delete CTRL_INSTANCES[ctrl.name];
 }
 
 /**
@@ -464,7 +497,6 @@ function loadCtrls(editable, callback) {
             $.blockUI();
         },
         success: function (response) {
-            console.log(response)
             if (response.data) {
                 renderDefinition(response.data, editable)
             }
@@ -481,12 +513,14 @@ function loadCtrls(editable, callback) {
 }
 
 /**
- * Performs the actual append of controls into the grid
+ * Performs the actual append of controls into the grid. Clears any existing controls
  *
  * @param definition The form definition structure
  * @param editable Whether the controls are editable or not
  */
 function renderDefinition(definition, editable) {
+    clearCtrls();
+    console.log("Rendering definition into the grid ...");
     definition.ctrls.forEach(function (ctrl) {
         appendCtrl(ctrl,
             ctrl.layout.x, ctrl.layout.y, ctrl.layout.width, ctrl.layout.height, editable)
@@ -498,7 +532,7 @@ function renderDefinition(definition, editable) {
  * ctrl, name and value. This list will be transformed into a map of name/value pairs
  * that will be passed to the {@code bind} function on the ctrl type.
  *
- * @param data
+ * @param data An array of FormData structures
  */
 function bindData(data) {
 
@@ -510,14 +544,14 @@ function bindData(data) {
         byCtrl[tuple.ctrl][tuple.name] = tuple.value
     });
 
-    $.each(byCtrl, function (ctrlId, ctrlData) {
+    $.each(byCtrl, function (name, fields) {
 
         let ctrl = null;
         try {
-            let ctrl = getCtrlInstance(ctrlId);
-            getCtrlFunction(ctrl.type, 'bind')(ctrl, ctrlData)
+            let ctrl = getCtrlInstance(name);
+            getCtrlFunction(ctrl.type, 'bind')(ctrl, fields)
         } catch (e) {
-            console.log(e, "Could not find ctrl", ctrl, ctrlData)
+            console.log(e, "Could not find ctrl", ctrl, fields)
         }
 
 
@@ -526,31 +560,36 @@ function bindData(data) {
 }
 
 /**
- * Finds the {@code .grid-stack-item-content} for a control
+ * Finds the {@code .grid-stack-item-content} for a control by searching {@code data-ctrl-name]
+ *
+ * @param ctrl Ctrl instance or name of control
  */
-function getCtrlContent(ctrlId) {
-    return $('div[data-ctrl-id="' + ctrlId + '"] .grid-stack-item-content');
+function getCtrlContent(ctrl) {
+    let name = (ctrl.hasOwnProperty('name')) ? ctrl.name : ctrl;
+    return $('div[data-ctrl-name="' + name + '"] .grid-stack-item-content');
 }
 
 /**
  * Looks up a field by id within the {@code #grid-stack-frm}
  *
- * @param ctrlId Identifier of control
+ * @param ctrl Ctrl instance
  * @param fieldName Name of rendered field in form. If not specified returns all fields
  */
-function getCtrlField(ctrlId, fieldName) {
+function getCtrlField(ctrl, fieldName) {
     if (fieldName != undefined)
-        return $('#grid-stack-frm').find(toId(ctrlId + '-' + fieldName));
-    return $('#grid-stack-frm').find('[id^=' + ctrlId + '-]');
+        return $('#grid-stack-frm').find(toId(ctrl.name + '-' + fieldName));
+    return $('#grid-stack-frm').find('[id^=' + ctrl.name + '-]');
 }
 
 /**
  * Returns the specified ctrl definition from {@link #CTRL_INSTANCES}
+ * 
+ * @param name Name of control to find
  */
-function getCtrlInstance(ctrlId) {
-    if (!CTRL_INSTANCES.hasOwnProperty(ctrlId))
-        throw new Error("Could not find control instance with id: " + ctrlId);
-    return CTRL_INSTANCES[ctrlId];
+function getCtrlInstance(name) {
+    if (!CTRL_INSTANCES.hasOwnProperty(name))
+        throw new Error("Could not find control: " + name);
+    return CTRL_INSTANCES[name];
 }
 
 $(document).ready(function () {
