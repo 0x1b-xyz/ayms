@@ -30,8 +30,8 @@ import javax.sql.DataSource
         @PropertySource(value = 'file://#{systemProperties["ayms.properties"]}', ignoreResourceNotFound = true)
 ])
 @EnableTransactionManagement
-@ComponentScan(['io.stiefel.ayms.dao', 'io.stiefel.ayms.service', 'io.stiefel.ayms.domain'])
 @EnableJpaRepositories(basePackages = 'io.stiefel.ayms.repo', entityManagerFactoryRef = 'emf')
+@ComponentScan(['io.stiefel.ayms.domain', 'io.stiefel.ayms.search'])
 @Log4j
 class Context {
 

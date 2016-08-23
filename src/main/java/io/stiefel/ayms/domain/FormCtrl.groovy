@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonView
 import groovy.transform.Canonical
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
+import groovy.transform.TupleConstructor
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
 import org.hibernate.validator.constraints.NotEmpty
@@ -18,7 +19,7 @@ import javax.persistence.*
 @Table(name = "aym_form_ctrl", uniqueConstraints = [
         @UniqueConstraint(columnNames = ['definition_id', 'name'])
 ])
-@Canonical
+@TupleConstructor(excludes = 'name')
 @EqualsAndHashCode(includes = 'id')
 @ToString(includes = ['id', 'type'])
 class FormCtrl {
