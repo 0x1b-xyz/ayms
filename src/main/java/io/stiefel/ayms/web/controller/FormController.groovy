@@ -14,8 +14,10 @@ import io.stiefel.ayms.repo.FormCtrlRepo
 import io.stiefel.ayms.repo.FormDataRepo
 import io.stiefel.ayms.repo.FormDefRepo
 import io.stiefel.ayms.repo.FormResultRepo
+import io.stiefel.ayms.search.ResultSearchRepo
 import io.stiefel.ayms.web.Result
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.solr.core.SolrTemplate
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.WebDataBinder
@@ -44,6 +46,8 @@ class FormController {
     @Autowired FormCtrlRepo ctrlRepo
     @Autowired FormResultRepo resultRepo
     @Autowired FormDataRepo dataRepo
+
+    @Autowired ResultSearchRepo search
 
     @InitBinder
     void initBinder(WebDataBinder binder) {
@@ -178,7 +182,7 @@ class FormController {
     Result<FormResult> getResult(@PathVariable Long definitionId, @PathVariable String resultId,
                                  HttpServletResponse response) {
 
-        def result = resultRepo.findOneByIdAndDefinitionId(resultId, definitionId)
+        def result = resultRepo.findOneByDefinitionIdAndId(definitionId, resultId)
         if (!result) {
             response.setStatus(404)
             return new Result(false)
@@ -193,7 +197,7 @@ class FormController {
                             @RequestBody Map<String,Map<String,String>> data,
                             HttpServletResponse response) {
 
-        FormResult result = resultRepo.findOneByIdAndDefinitionId(resultId, definitionId)
+        FormResult result = resultRepo.findOneByDefinitionIdAndId(definitionId, resultId)
         if (!result) {
             response.setStatus(404)
             return new Result(false)
@@ -227,31 +231,23 @@ class FormController {
         result.update()
         resultRepo.save(result)
 
+        search.save(result)
+
         new Result(result)
 
-    }
-
-    @Transactional(readOnly = false)
-    @RequestMapping(path = '/{definitionId}/result/{resultId}/delete', method = RequestMethod.GET, produces = 'text/html')
-    ModelAndView delete(@PathVariable Long definitionId, @PathVariable String resultId) {
-        doDelete(definitionId, resultId)
-        new ModelAndView("redirect:/form/${definitionId}/result");
     }
 
     @Transactional(readOnly = false)
     @RequestMapping(path = '/{definitionId}/result/{resultId}', method = RequestMethod.DELETE, produces = 'application/json')
     Result delete(@PathVariable Long definitionId, @PathVariable String resultId,
                   HttpServletResponse response) {
-        return new Result(doDelete(definitionId, resultId))
-    }
-
-    private boolean doDelete(Long definition, String resultId) {
         try {
-            resultRepo.delete(resultRepo.findOneByIdAndDefinitionId(resultId,definition))
+            resultRepo.delete(resultRepo.findOneByDefinitionIdAndId(definitionId, resultId))
+            search.delete(resultId)
         } catch (Throwable t) {
-            return false
+            return new Result(t)
         }
-        true
+        return new Result()
     }
 
 }

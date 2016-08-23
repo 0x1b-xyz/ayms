@@ -28,6 +28,7 @@ class Result<T> implements Serializable {
     @JsonView([View.Summary, View.Detail])
     String message
 
+    Result() {}
 
     Result(T data) {
         this.data = data

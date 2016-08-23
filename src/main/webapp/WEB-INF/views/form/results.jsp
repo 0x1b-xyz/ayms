@@ -25,7 +25,7 @@
                 <th>Form</th>
                 <th>Created</th>
                 <th>Updated</th>
-                <th></th>
+                <%--<th></th>--%>
             </tr>
             </thead>
             <tbody>

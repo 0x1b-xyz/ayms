@@ -10,6 +10,6 @@ interface FormResultRepo extends JpaRepository<FormResult, String> {
 
     List<FormResult> findAllByDefinitionId(Long definitionId);
 
-    FormResult findOneByIdAndDefinitionId(String resultId, Long definitionId);
+    FormResult findOneByDefinitionIdAndId(Long definitionId, String resultId);
 
 }

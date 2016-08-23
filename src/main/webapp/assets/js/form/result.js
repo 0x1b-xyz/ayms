@@ -2,6 +2,27 @@
 
 var AYM_FORM;
 
+function deleteResult() {
+
+    jQuery.ajax({
+        type: 'DELETE',
+        url: window.location.href,
+        //data: {_method: 'DELETE'},
+        contentType: 'application/json',
+        beforeSend: function() {
+            $.blockUI();
+        },
+        success: function(response) {
+            console.log("Removed result ...");
+            console.log(window.location.href)
+        },
+        complete: function () {
+            $.unblockUI();
+        }
+    })
+
+}
+
 /**
  * Collects the results of the form and saves them. Each field in the form must be named {@code ctrl-name}
  * as they will be pushed into a map of structs keyed by ctrl
@@ -64,7 +85,8 @@ function loadResult(callback) {
             if (response.data.data)
                 bindData(response.data.data);
 
-            console.log('Loaded results.')
+            console.log('Loaded results.');
+
 
         },
         complete: function() {
@@ -80,7 +102,8 @@ $(document).ready(function () {
 
     AYM_FORM = $('#grid-stack-frm');
 
-    $('#grid-stack-frm-submit').on('click', saveResult);
+    $('#result-save-btn').on('click', saveResult);
+    $('#result-del-btn').on('click', deleteResult);
 
     loadResult();
 

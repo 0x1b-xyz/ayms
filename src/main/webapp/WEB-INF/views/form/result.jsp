@@ -17,9 +17,9 @@
     <form id="grid-stack-frm" method="post" class="form-horizontal">
         <div class="grid-stack"></div>
         <hr>
-        <a href="<s:url value="/form/${definitionId}/result/${resultId}/delete"/>" type="button" role="button" class="btn btn-danger">Delete</a>
+        <button id="result-del-btn" role="button" class="btn btn-danger">Delete</button>
         <a href="<s:url value="/form/${definitionId}/result"/>" type="button" role="button" class="btn btn-default">Cancel</a>
-        <button id="grid-stack-frm-submit" type="button" class="btn btn-primary">Save</button>
+        <button id="result-save-btn" type="button" class="btn btn-primary">Save</button>
     </form>
 
 </body>
