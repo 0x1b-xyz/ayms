@@ -49,7 +49,7 @@ function editModal(ctrl, editing) {
     CTRL_MODAL.find('.modal-title').html(CTRL_DEFS[ctrl.type].label);
 
     CTRL_MODAL_FRM.data('ctrl-type', ctrl.type);
-    CTRL_MODAL_FRM.find('.modal-body').html(getTemplate('ctrl/' + ctrl.type + '/edit')(ctrl));
+    CTRL_MODAL_FRM.find('.modal-body').html(getTemplate('form/ctrl/' + ctrl.type + '/edit')(ctrl));
 
     CTRL_MODAL_FRM.find("input[type='text']").on("click", function () {
         $(this).select();
@@ -145,7 +145,7 @@ function updateCtrl() {
     CTRL_INSTANCES[ctrl.name] = ctrl;
 
     let widgetContent = getCtrlContent(ctrl);
-    widgetContent.html(getTemplate('ctrl/' + ctrl.type + '/render')(ctrl));
+    widgetContent.html(getTemplate('form/ctrl/' + ctrl.type + '/render')(ctrl));
 
     invokeCtrlFunction('render', ctrl);
 
@@ -195,7 +195,7 @@ function saveCtrls() {
 $(document).ready(function () {
 
     Handlebars.registerHelper('default-edit-fields', function(options) {
-        return getTemplate('ctrl/default-edit-fields')(this)
+        return getTemplate('form/ctrl/default-edit-fields')(this)
     });
     
     // Bind the {@link #newCtrl} method to all our form control buttons
