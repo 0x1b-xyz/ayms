@@ -1,4 +1,6 @@
-//= require form/common
+//= require ../app
+//= require common
+//= require_tree ctrl
 
 var APPEND_X_DEFAULT = 0;
 var APPEND_Y_DEFAULT = 99;

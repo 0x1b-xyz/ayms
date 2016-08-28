@@ -6,6 +6,8 @@
 <html>
 <head>
     <title>Clients</title>
+    <script src="<c:url value="/assets/client/client.js"/>"></script>
+
 </head>
 <body>
 

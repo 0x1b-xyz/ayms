@@ -1,4 +1,7 @@
-//= require form/common
+//= require ../app
+//= require common
+//= require_tree ctrl
+//= require result-dtl
 
 var AYM_FORM;
 

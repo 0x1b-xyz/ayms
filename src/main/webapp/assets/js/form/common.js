@@ -7,6 +7,8 @@
 //= require lodash
 //= require gridstack
 
+//= require_tree form/ctrl
+
 var CTRL_MODAL;
 var CTRL_MODAL_FRM;
 var CTRL_GRID;
@@ -433,7 +435,7 @@ function appendCtrl(ctrl, x, y, width, height, editable) {
 
     CTRL_INSTANCES[ctrl.name] = ctrl;
 
-    let widget = getTemplate('ctrl/wrapper')({
+    let widget = getTemplate('form/ctrl/wrapper')({
         name: ctrl.name,
         x: x, y: y, width: width, height: height,
         editable: editable
@@ -447,7 +449,7 @@ function appendCtrl(ctrl, x, y, width, height, editable) {
     }
 
     let widgetContent = getCtrlContent(ctrl);
-    widgetContent.html(getTemplate('ctrl/' + ctrl.type + '/render')(ctrl));
+    widgetContent.html(getTemplate('form/ctrl/' + ctrl.type + '/render')(ctrl));
 
     invokeCtrlFunction('render', ctrl);
 
@@ -525,7 +527,7 @@ function loadCtrls(editable, callback) {
  */
 function renderDefinition(definition, editable) {
     clearCtrls();
-    console.log("Rendering definition into the grid ...");
+    console.log("Rendering definition into the grid ...", definition);
     definition.ctrls.forEach(function (ctrl) {
         appendCtrl(ctrl,
             ctrl.layout.x, ctrl.layout.y, ctrl.layout.width, ctrl.layout.height, editable)
@@ -600,7 +602,7 @@ function getCtrlInstance(name) {
 $(document).ready(function () {
 
     Handlebars.registerHelper('ctrl-hbs', function (type, hbs) {
-        return getTemplate('ctrl/' + type + '/' + hbs)(this)
+        return getTemplate('form/ctrl/' + type + '/' + hbs)(this)
     });
 
     var gridStack = jQuery('.grid-stack');

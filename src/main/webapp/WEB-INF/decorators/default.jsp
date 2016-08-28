@@ -18,8 +18,6 @@
     <!--<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>-->
     <%--<![endif]-->--%>
 
-    <script src="<c:url value="/assets/app.js"/>"></script>
-
     <script type="text/javascript">
         URL_PREFIX = '<s:url value="/"/>';
     </script>

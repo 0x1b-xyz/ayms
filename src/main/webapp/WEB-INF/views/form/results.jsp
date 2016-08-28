@@ -5,6 +5,7 @@
 <html>
 <head>
     <title>${definition.description} Results</title>
+    <script type="text/javascript" src="<s:url value="/assets/form/form.js"/>"></script>
 </head>
 <body>
 

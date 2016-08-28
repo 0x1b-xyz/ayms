@@ -6,6 +6,7 @@
 <html>
 <head>
     <title>Employees</title>
+    <script src="<c:url value="/assets/employee/employee.js"/>"></script>
 </head>
 <body>
 

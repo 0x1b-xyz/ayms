@@ -33,7 +33,7 @@ class WebInitializer extends AbstractAnnotationConfigDispatcherServletInitialize
         AssetPipelineConfigHolder.config = [
                 cacheLocation: 'target/asset-cache',
                 handlebars: [
-                        'templateRoot': 'hbs',
+                        'templateRoot': '',
                         'templatePathSeperator': '/'
                 ]
         ]

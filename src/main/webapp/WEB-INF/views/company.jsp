@@ -5,6 +5,10 @@
 <html>
 <head>
     <title>Companies</title>
+
+    <script src="<c:url value="/assets/company/company.js"/>"></script>
+
+
 </head>
 <body>
 

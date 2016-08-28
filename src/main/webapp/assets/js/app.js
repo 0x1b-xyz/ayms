@@ -7,14 +7,11 @@
 //= require handlebars-intl
 //= require jsog
 
-//= require_tree hbs
-
 /**
  * Base url for templates or just urls. You should rewrite them using the <s:url/> tag so the context
  * switches correctly
  */
-var URL_PREFIX = '/';
-var TPL_PREFIX = URL_PREFIX + 'static/hbs/';
+var URL_PREFIX = URL_PREFIX ? URL_PREFIX : '/';
 
 /**
  * Pulls the data from the server and handles a Result<T> outcome. Runs the resultSet coming back
@@ -197,10 +194,6 @@ Handlebars.registerHelper('url', function(options) {
 });
 
 /**
- * Lazily loads and compiles the '.hbs' template from the {@link TPL_PREFIX}, returning
- * an executable template.
- *
- * @param path
  */
 function getTemplate(path) {
     if (!Handlebars.templates.hasOwnProperty(path))

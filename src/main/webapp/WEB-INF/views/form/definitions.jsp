@@ -5,6 +5,7 @@
 <html>
 <head>
     <title>Form Definitions</title>
+    <script src="<c:url value="/assets/form/form.js"/>"></script>
 </head>
 <body>
 
