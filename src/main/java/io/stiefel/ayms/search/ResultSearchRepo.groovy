@@ -1,7 +1,7 @@
 package io.stiefel.ayms.search
 
 import groovy.util.logging.Log4j
-import io.stiefel.ayms.domain.FormResult
+import io.stiefel.ayms.domain.Result
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.solr.core.SolrTemplate
@@ -23,10 +23,10 @@ class ResultSearchRepo {
     @Resource SolrTemplate solr
 
     /**
-     * Saves or updates the {@link FormResult} into solr
+     * Saves or updates the {@link io.stiefel.ayms.domain.Result} into solr
      */
     @Transactional
-    void save(FormResult result) {
+    void save(Result result) {
         ResultsDocument doc = new ResultsDocument(result.id, result.definition.id,
                 result.data.collectEntries { [[it.ctrl, it.name].join('.'), it.value] })
         solr.saveBean(doc)
@@ -34,7 +34,7 @@ class ResultSearchRepo {
     }
 
     /**
-     * Deletes the index for the {@link FormResult}
+     * Deletes the index for the {@link io.stiefel.ayms.domain.Result}
      */
     @Transactional
     void delete(String resultId) {

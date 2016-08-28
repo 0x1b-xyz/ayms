@@ -22,8 +22,8 @@ class PersistenceSpecIT extends Specification {
     @Autowired ClientRepo clientRepo
     @Autowired ServiceRepo serviceRepo
     @Autowired NoteRepo noteRepo
-    @Autowired FormDefRepo formDefRepo
-    @Autowired FormCtrlRepo formCtrlRepo
+    @Autowired DefinitionRepo formDefRepo
+    @Autowired CtrlRepo formCtrlRepo
 
     Address address = new Address('Somewhere in', null, 'Charlotte', 'NC', '28205')
     Company company = new Company(
@@ -133,9 +133,9 @@ class PersistenceSpecIT extends Specification {
     def "saves and finds form ctrls"() {
 
         when:
-        FormDef formDef = new FormDef("form-${UUID.randomUUID()}", 'description')
+        Definition formDef = new Definition("form-${UUID.randomUUID()}", 'description')
         formDefRepo.save(formDef)
-        FormCtrl ctrl = new FormCtrl(new FormCtrlId(formDef, RandomStringUtils.randomAlphabetic(5)),
+        Ctrl ctrl = new Ctrl(new CtrlId(formDef, RandomStringUtils.randomAlphabetic(5)),
                 'TextField', ['labelAlign': 'horizontal'], new Layout(1, 2, 100, 200))
         formCtrlRepo.save(ctrl);
 

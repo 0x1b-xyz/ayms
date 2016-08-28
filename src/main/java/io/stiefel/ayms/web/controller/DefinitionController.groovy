@@ -2,11 +2,13 @@ package io.stiefel.ayms.web.controller
 
 import com.fasterxml.jackson.annotation.JsonView
 import groovy.util.logging.Log4j
-import io.stiefel.ayms.domain.FormCtrl
-import io.stiefel.ayms.domain.FormCtrlId
-import io.stiefel.ayms.domain.FormDef
+import io.stiefel.ayms.domain.Ctrl
+import io.stiefel.ayms.domain.CtrlId
+import io.stiefel.ayms.domain.Definition
 import io.stiefel.ayms.domain.View
-import io.stiefel.ayms.repo.FormDefRepo
+import io.stiefel.ayms.repo.CtrlRepo
+import io.stiefel.ayms.repo.DataRepo
+import io.stiefel.ayms.repo.DefinitionRepo
 import io.stiefel.ayms.web.Result
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
@@ -29,7 +31,9 @@ import javax.validation.Valid
 @Log4j
 class DefinitionController {
 
-    @Autowired FormDefRepo defRepo
+    @Autowired CtrlRepo ctrlRepo
+    @Autowired DataRepo dataRepo
+    @Autowired DefinitionRepo defRepo
 
     @RequestMapping(path = '/form', method = RequestMethod.GET, produces = 'text/html')
     ModelAndView index() {
@@ -38,13 +42,13 @@ class DefinitionController {
 
     @RequestMapping(path = '/form', method = RequestMethod.GET, produces = "application/json")
     @JsonView(View.Summary)
-    Result<List<FormDef>> findAllDefinitions() {
+    Result<List<Definition>> findAllDefinitions() {
         new Result(defRepo.findAll())
     }
 
     @RequestMapping(path = '/form', method = RequestMethod.POST, produces = 'application/json')
     @Transactional(readOnly = false)
-    Result<Long> saveDefinition(@Valid FormDef definition, BindingResult binding) {
+    Result<Long> saveDefinition(@Valid Definition definition, BindingResult binding) {
         if (binding.hasErrors())
             return new Result(false, null).binding(binding)
         defRepo.save(definition)
@@ -59,17 +63,17 @@ class DefinitionController {
 
     @RequestMapping(path = '/form/{definitionId}', method = RequestMethod.GET, produces = "application/json")
     @JsonView(View.Detail)
-    Result<FormDef> getDefinition(@PathVariable Long definitionId) {
+    Result<Definition> getDefinition(@PathVariable Long definitionId) {
         new Result(defRepo.findOne(definitionId))
     }
 
     @RequestMapping(path = '/form/{definitionId}/ctrl', method = RequestMethod.POST, produces = 'application/json')
     @Transactional(readOnly = false)
-    Result<FormDef> saveCtrls(@PathVariable Long definitionId,
-                              @RequestBody List<FormCtrl> ctrls,
-                              HttpServletResponse response) {
+    Result<Definition> saveCtrls(@PathVariable Long definitionId,
+                                 @RequestBody List<Ctrl> ctrls,
+                                 HttpServletResponse response) {
 
-        FormDef definition = defRepo.findOne(definitionId)
+        Definition definition = defRepo.findOne(definitionId)
         if (!definition)
             response.sendError(404)
 
@@ -78,13 +82,13 @@ class DefinitionController {
         deleted.each { deletedCtrl ->
             if (definition.ctrls.removeAll { it.name == deletedCtrl }) {
                 dataRepo.deleteForDefinitionIdAndCtrl(definition.id, deletedCtrl)
-                ctrlRepo.delete(new FormCtrlId(definition, deletedCtrl))
+                ctrlRepo.delete(new CtrlId(definition, deletedCtrl))
             }
         }
 
         ctrls.each { submittedCtrl ->
 
-            FormCtrl ctrl = definition.ctrls.find { submittedCtrl.id.name == it.id.name }
+            Ctrl ctrl = definition.ctrls.find { submittedCtrl.id.name == it.id.name }
             if (!ctrl) {
                 submittedCtrl.id.definition = definition
                 definition.ctrls << submittedCtrl

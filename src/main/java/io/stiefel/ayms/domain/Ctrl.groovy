@@ -2,7 +2,6 @@ package io.stiefel.ayms.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonView
-import groovy.transform.Canonical
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import groovy.transform.TupleConstructor
@@ -22,11 +21,11 @@ import javax.persistence.*
 @TupleConstructor(excludes = 'name')
 @EqualsAndHashCode(includes = 'id')
 @ToString(includes = ['id', 'type'])
-class FormCtrl {
+class Ctrl {
 
     @EmbeddedId
     @JsonIgnore
-    FormCtrlId id
+    CtrlId id
 
     @Column(nullable = false, length = 50)
     @JsonView([View.Summary,View.Detail])
@@ -68,7 +67,7 @@ class FormCtrl {
      */
     void setName(String name) {
         if (!id)
-            id = new FormCtrlId()
+            id = new CtrlId()
         id.name = name
     }
 

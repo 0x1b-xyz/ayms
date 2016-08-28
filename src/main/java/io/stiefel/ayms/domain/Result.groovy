@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonView
 import groovy.transform.Canonical
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
-import org.hibernate.annotations.Type
-import org.hibernate.annotations.TypeDef
 
 import javax.persistence.*
 
@@ -17,7 +15,7 @@ import javax.persistence.*
 @Entity
 @Table(name = 'aym_form_result')
 @Canonical
-class FormResult {
+class Result {
 
     @Id
     @JsonView([View.Summary, View.Detail])
@@ -26,7 +24,7 @@ class FormResult {
     @ManyToOne(optional = false)
     @JoinColumn(name = 'definition_id')
     @JsonView([View.Summary, View.Detail])
-    FormDef definition
+    Definition definition
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -41,7 +39,7 @@ class FormResult {
     @OneToMany(mappedBy = 'id.result', cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonView([View.Detail])
     @Fetch(FetchMode.SELECT)
-    List<FormData> data
+    List<Data> data
 
     @PreUpdate
     @PrePersist

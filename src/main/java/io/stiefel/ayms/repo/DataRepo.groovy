@@ -1,6 +1,6 @@
 package io.stiefel.ayms.repo
 
-import io.stiefel.ayms.domain.FormData
+import io.stiefel.ayms.domain.Data
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query
 /**
  * @author jason@stiefel.io
  */
-interface FormDataRepo extends JpaRepository<FormData, Long> {
+interface DataRepo extends JpaRepository<Data, Long> {
 
     @Query(value = """
     delete from aym_form_data where result_id = (

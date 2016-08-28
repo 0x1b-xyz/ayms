@@ -23,7 +23,7 @@ import javax.persistence.TemporalType
 @Entity
 @Table(name = 'aym_form_definition')
 @Canonical
-class FormDef extends AbstractEntity<Long> {
+class Definition extends AbstractEntity<Long> {
 
     @Column(unique = true, nullable = false, length = 100)
     @JsonView([View.Summary, View.Detail])
@@ -48,7 +48,7 @@ class FormDef extends AbstractEntity<Long> {
     @OneToMany(mappedBy = 'id.definition', cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Fetch(FetchMode.SELECT)
     @JsonView([View.Detail])
-    List<FormCtrl> ctrls;
+    List<Ctrl> ctrls;
 
     @PreUpdate
     @PrePersist

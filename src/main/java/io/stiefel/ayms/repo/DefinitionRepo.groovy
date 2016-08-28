@@ -1,13 +1,13 @@
 package io.stiefel.ayms.repo;
 
-import io.stiefel.ayms.domain.FormDef;
+import io.stiefel.ayms.domain.Definition;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
  * @author jason@stiefel.io
  */
-public interface FormDefRepo extends JpaRepository<FormDef, Long> {
+public interface DefinitionRepo extends JpaRepository<Definition, Long> {
 
     @Query(value = """
         SELECT DISTINCT inside.name

@@ -15,11 +15,11 @@ import javax.persistence.*
         @UniqueConstraint(columnNames = ["result_id", "ctrl", "name"])
 ])
 @TupleConstructor
-class FormData {
+class Data {
 
     @EmbeddedId
     @JsonIgnore
-    FormDataId id
+    DataId id
 
     @Column(nullable = false)
     @NotEmpty
