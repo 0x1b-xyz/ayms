@@ -45,17 +45,18 @@ class ResultSearchRepo {
     /**
      * Runs a simple search for {@code field = value}
      */
-    List<String> find(Long definitionId,
+    List<ResultsDocument> find(Long definitionId,
                         Map<String,String> terms,
                       Pageable pageable = new PageRequest(0, Integer.MAX_VALUE)) {
 
         Criteria c = new Criteria("definition").is(definitionId.toString())
-        terms.each { String field, String }
+        terms.each { String field, String term ->
+            c = c.and("${field}_t").contains(term)
+        }
 
-        String query = "definition:${definitionId} ${terms.collect { "${it.key}_t:${it.value}" }.join(' ')}"
-        log.info("Searching with query: ${query}")
-        def q = new SimpleQuery(query, pageable).addProjectionOnFields('id')
-        solr.queryForPage(q, ResultsDocument).collect { it.id }
+        log.info("Searching with query: ${c.toString()}")
+        def q = new SimpleQuery(c, pageable) //.addProjectionOnFields('id')
+        solr.queryForPage(q, ResultsDocument).content //.collect { it.id }
 
     }
 
