@@ -14,9 +14,10 @@ import javax.servlet.*
  */
 class WebInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
-    final Class<?>[] rootConfigClasses = [io.stiefel.ayms.Context]
+    final Class<?>[] rootConfigClasses = [io.stiefel.ayms.domain.Context, io.stiefel.ayms.search.Context]
     final Class<?>[] servletConfigClasses = [Context]
     final String[] servletMappings = ['/']
+    final Filter[] servletFilters = [new CharacterEncodingFilter(encoding: "UTF-8"), new SiteMeshFilter()]
 
     /**
      * Configures the {@link asset.pipeline.servlet.AssetPipelineFilter}
@@ -41,14 +42,6 @@ class WebInitializer extends AbstractAnnotationConfigDispatcherServletInitialize
         registration.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/assets/*")
 
         super.onStartup(servletContext)
-    }
-
-    /**
-     * Adds the {@link CharacterEncodingFilter} and {@link SiteMeshFilter}
-     */
-    @Override
-    protected Filter[] getServletFilters() {
-        [new CharacterEncodingFilter(encoding: "UTF-8"), new SiteMeshFilter()]
     }
 
 }

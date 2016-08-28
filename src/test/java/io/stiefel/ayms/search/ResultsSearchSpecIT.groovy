@@ -1,15 +1,6 @@
-package io.stiefel.ayms
+package io.stiefel.ayms.search
 
-import io.stiefel.ayms.domain.FormCtrl
-import io.stiefel.ayms.domain.FormData
-import io.stiefel.ayms.domain.FormDataId
-import io.stiefel.ayms.domain.FormDef
-import io.stiefel.ayms.domain.FormResult
-import io.stiefel.ayms.search.ResultSearchRepo
-import io.stiefel.ayms.search.ResultsDocument
 import org.springframework.data.solr.core.SolrTemplate
-import org.springframework.data.solr.core.query.Criteria
-import org.springframework.data.solr.core.query.SimpleQuery
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.transaction.annotation.Transactional
@@ -20,13 +11,20 @@ import javax.annotation.Resource
 /**
  * @author jason@stiefel.io
  */
-@ContextConfiguration(classes = Context)
+@ContextConfiguration(classes = [EmbeddedContext])
 @Transactional
 @Rollback(false)
 class ResultsSearchSpecIT extends Specification {
 
     @Resource SolrTemplate solr
     @Resource ResultSearchRepo searcher
+
+    def "run a ping"() {
+
+        expect:
+        println solr.ping()
+
+    }
 
 //    def "create and update results"() {
 //

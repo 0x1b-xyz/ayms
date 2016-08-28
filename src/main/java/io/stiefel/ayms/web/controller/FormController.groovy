@@ -17,7 +17,6 @@ import io.stiefel.ayms.repo.FormResultRepo
 import io.stiefel.ayms.search.ResultSearchRepo
 import io.stiefel.ayms.web.Result
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.solr.core.SolrTemplate
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.WebDataBinder
@@ -248,6 +247,17 @@ class FormController {
             return new Result(t)
         }
         return new Result()
+    }
+
+    @RequestMapping(path = '/{definitionId}/fields', method = RequestMethod.GET, produces = 'application/json')
+    Result<List<String>> fields(@PathVariable Long definitionId) {
+        new Result(defRepo.findFieldNames(definitionId))
+    }
+
+    @RequestMapping(path = '/{definitionId}/search', method = RequestMethod.POST, produces = 'application/json')
+    Result<List<String>> search(@PathVariable Long definitionId,
+                                @RequestBody Map<String,String> terms) {
+        new Result(search.find(definitionId, terms))
     }
 
 }

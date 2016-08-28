@@ -1,9 +1,11 @@
 package io.stiefel.ayms.search
 
+import groovy.util.logging.Log4j
 import io.stiefel.ayms.domain.FormResult
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.solr.core.SolrTemplate
+import org.springframework.data.solr.core.query.Criteria
 import org.springframework.data.solr.core.query.SimpleQuery
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -15,6 +17,7 @@ import javax.annotation.Resource
  */
 @Component
 @Transactional(readOnly = true)
+@Log4j
 class ResultSearchRepo {
 
     @Resource SolrTemplate solr
@@ -42,11 +45,16 @@ class ResultSearchRepo {
     /**
      * Runs a simple search for {@code field = value}
      */
-    List<String> find(Map<String,String> terms,
+    List<String> find(Long definitionId,
+                        Map<String,String> terms,
                       Pageable pageable = new PageRequest(0, Integer.MAX_VALUE)) {
 
-        def q = new SimpleQuery(terms.collect { "${it.key}_t:${it.value}" }.join(' '), pageable)
-                            .addProjectionOnFields('id')
+        Criteria c = new Criteria("definition").is(definitionId.toString())
+        terms.each { String field, String }
+
+        String query = "definition:${definitionId} ${terms.collect { "${it.key}_t:${it.value}" }.join(' ')}"
+        log.info("Searching with query: ${query}")
+        def q = new SimpleQuery(query, pageable).addProjectionOnFields('id')
         solr.queryForPage(q, ResultsDocument).collect { it.id }
 
     }

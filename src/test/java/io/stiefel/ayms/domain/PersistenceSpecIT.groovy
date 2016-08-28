@@ -1,13 +1,6 @@
-package io.stiefel.ayms
+package io.stiefel.ayms.domain
 
-import io.stiefel.ayms.domain.*
-import io.stiefel.ayms.repo.ClientRepo
-import io.stiefel.ayms.repo.CompanyRepo
-import io.stiefel.ayms.repo.EmployeeRepo
-import io.stiefel.ayms.repo.FormCtrlRepo
-import io.stiefel.ayms.repo.FormDefRepo
-import io.stiefel.ayms.repo.NoteRepo
-import io.stiefel.ayms.repo.ServiceRepo
+import io.stiefel.ayms.repo.*
 import org.apache.commons.lang.RandomStringUtils
 import org.apache.commons.lang.math.RandomUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,7 +12,7 @@ import spock.lang.Specification
 /**
  * @author jason@stiefel.io
  */
-@ContextConfiguration(classes = Context)
+@ContextConfiguration(classes = [Context])
 @Transactional
 @Rollback(false)
 class PersistenceSpecIT extends Specification {

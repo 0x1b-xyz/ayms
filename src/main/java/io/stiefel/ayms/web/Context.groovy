@@ -20,14 +20,9 @@ import javax.servlet.ServletContext
 @EnableWebMvc
 @ComponentScan(['io.stiefel.ayms.web','asset.pipeline.springboot'])
 @EnableTransactionManagement
-class Context extends WebMvcConfigurerAdapter implements InitializingBean {
+class Context extends WebMvcConfigurerAdapter {
 
     @Autowired ServletContext servletContext
-
-    @Override
-    void afterPropertiesSet() throws Exception {
-        println "!!!! ${servletContext}"
-    }
 
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {

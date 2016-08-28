@@ -23,15 +23,12 @@ import javax.sql.DataSource
  *
  * @author jason@stiefel.io
  */
-@Configuration
+@Configuration('root')
 @PropertySources([
         @PropertySource('classpath:io/stiefel/ayms/defaults.properties'),
         @PropertySource(value = 'file:${user.home}/ayms.properties', ignoreResourceNotFound = true),
         @PropertySource(value = 'file://#{systemProperties["ayms.properties"]}', ignoreResourceNotFound = true)
 ])
-@EnableTransactionManagement
-@EnableJpaRepositories(basePackages = 'io.stiefel.ayms.repo', entityManagerFactoryRef = 'emf')
-@ComponentScan(['io.stiefel.ayms.domain', 'io.stiefel.ayms.search'])
 @Log4j
 class Context {
 
@@ -44,57 +41,6 @@ class Context {
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
         new PropertySourcesPlaceholderConfigurer();
-    }
-
-    @Bean(destroyMethod = 'close')
-    DataSource dataSource() {
-        URI dbUri = new URI(env.getProperty('ayms.jdbc.url'))
-        new BasicDataSource(
-                driverClassName: env.getProperty('ayms.jdbc.driver'),
-                url: "jdbc:postgresql://${dbUri.host}:${dbUri.port}${dbUri.path}",
-                username: dbUri.userInfo.split(':')[0],
-                password: dbUri.userInfo.split(':')[1]
-        )
-    }
-
-    @Bean
-    SpringLiquibase liquibase() {
-        new SpringLiquibase(
-                dataSource: dataSource(),
-                changeLog: 'classpath:io/stiefel/ayms/db-changelog.xml',
-                contexts: env.getProperty('ayms.jdbc.contexts')
-        )
-    }
-
-    @Bean
-    LocalContainerEntityManagerFactoryBean emf() {
-        new LocalContainerEntityManagerFactoryBean(
-                dataSource: dataSource(),
-                packagesToScan: ['io.stiefel.ayms.domain'],
-                jpaVendorAdapter: new HibernateJpaVendorAdapter(),
-                jpaProperties: [
-                        'hibernate.hbm2ddl.auto': env.getProperty('ayms.jdbc.hbm2ddl'),
-                        'hibernate.dialect': env.getProperty('ayms.jdbc.dialect'),
-                        'hibernate.show_sql': env.getProperty('ayms.jdbc.showSql')
-                ]
-        )
-    }
-
-    @Bean
-    PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
-        new JpaTransactionManager(
-                entityManagerFactory: emf
-        )
-    }
-
-    @Bean
-    NamedParameterJdbcTemplate jdbcTemplate(DataSource dataSource) {
-        new NamedParameterJdbcTemplate(dataSource)
-    }
-
-    @Bean
-    TransactionTemplate tx(PlatformTransactionManager transactionManager) {
-        new TransactionTemplate(transactionManager)
     }
 
 }
