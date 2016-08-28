@@ -441,10 +441,13 @@
 
                         <image>
                             <name>postgres:9.5.3</name>
-                            <alias>postgres</alias>
+                            <alias>ayms-postgres</alias>
                             <run>
+                                <log>
+                                    <enabled>true</enabled>
+                                </log>
                                 <namingStrategy>alias</namingStrategy>
-                                <hostname>postgres.docker</hostname>
+                                <hostname>ayms-postgres.docker</hostname>
                                 <ports>
                                     <port>5432:5432</port>
                                 </ports>
@@ -454,7 +457,28 @@
                                     <POSTGRES_DB>ayms</POSTGRES_DB>
                                 </env>
                                 <wait>
-                                    <time>2500</time>
+                                    <log>PostgreSQL init process complete; ready for start up.</log>
+                                    <time>30000</time>
+                                </wait>
+                            </run>
+                        </image>
+
+                        <image>
+                            <name>solr</name>
+                            <alias>ayms-solr</alias>
+                            <run>
+                                <log>
+                                    <enabled>true</enabled>
+                                </log>
+                                <namingStrategy>alias</namingStrategy>
+                                <hostname>solr.docker</hostname>
+                                <ports>
+                                    <port>8983:8983</port>
+                                </ports>
+                                <cmd>solr-create -c collection1</cmd>
+                                <wait>
+                                    <log>o.a.s.c.CoreContainer registering core: collection1</log>
+                                    <time>30000</time>
                                 </wait>
                             </run>
                         </image>

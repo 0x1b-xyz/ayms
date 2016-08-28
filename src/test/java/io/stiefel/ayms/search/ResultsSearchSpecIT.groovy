@@ -11,7 +11,7 @@ import javax.annotation.Resource
 /**
  * @author jason@stiefel.io
  */
-@ContextConfiguration(classes = [EmbeddedContext])
+@ContextConfiguration(classes = [Context])
 @Transactional
 @Rollback(false)
 class ResultsSearchSpecIT extends Specification {
