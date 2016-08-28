@@ -43,6 +43,12 @@ class FormCtrl {
     @NotEmpty
     Map<String,String> attr;
 
+    @Column(nullable = false)
+    Boolean required = false
+
+    @Column(nullable = false)
+    Boolean summary = false
+
     @Embedded
     @JsonView(View.Detail)
     Layout layout;
