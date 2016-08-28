@@ -39,8 +39,13 @@ var CTRL_DEFS = {
          */
         bind: function (ctrl, data) {
             try {
-
+                
                 $.each(data, function(field, value) {
+
+                    // If there's no .FIELD suffix on the field name then we look for 'value'
+                    if (field.indexOf('.') == -1)
+                        field = 'value';
+
                     var ctrlField = getCtrlField(ctrl, field);
                     if (!ctrlField.length) {
                         console.log("Could not find ctrl field", ctrl, field);

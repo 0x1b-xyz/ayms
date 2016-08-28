@@ -7,7 +7,6 @@ function deleteResult() {
     jQuery.ajax({
         type: 'DELETE',
         url: window.location.href,
-        //data: {_method: 'DELETE'},
         contentType: 'application/json',
         beforeSend: function() {
             $.blockUI();
