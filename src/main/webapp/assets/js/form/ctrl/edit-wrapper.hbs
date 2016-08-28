@@ -1,0 +1,44 @@
+
+<div>
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#fields-pnl" aria-controls="fields" role="tab" data-toggle="tab">Field</a></li>
+        <li role="presentation"><a href="#meta-pnl" aria-controls="meta" role="tab" data-toggle="tab">Meta</a></li>
+    </ul>
+
+    <div class="tab-content">
+
+        <div role="tabpanel" class="tab-pane active" id="fields-pnl">
+
+            {{{ctrl-hbs type 'edit'}}}
+
+        </div>
+
+        <div role="tabpanel" class="tab-pane" id="meta-pnl">
+
+            <div class="checkbox">
+                <label>
+                    <input name="required" type="checkbox" value="true" {{#compare attr.required "true"}}checked{{/compare}}>
+                    Field is required to submit the form.
+                </label>
+            </div>
+
+            <div class="checkbox">
+                <label>
+                    <input name="summary" type="checkbox" value="true" {{#compare attr.summaey "true"}}checked{{/compare}}>
+                    Field appears in form result summaries.
+                </label>
+            </div>
+
+            <div class="checkbox">
+                <label>
+                    <input name="searchable" type="checkbox" value="true" {{#compare attr.searchable "true"}}checked{{/compare}}>
+                    Field is searchable.
+                </label>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>

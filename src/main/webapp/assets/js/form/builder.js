@@ -49,7 +49,7 @@ function editModal(ctrl, editing) {
     CTRL_MODAL.find('.modal-title').html(CTRL_DEFS[ctrl.type].label);
 
     CTRL_MODAL_FRM.data('ctrl-type', ctrl.type);
-    CTRL_MODAL_FRM.find('.modal-body').html(getTemplate('form/ctrl/' + ctrl.type + '/edit')(ctrl));
+    CTRL_MODAL_FRM.find('.modal-body').html(getTemplate('form/ctrl/edit-wrapper')(ctrl));
 
     CTRL_MODAL_FRM.find("input[type='text']").on("click", function () {
         $(this).select();
